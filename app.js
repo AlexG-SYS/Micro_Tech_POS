@@ -55,7 +55,7 @@ app.on('activate', function () {
 })
 
 require('update-electron-app')({
-  repo: 'github-user/repo',
+  repo: 'AlexG-SYS/Micro_Tech_POS',
   updateInterval: '1 hour',
   logger: require('electron-log')
 })
