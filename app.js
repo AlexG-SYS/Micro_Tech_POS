@@ -23,9 +23,12 @@ function initWindow() {
     width: 1000,
     height: 800,
     webPreferences: {
-      nodeIntegration: true
-    }
+      nodeIntegration: true,
+      devTools: false
+    },
+    icon: path.join(__dirname, 'assets/icons/win/icon.ico')
   })
+  
   // Electron Build Path
   appWindow.loadURL(
     url.format({

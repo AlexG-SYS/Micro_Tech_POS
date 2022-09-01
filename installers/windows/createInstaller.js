@@ -14,12 +14,12 @@ function getInstallerConfig () {
   const outPath = path.join(rootPath, 'release-builds')
 
   return Promise.resolve({
-    appDirectory: path.join(outPath, 'micro-tech-pos-win32-ia32/'),
+    appDirectory: path.join(outPath, 'Micro Tech POS-win32-ia32/'),
     authors: 'Micro Tech',
     noMsi: true,
     outputDirectory: path.join(outPath, 'windows-installer'),
-    exe: 'micro-tech-pos.exe',
-    setupExe: 'MicroTechPOS.exe',
-    //setupIcon: path.join(rootPath, 'assets', 'icons', 'win', 'icon.ico')
+    exe: 'Micro Tech POS.exe',
+    setupExe: 'Micro Tech POS.exe',
+    setupIcon: path.join(rootPath, 'assets', 'icons', 'win', 'icon.ico')
   })
 }
