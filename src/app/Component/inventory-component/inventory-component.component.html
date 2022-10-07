@@ -1,0 +1,113 @@
+<!-- Inventory Component -->
+<div class="container">
+    <div class="row">
+        <div class="container my-4 py-4 col">
+            <div class="row">
+                <div class="col">
+                    <h1>Inventory List</h1>
+                </div>
+                <div class="col d-flex justify-content-end">
+                    <mat-form-field class="m-2">
+                        <mat-icon class="pt-1 mx-1" matPrefix>search</mat-icon>
+                        <input type="input" matInput placeholder="Search" name="search" (keyup)="applyFilter($event)">
+                    </mat-form-field>
+
+                    <button mat-mini-fab class="m-2" color="accent" aria-label="New Item" (click)="addItemBtn()"
+                        id="addItemBtn">
+                        <mat-icon>{{icon}}</mat-icon>
+                    </button>
+                </div>
+            </div>
+
+            <table mat-table [dataSource]="dataSource" matSort matSortActive="upc" matSortDirection="asc">
+
+                <!-- UPC Column -->
+                <ng-container matColumnDef="upc">
+                    <th class="p-2" mat-header-cell *matHeaderCellDef mat-sort-header> UPC </th>
+                    <td class="p-2" mat-cell *matCellDef="let element"
+                        [class.red]="element.status == 'inactive' ? 'red' : ''"> {{element.upc}} </td>
+                </ng-container>
+
+                <!-- Description Column -->
+                <ng-container matColumnDef="description">
+                    <th class="p-2" mat-header-cell *matHeaderCellDef mat-sort-header> Description </th>
+                    <td class="p-2" mat-cell *matCellDef="let element"
+                        [class.red]="element.status == 'inactive' ? 'red' : ''"> {{element.description}} </td>
+                </ng-container>
+
+                <!-- Price Column -->
+                <ng-container matColumnDef="price">
+                    <th class="p-2" mat-header-cell *matHeaderCellDef mat-sort-header> Price </th>
+                    <td class="p-2" mat-cell *matCellDef="let element"
+                        [class.red]="element.status == 'inactive' ? 'red' : ''"> ${{element.price.toFixed(2)}} </td>
+                </ng-container>
+
+                <!-- Quantity Column -->
+                <ng-container matColumnDef="quantity">
+                    <th class="p-2" mat-header-cell *matHeaderCellDef mat-sort-header> Quantity </th>
+                    <td class="p-2" mat-cell *matCellDef="let element"
+                        [class.red]="element.status == 'inactive' ? 'red' : ''"> {{element.quantity}} </td>
+                </ng-container>
+
+                <!-- MPN Column -->
+                <ng-container matColumnDef="mpn">
+                    <th class="p-2" mat-header-cell *matHeaderCellDef mat-sort-header> MPN </th>
+                    <td class="p-2" mat-cell *matCellDef="let element"
+                        [class.red]="element.status == 'inactive' ? 'red' : ''"> {{element.mpn}} </td>
+                </ng-container>
+
+                <!-- Online Column -->
+                <ng-container matColumnDef="online">
+                    <th class="p-2" mat-header-cell *matHeaderCellDef mat-sort-header> Online </th>
+                    <td class="p-2" mat-cell *matCellDef="let element"
+                        [class.red]="element.status == 'inactive' ? 'red' : ''">
+                        <ng-container *ngIf="element.online == true">Yes</ng-container>
+                        <ng-container *ngIf="element.online == false">No</ng-container>
+                    </td>
+                </ng-container>
+
+                <!-- Item Menu Column -->
+                <ng-container matColumnDef="menu">
+                    <th mat-header-cell *matHeaderCellDef></th>
+                    <td mat-cell *matCellDef="let element">
+                        <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Item Menu Button">
+                            <mat-icon>more_vert</mat-icon>
+                        </button>
+                        <mat-menu #menu="matMenu">
+                            <button mat-menu-item (click)="editItemBtn(element)">
+                                <mat-icon>edit</mat-icon>
+                                <span>Edit Item</span>
+                            </button>
+                        </mat-menu>
+                    </td>
+                </ng-container>
+                <!-- Sets Table Column Names and Positions -->
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+
+            <!-- Table Footer-->
+            <div class="container">
+                <div class="row">
+                    <!-- Hide or Show Inactive Items Button -->
+                    <div class="col">
+                        <button mat-stroked-button color="warn" class="my-3"
+                            (click)="showHideInactive()">{{showHide_Value}}</button>
+                    </div>
+                    <!-- Item Table Paginator -->
+                    <div class="col">
+                        <mat-paginator [pageSizeOptions]="[10, 20, 50, 100]"></mat-paginator>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Add or Edit Item Form -->
+        <div *ngIf="show" class="addItemForm col-4 mb-4 pb-4">
+            <app-add-item-form-component (refreshActiveItemListEvent)="refreshTable($event)">
+            </app-add-item-form-component>
+        </div>
+    </div>
+
+</div>

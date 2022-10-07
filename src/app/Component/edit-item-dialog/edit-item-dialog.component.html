@@ -1,0 +1,99 @@
+<!-- Edit Item Dialog Component -->
+
+<h2 mat-dialog-title>Edit Item</h2>
+<mat-dialog-content [formGroup]="itemForm">
+    <!-- UPC input field and Online input field-->
+    <div class="row py-2">
+        <div class="col d-flex justify-content-center">
+            <mat-form-field hintLabel="Max 12 Characters" appearance="fill" class=" upc">
+                <mat-icon class="pt-1 mx-1" matPrefix>qr_code_2</mat-icon>
+                <mat-label>UPC</mat-label>
+                <input mat-icon-store type="text" matInput #upcInput maxlength="12" name="upc" formControlName="upc">
+                <mat-hint align="end">{{upcInput.value.length || 0}}/12</mat-hint>
+            </mat-form-field>
+        </div>
+        <div class="col d-flex justify-content-center">
+            <mat-form-field appearance="fill" class="status">
+                <mat-icon class="pt-1 mx-1" matPrefix>toggle_on</mat-icon>
+                <mat-label>Status</mat-label>
+                <mat-select name="status" formControlName="status">
+                    <mat-option value="active">Active</mat-option>
+                    <mat-option value="inactive">Inactive</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+    </div>
+    <!-- Description input field -->
+    <div class="row py-2">
+        <div class="col-12 d-flex justify-content-center">
+            <mat-form-field appearance="fill" class="mx-1 description">
+                <mat-icon class="pt-1 mx-1" matPrefix>description</mat-icon>
+                <mat-label>Description</mat-label>
+                <textarea matInput name="description" formControlName="description"></textarea>
+            </mat-form-field>
+        </div>
+    </div>
+    <!-- Quantity input field and Price input field -->
+    <div class="row py-2">
+        <div class="col d-flex justify-content-center">
+            <mat-form-field hintLabel="Max 999 Units" appearance="fill" class="mx-1 quantity">
+                <mat-icon class="pt-1 mx-1" matPrefix>tag</mat-icon>
+                <mat-label>Quantity</mat-label>
+                <input type="number" matInput name="quantity" min="1" max="999" formControlName="quantity">
+            </mat-form-field>
+        </div>
+        <div class="col d-flex justify-content-center">
+            <mat-form-field appearance="fill" class="mx-1 price">
+                <mat-icon class="pt-1 mx-1" matPrefix>attach_money</mat-icon>
+                <mat-label>Price</mat-label>
+                <input type="number" matInput name="price" min="0" step=".01" formControlName="price">
+            </mat-form-field>
+        </div>
+    </div>
+    <!-- Category input field -->
+    <!-- <div class="row py-2">
+        <div class="col d-flex justify-content-center">
+            <mat-form-field appearance="fill" class="mx-1 category">
+                <mat-icon class="pt-1 mx-1" matPrefix>category</mat-icon>
+                <mat-label>Category</mat-label>
+                <mat-chip-list #chipList aria-label="Category selection">
+                    <mat-chip *ngFor="let category of category" (removed)="removeMatChip(category)">
+                        {{category.name}}
+                        <button matChipRemove>
+                            <mat-icon>cancel</mat-icon>
+                        </button>
+                    </mat-chip>
+                    <input placeholder="New Category" [matChipInputFor]="chipList"
+                        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                        [matChipInputAddOnBlur]="addOnBlur" (matChipInputTokenEnd)="addMatChip($event)">
+                </mat-chip-list>
+            </mat-form-field>
+        </div>
+    </div> -->
+    <!-- MPN input field -->
+    <div class="row py-2">
+        <div class="col d-flex justify-content-center">
+            <mat-form-field hintLabel="Max 9 Characters" appearance="fill" class="mx-1 mpn">
+                <mat-icon class="pt-1 mx-1" matPrefix>warehouse</mat-icon>
+                <mat-label>MPN</mat-label>
+                <input type="text" matInput #mpnInput maxlength="9" name="mpn" formControlName="mpn">
+                <mat-hint align="end">{{mpnInput.value.length || 0}}/9</mat-hint>
+            </mat-form-field>
+        </div>
+        <div class="col d-flex justify-content-center">
+            <mat-form-field appearance="fill" class=" online">
+                <mat-icon class="pt-1 mx-1" matPrefix>shopping_bag</mat-icon>
+                <mat-label>Online</mat-label>
+                <mat-select name="online" formControlName="online">
+                    <mat-option [value]="false">No</mat-option>
+                    <mat-option [value]="true">Yes</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+    </div>
+</mat-dialog-content>
+<!-- Cancel and Save Updated Item Buttons -->
+<mat-dialog-actions class="py-4 d-flex justify-content-end">
+    <button mat-raised-button (click)="close()" class="m-2">Close</button>
+    <button mat-raised-button color="primary" (click)="save()" class="m-2">Save</button>
+</mat-dialog-actions>

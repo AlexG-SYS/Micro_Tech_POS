@@ -1,0 +1,56 @@
+/* Update Item Dialog CSS styling */
+
+.upc,
+.online,
+.quantity,
+.price,
+.mpn,
+.status {
+  width: 12rem;
+}
+
+.description,
+.category {
+  width: 26rem;
+}
+
+.file-name {
+  padding: .5rem;
+  margin-left: .5rem;
+  border: 1px;
+  border-style: dashed;
+  border-radius: .5rem;
+}
+
+@media (max-width: 1400px) {
+
+  .upc,
+  .online,
+  .quantity,
+  .price,
+  .mpn,
+  .status {
+    width: 10rem;
+  }
+
+  .description,
+  .category {
+    width: 22rem;
+  }
+}
+
+@media (max-width: 768px) {
+
+  .upc,
+  .online,
+  .quantity,
+  .price,
+  .mpn,
+  .status,
+  .description,
+  .category  {
+    width: 16rem;
+  }
+
+  
+}

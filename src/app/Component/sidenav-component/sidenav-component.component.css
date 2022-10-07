@@ -1,0 +1,36 @@
+ /* Styles SideNav Component */
+ 
+ .name {
+     margin: 0;
+     margin-top: 8px;
+     font-weight: normal;
+ }
+
+ .designation {
+     margin-top: 2px;
+     font-size: 0.8rem;
+     color: lightgray;
+ }
+
+ button {
+     width: 5rem;
+     border-radius: 1rem;
+ }
+
+ .logout-div {
+     position: absolute;
+     right: .5rem;
+     left: .5rem;
+     bottom: 2rem;
+ }
+ .active{
+    background-color: rgb(224, 220, 220);
+ }
+
+ @media (max-width: 768px) {
+     button {
+         width: 0;
+         height: 3rem;
+         border-radius: 1rem;
+     }
+ }

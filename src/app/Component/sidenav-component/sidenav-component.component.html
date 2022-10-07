@@ -1,0 +1,51 @@
+<!-- SideNav Component -->
+
+<div class="container-fluid">
+    <!-- Displays Company Logo -->
+    <div class="logo-div py-4">
+        <!-- <img class="logo logo-image img-fluid rounded" src=".." alt="logo" height="55rem" width="auto"> -->
+        <span>
+            <mat-icon>polymer</mat-icon>
+        </span>
+    </div>
+    <!-- Displays Navigation Buttons -->
+    <div class="mainBtn-div">
+        <!-- Home Button and Router Link -->
+        <button routerLink="home" routerLinkActive="active" mat-stroked-button color="primary" class="my-1">
+            <mat-icon>home</mat-icon>
+            <span class="d-none d-sm-none d-md-block">Home</span>
+        </button>
+        <!-- Inventory Button and Router Link -->
+        <button routerLink="inventory" routerLinkActive="active" mat-stroked-button color="primary" class="my-1">
+            <mat-icon>inventory</mat-icon>
+            <span class="d-none d-sm-none d-md-block">Inventory</span>
+        </button>
+        <!-- Receipt Button and Router Link -->
+        <button routerLink="receipt" routerLinkActive="active" mat-stroked-button color="primary" class="my-1">
+            <mat-icon>receipt_long</mat-icon>
+            <span class="d-none d-sm-none d-md-block">Receipt</span>
+        </button>
+        <!-- History Button and Router Link -->
+        <button routerLink="history" routerLinkActive="active" mat-stroked-button color="primary" class="my-1">
+            <mat-icon>history</mat-icon>
+            <span class="d-none d-sm-none d-md-block">History</span>
+        </button>
+        <!-- Report Button and Router Link -->
+        <button routerLink="report" routerLinkActive="active" mat-stroked-button color="primary" class="my-1">
+            <mat-icon>summarize</mat-icon>
+            <span class="d-none d-sm-none d-md-block">Report</span>
+        </button>
+        <!-- Settings Button and Router Link -->
+        <button routerLink="settings" routerLinkActive="active" mat-stroked-button color="primary" class="my-1">
+            <mat-icon>settings</mat-icon>
+            <span class="d-none d-sm-none d-md-block">Settings</span>
+        </button>
+    </div>
+    <!-- Logout Button and Router Link -->
+    <div routerLink="/login" class="logout-div">
+        <button mat-stroked-button color="warn">
+            <mat-icon>logout</mat-icon>
+            <span class="d-none d-sm-none d-md-block">Logout</span>
+        </button>
+    </div>
+</div>

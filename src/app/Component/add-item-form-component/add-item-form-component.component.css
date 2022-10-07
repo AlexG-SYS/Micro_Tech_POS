@@ -1,0 +1,99 @@
+/* Add Item CSS Styling */
+
+.upc,
+.online,
+.quantity,
+.price,
+.mpn,
+.status {
+  width: 12rem;
+}
+
+.description,
+.category {
+  width: 25rem;
+}
+
+.file-name {
+  padding: .5rem;
+  margin-left: .5rem;
+  border: 1px;
+  border-style: dashed;
+  border-radius: .5rem;
+}
+
+.red {
+  color: red;
+}
+
+@media (max-width: 1400px) {
+
+  .upc,
+  .online,
+  .quantity,
+  .price,
+  .mpn,
+  .status {
+    width: 10rem;
+  }
+
+  .description,
+  .category {
+    width: 22rem;
+  }
+}
+
+@media (max-width: 1200px) {
+
+  .upc,
+  .online,
+  .quantity,
+  .price,
+  .category,
+  .description,
+  .mpn,
+  .status,
+  .category {
+    width: 12rem;
+  }
+}
+
+@media (max-width: 768px) {
+
+  .newItemForm {
+    width: fit-content;
+  }
+
+  .upc,
+  .online,
+  .quantity,
+  .price,
+  .mpn,
+  .status {
+    width: 10rem;
+  }
+
+  .description,
+  .category {
+    width: 22rem;
+  }
+}
+
+@media (max-width: 360px) {
+
+  .newItemForm {
+    width: fit-content;
+  }
+
+  .upc,
+  .online,
+  .quantity,
+  .price,
+  .category,
+  .description,
+  .mpn,
+  .status,
+  .category {
+    width: 12rem;
+  }
+}

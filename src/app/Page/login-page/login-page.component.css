@@ -1,0 +1,26 @@
+/* Styles the login page */
+
+.card-holder {
+    width: 100vw;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.card {
+    padding: 2rem;
+    margin: 2rem;
+    width: 66vw;
+    min-height: 75vh;
+    background-color: #f6f6f6;
+    border-radius: 3rem;
+}
+
+.inner-card{
+    background-image: url("../../../assets/images/login-background.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+    border-radius: 1rem;
+}

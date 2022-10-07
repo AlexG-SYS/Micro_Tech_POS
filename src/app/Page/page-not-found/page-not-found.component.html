@@ -1,0 +1,24 @@
+<!-- Page Not Found Component -->
+<div class="card-holder container">
+    <mat-card>
+        <div class="row">
+            <div class="col-sm-4 error-icon">
+                <!-- Icon -->
+                <mat-icon class="">sentiment_very_dissatisfied</mat-icon>
+                <br>
+                <h1>404 ERROR</h1>
+            </div>
+            <div class="col-sm-8 error-content">
+                <!-- Content -->
+                <mat-card-title>Oops!</mat-card-title>
+                <mat-card-subtitle>Page Not Found</mat-card-subtitle>
+                <mat-card-content>
+                    <p>We could not find that requested page! Or the server has restricted access!</p>
+                    <!-- Return Home Button -->
+                    <button routerLink="/dashboard/home" mat-raised-button color="primary" class="my-4">Return
+                        Home</button>
+                </mat-card-content>
+            </div>
+        </div>
+    </mat-card>
+</div>

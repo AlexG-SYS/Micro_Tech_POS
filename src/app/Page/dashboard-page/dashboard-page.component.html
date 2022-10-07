@@ -1,0 +1,13 @@
+<!-- Holds all the dashboard components together -->
+
+<mat-sidenav-container class="dashboard-container">
+    <mat-sidenav opened mode="side" class="sidenav">
+        <!-- Display the Dashboard Side Component -->
+        <app-sidenav-component></app-sidenav-component>
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+        <!-- Display the Dashboard Main Content -->
+        <router-outlet></router-outlet>
+    </mat-sidenav-content>
+</mat-sidenav-container>

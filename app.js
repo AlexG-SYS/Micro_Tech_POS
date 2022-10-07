@@ -20,11 +20,11 @@ const path = require("path");
 let appWindow
 function initWindow() {
   appWindow = new BrowserWindow({
-    width: 1000,
-    height: 800,
+    width: 1920,
+    height: 1080,
     webPreferences: {
       nodeIntegration: true,
-      devTools: false
+      devTools: true,
     },
     icon: path.join(__dirname, 'assets/icons/win/icon.ico')
   })

@@ -1,0 +1,39 @@
+<!-- Login Component -->
+
+<mat-card class="m-4 px-4">
+    <mat-card-title class="mx-4 my-2">Login</mat-card-title>
+    <mat-card-content>
+        <!-- Login Form -->
+        <form #loginForm="ngForm" (ngSubmit)="onLoginSubmit(loginForm)">
+            <!-- Company name input field -->
+            <p class="pt-2 mx-4">
+                <mat-form-field>
+                    <mat-icon class="pt-1 mx-1" matPrefix>store</mat-icon>
+                    <input #firstInput mat-icon-store type="text" matInput autofocus placeholder="Company Name" name="companyName" ngModel>
+                </mat-form-field>
+            </p>
+            <!-- Username input field -->
+            <p class="mx-4">
+                <mat-form-field>
+                    <mat-icon class="pt-1 mx-1" matPrefix>person</mat-icon>
+                    <input type="text" matInput placeholder="Username" name="username" ngModel>
+                </mat-form-field>
+            </p>
+            <!-- Password input field -->
+            <p class="mx-4">
+                <mat-form-field>
+                    <mat-icon class="pt-1 mx-1" matPrefix>key</mat-icon>
+                    <input type="password" matInput placeholder="Password" name="password" ngModel>
+                </mat-form-field>
+            </p>
+            <!-- Error Message -->
+            <p *ngIf="error" class="error mx-4">
+                {{ error }}
+            </p>
+            <!-- Login Button -->
+            <div class="button mx-4">
+                <button type="submit" mat-raised-button color="primary">Login</button>
+            </div>
+        </form>
+    </mat-card-content>
+</mat-card>
