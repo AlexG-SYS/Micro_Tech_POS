@@ -83,11 +83,10 @@ export class AddItemFormComponentComponent {
             this.resetInput();
             formData.resetForm();
             this.refreshActiveItemListEvent.emit(true);
-            this.openSnackBar('Item Successfully Added!');
+            this.openSnackBar('Item Successfully Added!', 'success-snakBar');
           }),
           catchError(error => {
-            console.log(error);
-            this.openSnackBar('An Error Occured While Saving!');
+            this.openSnackBar('An Error Occured While Saving!', 'error-snakBar');
             throw catchError(error);
           })
         ).subscribe();
@@ -110,9 +109,10 @@ export class AddItemFormComponentComponent {
 
   // -----------------------------------------------------------------------------------------------------------
   //Displays message to the user
-  openSnackBar(message: string) {
+  openSnackBar(message: string, cssStyle: string) {
     this.snackBar.open(message, '', {
-      duration: 2000
+      duration: 2000,
+      panelClass: [cssStyle],
     });
   }
   // -----------------------------------------------------------------------------------------------------------

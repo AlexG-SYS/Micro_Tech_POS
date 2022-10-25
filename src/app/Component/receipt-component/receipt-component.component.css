@@ -1,0 +1,59 @@
+/* Receipt Component Styling */
+.content {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+table {
+  width: 100%;
+}
+
+.table-container {
+  height: 590px;
+  max-width: 100%;
+  overflow: auto;
+}
+
+.mat-table button:hover {
+  background-color: #d7d7d7;
+}
+
+.mat-column-menu {
+  text-align: end;
+}
+
+.mat-row:nth-child(even) {
+  background-color: #f0f0f0;
+}
+
+.receiptSideBar {
+  background-color: #f6f6f6;
+  border-top-left-radius: 2rem;
+  border-bottom-left-radius: 2rem;
+  border: solid;
+  border-width: 1px;
+  border-color: #d8d8d8;
+}
+
+.red {
+  color: red;
+}
+
+.payment-method-Btn {
+  width: 5rem;
+  border-radius: 1rem;
+}
+
+.no-gutters {
+  margin-right: 0;
+  margin-left: 0;
+}
+
+.active{
+  background-color: rgb(224, 220, 220);
+}
+
+.profile-image{
+	border-radius: 1rem;
+}
+

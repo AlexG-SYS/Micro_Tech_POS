@@ -15,20 +15,20 @@ export class ItemService {
   constructor(private db: AngularFirestore) { }
 
   // Retrieves an array of items from the databse 
-  getItem(status: string): Observable<Items[]> {
-    return this.db.collection("/" + GlobalComponent.companyName + "/jodK1Ymec6nYUgcOhf1I-" + GlobalComponent.companyName + "/item",
+  getItemList(status: string): Observable<Items[]> {
+    return this.db.collection("/" + GlobalComponent.companyName + "/jodK1Ymec6nYUgcOhf1I-" + GlobalComponent.companyName + "/items",
       ref => ref.where("status", "==", status)
     ).get().pipe(
       map(snaps => convertSnaps<Items>(snaps))
     )
   }
   // Add an item to the databse 
-  addItem(newItem: Partial<Items>, image: any){
+  addItem(newItem: Partial<Items>, image: any) {
     let save$: Observable<any>;
-    save$ = from(this.db.collection("/" + GlobalComponent.companyName + "/jodK1Ymec6nYUgcOhf1I-" + GlobalComponent.companyName + "/item").add(newItem));
+    save$ = from(this.db.collection("/" + GlobalComponent.companyName + "/jodK1Ymec6nYUgcOhf1I-" + GlobalComponent.companyName + "/items").add(newItem));
     return save$.pipe(
       map(res => {
-        return{
+        return {
           id: res.id
         }
       })
@@ -36,7 +36,9 @@ export class ItemService {
   }
 
   // Updates an items on databse 
-  updateItem(itemID: string, changes: Partial<Items>): Observable<any>{
-    return from(this.db.doc("/" + GlobalComponent.companyName + "/jodK1Ymec6nYUgcOhf1I-" + GlobalComponent.companyName + "/item/" + itemID).update(changes));
+  updateItem(itemID: string, changes: Partial<Items>): Observable<any> {
+    return from(this.db.doc("/" + GlobalComponent.companyName + "/jodK1Ymec6nYUgcOhf1I-" + GlobalComponent.companyName + "/items/" + itemID).update(changes));
   }
+
+
 }

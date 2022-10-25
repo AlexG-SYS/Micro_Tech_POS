@@ -17,6 +17,7 @@ export class LoginComponentComponent {
     // Sets the Global Variables to NULL
     GlobalComponent.companyName = "";
     GlobalComponent.userName = "";
+    GlobalComponent.privilege = "";
 
   }
 
@@ -47,6 +48,7 @@ export class LoginComponentComponent {
                 console.log("LOGIN Successful")
                 GlobalComponent.companyName = loginData.value.companyName.toLowerCase();
                 GlobalComponent.userName = loginData.value.username.toLowerCase();
+                GlobalComponent.privilege = snap.get("privilege");
                 // Resets the form and navigates to Dashboard page
                 loginData.resetForm();
                 this.error = "";

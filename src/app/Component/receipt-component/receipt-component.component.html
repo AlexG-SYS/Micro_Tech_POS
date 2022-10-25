@@ -1,1 +1,198 @@
-<p>receipt-component works!</p>
+<!-- Receipt Component -->
+<div class="content">
+    <div class="row">
+        <div class="container m-4 p-4 col">
+            <div class="row">
+                <!-- Heading -->
+                <div class="col">
+                    <h1 class="my-2">Sales Receipt</h1>
+                </div>
+                <!-- Auto Complete Input Field -->
+                <div class="col d-flex justify-content-end">
+                    <mat-form-field class="m-2 w-75">
+                        <mat-icon class="pt-1 mx-1" matPrefix>search</mat-icon>
+                        <input #itemSearch type="input" placeholder="Search Item" matInput
+                            [formControl]="itemSearchField" [matAutocomplete]="auto">
+
+                        <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+                            <mat-option *ngFor="let autoCompleteData of filteredOptions | async"
+                                [value]="autoCompleteData" (onSelectionChange)="addToReceipt($event)">
+                                {{autoCompleteData}}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                </div>
+            </div>
+            <!-- Receipt Table -->
+            <div class="table-container">
+                <table mat-table [dataSource]="dataSource">
+                    <!-- UPC Column -->
+                    <ng-container matColumnDef="UPC">
+                        <th class="p-2" mat-header-cell *matHeaderCellDef> UPC </th>
+                        <td class="p-2" mat-cell *matCellDef="let element"> {{element.upc}} </td>
+                    </ng-container>
+
+                    <!-- Description Column -->
+                    <ng-container matColumnDef="Description">
+                        <th class="p-2 w-50" mat-header-cell *matHeaderCellDef> Description </th>
+                        <td class="p-2 w-50" mat-cell *matCellDef="let element"> {{element.description}} </td>
+                    </ng-container>
+
+                    <!-- Qty Column -->
+                    <ng-container matColumnDef="Qty">
+                        <th class="p-2 text-center" mat-header-cell *matHeaderCellDef> Qty </th>
+                        <td class="p-2 text-center" mat-cell *matCellDef="let element">
+                            <button mat-icon-button color="primary" aria-label="Subtraction"
+                                (click)="decreaseQty(element.id)">
+                                <mat-icon>remove</mat-icon>
+                            </button>
+                            {{element.quantity}}
+                            <button mat-icon-button color="primary" aria-label="Addition"
+                                (click)="increaseQty(element.id)">
+                                <mat-icon>add</mat-icon>
+                            </button>
+                        </td>
+                    </ng-container>
+
+                    <!-- Price Column -->
+                    <ng-container matColumnDef="Price">
+                        <th class="p-2 text-center" mat-header-cell *matHeaderCellDef> Price </th>
+                        <td class="p-2 text-center" mat-cell *matCellDef="let element">
+                            ${{element.price.toFixed(2)}} </td>
+                    </ng-container>
+
+                    <!-- Remove Item Column -->
+                    <ng-container matColumnDef="Remove">
+                        <th class="p-2 text-center" mat-header-cell *matHeaderCellDef></th>
+                        <td class="p-2 text-center" mat-cell *matCellDef="let element = index">
+                            <button mat-icon-button color="warn" aria-label="Addition" (click)="removeItem(element)">
+                                <mat-icon>close</mat-icon>
+                            </button>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- Receipt SideBar -->
+        <div class="receiptSideBar col-4">
+            <div class="container mt-4">
+
+                <div class="row text-center my-4 py-2">
+                    <h1>Checkout</h1>
+                    <!-- Error Message -->
+                    <div *ngIf="error" class="red">
+                        {{ error }}
+                    </div>
+                </div>
+                <!-- Current User Detials -->
+                <div class="row my-2">
+                    <div class="col d-flex align-items-center pb-2">
+                        <img src="../../../assets/images/profile-default.jpg" class="img-fluid profile-image"
+                            width="70">
+
+                        <div class="mx-3">
+                            <h5 class="m-0 p-0 pt-1 text-capitalize">{{privilege}} User</h5>
+                            <h3 class="text-capitalize">{{username}}</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <mat-divider class="my-3"></mat-divider>
+                <!-- Sub Total -->
+                <div class="row">
+                    <div class="col">
+                        <h5 class="mx-2">Sub Total:</h5>
+                    </div>
+                    <div class="col d-flex justify-content-end">
+                        <h5 class="mx-4">${{subTotal.toFixed(2)}}</h5>
+                    </div>
+                </div>
+                <!-- Tax -->
+                <div class="row">
+                    <div class="col">
+                        <h5 class="mx-2">Tax (12.5%):</h5>
+                    </div>
+                    <div class="col d-flex justify-content-end">
+                        <h5 class="mx-4">${{tax.toFixed(2)}}</h5>
+                    </div>
+                </div>
+                <!-- Total -->
+                <div class="row">
+                    <div class="col">
+                        <h2 class="mx-2">Total:</h2>
+                    </div>
+                    <div class="col d-flex justify-content-end">
+                        <h2 class="mx-4">${{total.toFixed(2)}}</h2>
+                    </div>
+                </div>
+
+                <mat-divider class="my-3"></mat-divider>
+                <!-- Payment Method Titel -->
+                <div class="row">
+                    <h2 class="mx-2 fw-normal">Payment Method</h2>
+                </div>
+                <!-- Payment Methods -->
+                <div class="row no-gutters">
+                    <div class="col my-1">
+                        <!-- Cash Payment Mehtod Btn -->
+                        <button mat-stroked-button id="Cash" color="primary" class="payment-method-Btn"
+                            (click)="paymentMethod(0)">
+                            <mat-icon>local_atm</mat-icon>
+                            <span class="d-md-block">Cash</span>
+                        </button>
+                    </div>
+                    <div class="col my-1">
+                        <!-- Card Payment Mehtod Btn -->
+                        <button mat-stroked-button id="Card" color="primary" class="payment-method-Btn"
+                            (click)="paymentMethod(1)">
+                            <mat-icon>credit_card</mat-icon>
+                            <span class="d-md-block">Card</span>
+                        </button>
+                    </div>
+                    <div class="col my-1">
+                        <!-- Cheque Payment Mehtod Btn -->
+                        <button mat-stroked-button id="Cheque" color="primary" class="payment-method-Btn"
+                            (click)="paymentMethod(2)">
+                            <mat-icon>money</mat-icon>
+                            <span class="d-md-block">Cheque</span>
+                        </button>
+                    </div>
+                    <div class="col my-1">
+                        <!-- E-Wallet Payment Mehtod Btn -->
+                        <button mat-stroked-button id="E-Wallet" color="primary" class="payment-method-Btn"
+                            (click)="paymentMethod(3)">
+                            <mat-icon>wallet</mat-icon>
+                            <span class="d-md-block">E-Wallet</span>
+                        </button>
+                    </div>
+                </div>
+
+                <mat-divider class="my-3"></mat-divider>
+
+                <form #receiptForm="ngForm" (ngSubmit)="receiptItemSubmit(receiptForm)">
+                    <div class="row no-gutters">
+                        <div class="col d-flex align-items-center">
+                            <!-- Tendered Amount Input Field -->
+                            <h2 class="fw-normal px-2">Tendered:</h2>
+                            <mat-form-field appearance="fill" class="my-2">
+                                <mat-icon class="pt-1 mx-1" matPrefix>attach_money</mat-icon>
+                                <mat-label>Amount</mat-label>
+                                <input type="number" matInput name="tendered" min="0" step=".01" required ngModel>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <!-- Clear or Save Btn -->
+                    <div class="row p-4">
+                        <div class="col d-flex justify-content-center">
+                            <button class="m-2" mat-raised-button type="reset" (click)="resetReceipt()">Clear</button>
+                            <button class="m-2" mat-raised-button color="primary" type="submit">Save and
+                                New</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

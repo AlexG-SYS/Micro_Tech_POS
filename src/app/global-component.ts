@@ -5,5 +5,5 @@ export class GlobalComponent {
     public static appEmail: string = "MicroTechBZ@gmail.com";
     public static companyName: string = "";
     public static userName: string = "";
- 
+    public static privilege: string = "";
 }

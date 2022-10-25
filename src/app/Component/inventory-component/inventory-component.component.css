@@ -1,4 +1,8 @@
 /* Styles all content in the inventory component */
+.content{
+  max-width: 100%;
+  overflow-x: hidden;
+}
 
 table {
   width: 100%;
@@ -14,10 +18,11 @@ table {
 
 .addItemForm {
   background-color: #f6f6f6;
-  border-radius: 2rem;
+  border-top-left-radius: 2rem;
+  border-bottom-left-radius: 2rem;
   border: solid;
   border-width: 1px;
-  border-color: #cccccc;
+  border-color: #d8d8d8;
 }
 
 .red {

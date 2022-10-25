@@ -56,14 +56,14 @@ export class InventoryComponentComponent implements OnInit {
   inactiveItemList!: any;
 
   refreshActiveItemList() {
-    this.itemService.getItem("active").subscribe(itemsData => {
+    this.itemService.getItemList("active").subscribe(itemsData => {
       this.dataSource.data = itemsData;
     });
     // this.itemService.getItem("active").subscribe(val => console.log(val));
   }
 
   refreshInActiveItemList() {
-    this.itemService.getItem("inactive").subscribe(itemsData => {
+    this.itemService.getItemList("inactive").subscribe(itemsData => {
       itemsData.forEach(data => {
         this.dataSource.data.push(data);
         this.dataSource.data = this.dataSource.data;

@@ -14,6 +14,9 @@ import {MatSortModule} from '@angular/material/sort';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatDialogModule} from '@angular/material/dialog';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {NgxPrintModule} from 'ngx-print';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -44,6 +47,8 @@ import { HistoryComponentComponent } from './Component/history-component/history
 import { AddItemFormComponentComponent } from './Component/add-item-form-component/add-item-form-component.component';
 import { EditItemDialogComponent } from './Component/edit-item-dialog/edit-item-dialog.component';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import {MatDividerModule} from '@angular/material/divider';
+import { PrintReceiptDialogComponent } from './Component/print-receipt-dialog/print-receipt-dialog.component';
 
 @NgModule({
   declarations: [
@@ -61,6 +66,7 @@ import {MatSlideToggleModule} from '@angular/material/slide-toggle';
     HistoryComponentComponent,
     AddItemFormComponentComponent,
     EditItemDialogComponent,
+    PrintReceiptDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -93,7 +99,11 @@ import {MatSlideToggleModule} from '@angular/material/slide-toggle';
     MatSnackBarModule,
     MatPaginatorModule,
     MatDialogModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    MatAutocompleteModule,
+    MatDividerModule,
+    MatProgressSpinnerModule,
+    NgxPrintModule
   ],
   providers: [
     ScreenTrackingService,UserTrackingService,
