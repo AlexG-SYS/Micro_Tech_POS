@@ -7,6 +7,7 @@ export interface Receipt {
     receiptNumber: number;
     date: string;
     items: Partial<Items>[];
+    total: number;
     paymentMeth: string;
     memo: string;
 }

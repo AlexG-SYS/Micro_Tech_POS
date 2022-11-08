@@ -18,14 +18,15 @@ export class ReceiptService {
 
   constructor(private db: AngularFirestore, private itemService: ItemService) { }
 
+  // Adds receipt to the Database
   addReceipt(newReceipt: Partial<Receipt>) {
     return this.db.collection("/" + GlobalComponent.companyName + "/jodK1Ymec6nYUgcOhf1I-" + GlobalComponent.companyName + "/receipts",
       ref => ref.orderBy("receiptNumber", "desc").limit(1))
       .get().pipe(map(result => {
-        if (result.empty) {
-          console.log("Could not reteive last receipt number")
-          throw Error('');
-        }
+        // if (result.empty) {
+        //   console.log("Could not reteive last receipt number")
+        //   throw Error('');
+        // }
 
         const lastReceipt = convertSnaps<Receipt>(result)
         const lastReceiptNumber = lastReceipt[0]?.receiptNumber ?? 0;
@@ -48,7 +49,17 @@ export class ReceiptService {
       }))
   }
 
+  // Finds a specific Receipt based on the Receipt ID
   findReceipt(recID: string){
     return this.db.doc("/" + GlobalComponent.companyName + "/jodK1Ymec6nYUgcOhf1I-" + GlobalComponent.companyName + "/receipts/" + recID).get()
+  }
+
+  // Retrieves an array of Receipts from the databse 
+  getReceiptList(date: string): Observable<Receipt[]> {
+    return this.db.collection("/" + GlobalComponent.companyName + "/jodK1Ymec6nYUgcOhf1I-" + GlobalComponent.companyName + "/receipts",
+      ref => ref.where("date", "==", date)
+    ).get().pipe(
+      map(snaps => convertSnaps<Receipt>(snaps))
+    )
   }
 }

@@ -135,7 +135,7 @@
                 </div>
                 <!-- Payment Methods -->
                 <div class="row no-gutters">
-                    <div class="col my-1">
+                    <div class="col-4 my-1 d-flex justify-content-end">
                         <!-- Cash Payment Mehtod Btn -->
                         <button mat-stroked-button id="Cash" color="primary" class="payment-method-Btn"
                             (click)="paymentMethod(0)">
@@ -143,7 +143,7 @@
                             <span class="d-md-block">Cash</span>
                         </button>
                     </div>
-                    <div class="col my-1">
+                    <div class="col-4 my-1 d-flex justify-content-center">
                         <!-- Card Payment Mehtod Btn -->
                         <button mat-stroked-button id="Card" color="primary" class="payment-method-Btn"
                             (click)="paymentMethod(1)">
@@ -151,7 +151,7 @@
                             <span class="d-md-block">Card</span>
                         </button>
                     </div>
-                    <div class="col my-1">
+                    <div class="col-4 my-1 d-flex justify-content-start">
                         <!-- Cheque Payment Mehtod Btn -->
                         <button mat-stroked-button id="Cheque" color="primary" class="payment-method-Btn"
                             (click)="paymentMethod(2)">
@@ -159,12 +159,29 @@
                             <span class="d-md-block">Cheque</span>
                         </button>
                     </div>
-                    <div class="col my-1">
+                    
+                    <div class="col-4 my-1 d-flex justify-content-end">
                         <!-- E-Wallet Payment Mehtod Btn -->
                         <button mat-stroked-button id="E-Wallet" color="primary" class="payment-method-Btn"
                             (click)="paymentMethod(3)">
                             <mat-icon>wallet</mat-icon>
                             <span class="d-md-block">E-Wallet</span>
+                        </button>
+                    </div>
+                    <div class="col-4 my-1 d-flex justify-content-center">
+                        <!-- Gift Card Payment Mehtod Btn -->
+                        <button mat-stroked-button id="Gift Card" color="primary" class="payment-method-Btn"
+                            (click)="paymentMethod(4)">
+                            <mat-icon>card_giftcard</mat-icon>
+                            <span class="d-md-block">Gift Card</span>
+                        </button>
+                    </div>
+                    <div class="col-4 my-1 d-flex justify-content-start">
+                        <!-- Direct to Bank Payment Mehtod Btn -->
+                        <button mat-stroked-button id="Direct To Bank" color="primary" class="payment-method-Btn"
+                            (click)="paymentMethod(5)">
+                            <mat-icon>account_balance</mat-icon>
+                            <span class="d-md-block">D.T.B</span>
                         </button>
                     </div>
                 </div>
@@ -173,7 +190,7 @@
 
                 <form #receiptForm="ngForm" (ngSubmit)="receiptItemSubmit(receiptForm)">
                     <div class="row no-gutters">
-                        <div class="col d-flex align-items-center">
+                        <div class="col-sm d-flex align-items-center">
                             <!-- Tendered Amount Input Field -->
                             <h2 class="fw-normal px-2">Tendered:</h2>
                             <mat-form-field appearance="fill" class="my-2">

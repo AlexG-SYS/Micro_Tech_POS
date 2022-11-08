@@ -18,7 +18,6 @@ export class InventoryComponentComponent implements OnInit {
   dataSource = new MatTableDataSource<Items>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-  @ViewChild(MatTable) itemsTable!: MatTable<Element>;
 
   constructor(private itemService: ItemService, private snackBar: MatSnackBar, private dialog: MatDialog) {
   }
@@ -125,19 +124,20 @@ export class InventoryComponentComponent implements OnInit {
         console.log("item Edited", val);
         this.refreshTable(true);
         this.showHide_Value = "Show Inactive";
-        this.openSnackBar('Item Successfully Updated!');
+        this.openSnackBar('Item Successfully Updated!','success-snakBar');
       }
       else{
-        this.openSnackBar('Item Was Not Updated!');
+        this.openSnackBar('Item Was Not Updated!', 'error-snakBar');
       }
     })
   }
 
   // -----------------------------------------------------------------------------------------------------------
   //Displays message to the user
-  openSnackBar(message: string) {
+  openSnackBar(message: string, cssStyle: string) {
     this.snackBar.open(message, '', {
-      duration: 2000
+      duration: 2000,
+      panelClass: [cssStyle],
     });
   }
   // -----------------------------------------------------------------------------------------------------------

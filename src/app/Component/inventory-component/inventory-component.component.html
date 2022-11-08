@@ -81,9 +81,10 @@
                         </mat-menu>
                     </td>
                 </ng-container>
+                
                 <!-- Sets Table Column Names and Positions -->
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                <tr mat-row (click)="editItemBtn(row)" *matRowDef="let row; columns: displayedColumns;"></tr>
             </table>
 
             <!-- Table Footer-->

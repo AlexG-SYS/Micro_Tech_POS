@@ -28,3 +28,11 @@ table {
 .red {
   color: red;
 }
+
+.mat-row .mat-cell {
+  cursor: pointer;
+}
+
+.mat-row:hover .mat-cell {
+  font-weight: 500;
+}

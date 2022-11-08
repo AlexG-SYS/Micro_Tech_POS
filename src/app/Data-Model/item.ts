@@ -1,7 +1,7 @@
 // Item Data Model
 export interface Items{
     id: string;
-    categories: string[];
+    category: string;
     upc: string;
     description: string;
     price: number;

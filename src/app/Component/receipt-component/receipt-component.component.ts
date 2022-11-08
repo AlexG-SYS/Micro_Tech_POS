@@ -11,6 +11,7 @@ import { ReceiptService } from 'src/app/Services/receipt.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { PrintReceiptDialogComponent } from '../print-receipt-dialog/print-receipt-dialog.component';
+import { END } from '@angular/cdk/keycodes';
 
 
 @Component({
@@ -79,7 +80,6 @@ export class ReceiptComponentComponent implements OnInit {
 
       this.receiptDataSource.forEach((item: any) => {
         delete item.online;
-        delete item.categories;
         delete item.date;
         delete item.mpn;
         delete item.status;
@@ -114,26 +114,28 @@ export class ReceiptComponentComponent implements OnInit {
     if (item.source.selected) {
       const itemUPC = item.source.value.split(':', 1)
 
-      this.receiptDataSource.forEach(items => {
-        if (items.upc == itemUPC[0]) {
-
-          this.itemList.forEach(element => {
-            if (element.upc == items.upc) {
-              itemQty = element.quantity;
+      if(!this.isItemInReceipt(itemUPC)){
+        this.receiptDataSource.forEach(items => {
+          if (items.upc == itemUPC[0]) {
+  
+            this.itemList.forEach(element => {
+              if (element.upc == items.upc) {
+                itemQty = element.quantity;
+              }
+            });
+  
+            if (itemQty > 0) {
+              items.quantity = 1;
+              this.receiptItems.push(items);
+              this.error = "";
             }
-          });
-
-          if (itemQty > 0) {
-            items.quantity = 1;
-            this.receiptItems.push(items);
-            this.error = "";
+            else {
+              this.error = items.description + ": Insufficient quantity";
+              return;
+            }
           }
-          else {
-            this.error = items.description + ": Insufficient quantity";
-            return;
-          }
-        }
-      })
+        })
+      }
 
       this.itemSearchField.reset();
     }
@@ -264,6 +266,7 @@ export class ReceiptComponentComponent implements OnInit {
       this.receipt.customerName = "BMP " + this.pymMethod + " Customer"
       this.receipt.date = new Date().toLocaleDateString();
       this.receipt.items = this.receiptItems;
+      this.receipt.total = this.total;
       this.receipt.paymentMeth = this.pymMethod;
       this.receipt.memo = "Thank you for Choosing " + GlobalComponent.companyName.toUpperCase() + "!";
 
@@ -337,4 +340,20 @@ export class ReceiptComponentComponent implements OnInit {
       })
   }
   // -------------------------------------------------------------------------------------------------------------
+
+  isItemInReceipt(upc: string): boolean{
+    let result: boolean = false;
+    
+    this.receiptItems.forEach( item => {
+      if(item.upc == upc){
+        this.increaseQty(item.id);
+        result = true;
+      }
+      else {
+        result = false;
+      }
+    })
+
+    return result;
+  }
 }
