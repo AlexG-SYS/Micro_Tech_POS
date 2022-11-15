@@ -39,7 +39,9 @@
                         <td class="p-2 px-2" mat-cell *matCellDef="let element">
                             <ul class="p-0 m-0 padTop-4">
                                 <ng-container *ngFor="let item of element.items">
-                                    <li>{{item.description | json}} - ${{item.price*item.quantity}}</li>
+                                    <li>{{item.description | json}} - 
+                                        ${{item.price*item.quantity | number : '1.2-2'}} - 
+                                        (T{{item.itemTax*item.quantity | number : '1.2-2'}})</li>
                                 </ng-container>
                             </ul>
                         </td>
@@ -65,10 +67,19 @@
             <div class="row">
                 <div class="col noPrint">
                     <button mat-raised-button class="my-4 mx-2" (click)="refresReceiptListMale()">Male Report</button>
-                    <button mat-raised-button class="my-4" (click)="refresReceiptListFemale()">Female Report</button>
+                    <button mat-raised-button class="my-4 mx-2" (click)="refresReceiptListFemale()">Female Report</button>
+                    <button mat-raised-button class="my-4 mx-2" (click)="refresReceiptListOther()">Other Report</button>
                 </div>
-                <div class="col d-flex justify-content-end pt-4">
-                    <h2>Closing Total: ${{salesTotal.toFixed(2)}}</h2>
+                <div class="col pt-4">
+                    <div class="d-flex justify-content-end">
+                        <h3>Sub Total:&emsp;${{subTotal.toFixed(2)}}</h3>
+                    </div>
+                    <div class="d-flex justify-content-end">
+                        <h3>Tax (12.5%):&emsp;${{tax.toFixed(2)}}</h3>
+                    </div>
+                    <div class="d-flex justify-content-end">
+                        <h2>Total: ${{salesTotal.toFixed(2)}}</h2>
+                    </div>
                 </div>
             </div>
         </div>

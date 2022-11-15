@@ -5,12 +5,13 @@
 .quantity,
 .price,
 .mpn,
-.status {
+.status,
+.category,
+.tax {
   width: 12rem;
 }
 
-.description,
-.category {
+.description {
   width: 25rem;
 }
 
@@ -33,12 +34,13 @@
   .quantity,
   .price,
   .mpn,
-  .status {
+  .status,
+  .category,
+  .tax  {
     width: 10rem;
   }
 
-  .description,
-  .category {
+  .description{
     width: 22rem;
   }
 }
@@ -53,8 +55,9 @@
   .description,
   .mpn,
   .status,
-  .category {
-    width: 12rem;
+  .category,
+  .tax {
+    width: 15rem;
   }
 }
 
@@ -69,12 +72,13 @@
   .quantity,
   .price,
   .mpn,
-  .status {
+  .status,
+  .category,
+  .tax  {
     width: 10rem;
   }
 
-  .description,
-  .category {
+  .description {
     width: 22rem;
   }
 }
@@ -93,7 +97,8 @@
   .description,
   .mpn,
   .status,
-  .category {
+  .category,
+  .tax {
     width: 12rem;
   }
 }

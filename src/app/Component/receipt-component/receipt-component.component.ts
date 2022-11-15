@@ -115,6 +115,7 @@ export class ReceiptComponentComponent implements OnInit {
       const itemUPC = item.source.value.split(':', 1)
 
       if(!this.isItemInReceipt(itemUPC)){
+
         this.receiptDataSource.forEach(items => {
           if (items.upc == itemUPC[0]) {
   
@@ -291,8 +292,6 @@ export class ReceiptComponentComponent implements OnInit {
               this.resetReceipt();
               formData.resetForm();
 
-              this.refreshActiveItemList();
-
               this.filteredOptions = this.itemSearchField.valueChanges.pipe(
                 startWith(''),
                 map(value => this._filter(value || '')),
@@ -342,15 +341,12 @@ export class ReceiptComponentComponent implements OnInit {
   // -------------------------------------------------------------------------------------------------------------
 
   isItemInReceipt(upc: string): boolean{
-    let result: boolean = false;
+    let result = false;
     
     this.receiptItems.forEach( item => {
       if(item.upc == upc){
         this.increaseQty(item.id);
         result = true;
-      }
-      else {
-        result = false;
       }
     })
 

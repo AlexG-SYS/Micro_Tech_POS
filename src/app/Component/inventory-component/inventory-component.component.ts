@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Items } from 'src/app/Data-Model/item';
 import { ItemService } from '../../Services/item.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -18,8 +18,10 @@ export class InventoryComponentComponent implements OnInit {
   dataSource = new MatTableDataSource<Items>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild("itemSearch") searchField!: ElementRef;
 
-  constructor(private itemService: ItemService, private snackBar: MatSnackBar, private dialog: MatDialog) {
+  constructor(private itemService: ItemService, private snackBar: MatSnackBar, private dialog: MatDialog,
+    private changeDet: ChangeDetectorRef) {
   }
 
   // When the component is loaded ngOnInit is executed
@@ -31,6 +33,8 @@ export class InventoryComponentComponent implements OnInit {
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+    this.searchField.nativeElement.focus();
+    this.changeDet.detectChanges();
   }
 
   // -------------------------------------------------------------------------------------------------------------

@@ -1,7 +1,7 @@
 <!-- Inventory Component -->
 <div class="content">
     <div class="row">
-        <div class="container m-4 p-4 col">
+        <div class="container col m-4 mb-0 pt-2 ">
             <div class="row">
                 <div class="col">
                     <h1>Inventory List</h1>
@@ -9,7 +9,7 @@
                 <div class="col d-flex justify-content-end">
                     <mat-form-field class="m-2">
                         <mat-icon class="pt-1 mx-1" matPrefix>search</mat-icon>
-                        <input type="input" matInput placeholder="Search" name="search" (keyup)="applyFilter($event)">
+                        <input type="input" #itemSearch matInput placeholder="Search" name="search" (keyup)="applyFilter($event)">
                     </mat-form-field>
 
                     <button mat-mini-fab class="m-2" color="accent" aria-label="New Item" (click)="addItemBtn()"
@@ -105,7 +105,7 @@
         </div>
 
         <!-- Add or Edit Item Form -->
-        <div *ngIf="show" class="addItemForm col-4 mb-4 pb-4">
+        <div *ngIf="show" class="addItemForm col-4 pb-4 h-100">
             <app-add-item-form-component (refreshActiveItemListEvent)="refreshTable($event)">
             </app-add-item-form-component>
         </div>

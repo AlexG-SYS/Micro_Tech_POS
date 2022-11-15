@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { Items } from 'src/app/Data-Model/item';
 import { ItemService } from '../../Services/item.service';
 import { NgForm } from '@angular/forms';
@@ -17,11 +17,17 @@ export interface Category {
 export class AddItemFormComponentComponent {
 
   @Output() refreshActiveItemListEvent: EventEmitter<boolean> = new EventEmitter();
+  @ViewChild("upcInput") searchField!: ElementRef;
 
   error = "";
   selectedFile: any = null;
 
-  constructor(private itemService: ItemService, private snackBar: MatSnackBar) {
+  constructor(private itemService: ItemService, private snackBar: MatSnackBar, private changeDet: ChangeDetectorRef) {
+  }
+
+  ngAfterViewInit() {
+    this.searchField.nativeElement.focus();
+    this.changeDet.detectChanges();
   }
 
   // -----------------------------------------------------------------------------------------------------------
@@ -38,6 +44,15 @@ export class AddItemFormComponentComponent {
 
       const date = new Date().toLocaleDateString();
       const newItem = { ...formData.value } as Items;
+
+      if(newItem.tax){
+        newItem.itemTax = newItem.price * 0.125;
+        newItem.itemSubTotal = newItem.price - newItem.itemTax;
+      }
+      else{
+        newItem.itemTax = 0;
+        newItem.itemSubTotal = newItem.price;
+      }
 
       newItem.price = Number(newItem.price.toFixed(2));
       newItem.date = date;

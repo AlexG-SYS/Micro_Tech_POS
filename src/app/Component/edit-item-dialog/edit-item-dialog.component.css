@@ -5,12 +5,13 @@
 .quantity,
 .price,
 .mpn,
-.status {
+.status,
+.category,
+.tax {
   width: 12rem;
 }
 
-.description,
-.category {
+.description {
   width: 26rem;
 }
 
@@ -29,12 +30,13 @@
   .quantity,
   .price,
   .mpn,
-  .status {
+  .status,
+  .category,
+  .tax {
     width: 10rem;
   }
 
-  .description,
-  .category {
+  .description {
     width: 22rem;
   }
 }
@@ -48,7 +50,8 @@
   .mpn,
   .status,
   .description,
-  .category  {
+  .category,
+  .tax  {
     width: 16rem;
   }
 

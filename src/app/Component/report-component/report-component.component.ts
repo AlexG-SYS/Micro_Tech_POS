@@ -18,6 +18,8 @@ export class ReportComponentComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   reportTitle = "";
+  subTotal = 0;
+  tax = 0;
   salesTotal = 0;
 
   constructor(private receiptService: ReceiptService) { }
@@ -35,45 +37,39 @@ export class ReportComponentComponent implements OnInit {
   refresReceiptListMale() {
     this.reportTitle = "(Male)"
     this.salesTotal = 0;
+    this.tax = 0;
+    this.subTotal = 0;
 
     this.receiptService.getReceiptList(this.date).subscribe(receiptData => {
       const tempRec = receiptData;
 
       // I dont Understand why i have to loop twice to make it work --------------------
-      tempRec.forEach(receipt => {
-        receipt.items.forEach((item, index) => {
-          if (item.category != "male") {
-            receipt.items.splice(index, 1)
-          }
+      for (let i = 0; i < 5; i++) {
+        tempRec.forEach(receipt => {
+          receipt.items.forEach((item, index) => {
+            if (item.category != "male") {
+              receipt.items.splice(index, 1)
+            }
+          })
         })
-      })
-
-      tempRec.forEach(receipt => {
-        receipt.items.forEach((item, index) => {
-          if (item.category != "male") {
-            receipt.items.splice(index, 1)
-          }
-        })
-      })
-    // -----------------------------------------------------------------------------------
+      }
+      // -----------------------------------------------------------------------------------
 
       // I dont Understand why i have to loop twice to make it work --------------------
-      tempRec.forEach((receipt, index) => {
-        if (receipt.items.length == 0) {
-          tempRec.splice(index, 1);
-        }
-      })
-
-      tempRec.forEach((receipt, index) => {
-        if (receipt.items.length == 0) {
-          tempRec.splice(index, 1);
-        }
-      })
-    // -----------------------------------------------------------------------------------
+      for (let i = 0; i < 5; i++) {
+        tempRec.forEach((receipt, index) => {
+          if (receipt.items.length == 0) {
+            tempRec.splice(index, 1);
+          }
+        })
+      }
+      // -----------------------------------------------------------------------------------
 
       tempRec.forEach(receipt => {
-        receipt.items.forEach( (item:any) => {
+        receipt.items.forEach((item: any) => {
           this.salesTotal = (item.price * item.quantity) + this.salesTotal
+          this.tax = (item.itemTax * item.quantity) + this.tax
+          this.subTotal = (item.itemSubTotal * item.quantity) + this.subTotal
         })
       })
 
@@ -84,45 +80,82 @@ export class ReportComponentComponent implements OnInit {
   refresReceiptListFemale() {
     this.reportTitle = "(Female)"
     this.salesTotal = 0;
+    this.tax = 0;
+    this.subTotal = 0;
 
     this.receiptService.getReceiptList(this.date).subscribe(receiptData => {
       const tempRec = receiptData;
 
       // I dont Understand why i have to loop twice to make it work --------------------
-      tempRec.forEach(receipt => {
-        receipt.items.forEach((item, index) => {
-          if (item.category != "female") {
-            receipt.items.splice(index, 1)
-          }
+      for (let i = 0; i < 5; i++) {
+        tempRec.forEach(receipt => {
+          receipt.items.forEach((item, index) => {
+            if (item.category != "female") {
+              receipt.items.splice(index, 1)
+            }
+          })
         })
-      })
-
-      tempRec.forEach(receipt => {
-        receipt.items.forEach((item, index) => {
-          if (item.category != "female") {
-            receipt.items.splice(index, 1)
-          }
-        })
-      })
-    // -----------------------------------------------------------------------------------
+      }
+      // -----------------------------------------------------------------------------------
 
       // I dont Understand why i have to loop twice to make it work --------------------
-      tempRec.forEach((receipt, index) => {
-        if (receipt.items.length == 0) {
-          tempRec.splice(index, 1);
-        }
-      })
-
-      tempRec.forEach((receipt, index) => {
-        if (receipt.items.length == 0) {
-          tempRec.splice(index, 1);
-        }
-      })
-    // -----------------------------------------------------------------------------------
+      for (let i = 0; i < 5; i++) {
+        tempRec.forEach((receipt, index) => {
+          if (receipt.items.length == 0) {
+            tempRec.splice(index, 1);
+          }
+        })
+      }
+      // -----------------------------------------------------------------------------------
 
       tempRec.forEach(receipt => {
-        receipt.items.forEach( (item:any) => {
+        receipt.items.forEach((item: any) => {
           this.salesTotal = (item.price * item.quantity) + this.salesTotal
+          this.tax = (item.itemTax * item.quantity) + this.tax
+          this.subTotal = (item.itemSubTotal * item.quantity) + this.subTotal
+        })
+      })
+
+      this.dataSource.data = tempRec;
+    })
+  }
+
+  refresReceiptListOther() {
+    this.reportTitle = "(Other)"
+    this.salesTotal = 0;
+    this.tax = 0;
+    this.subTotal = 0;
+
+    this.receiptService.getReceiptList(this.date).subscribe(receiptData => {
+      const tempRec = receiptData;
+
+      // I dont Understand why i have to loop twice to make it work --------------------
+      for (let i = 0; i < 5; i++) {
+        tempRec.forEach(receipt => {
+          receipt.items.forEach((item, index) => {
+            if (item.category != "other") {
+              receipt.items.splice(index, 1)
+            }
+          })
+        })
+      }
+      // -----------------------------------------------------------------------------------
+
+      // I dont Understand why i have to loop twice to make it work --------------------
+      for (let i = 0; i < 5; i++) {
+        tempRec.forEach((receipt, index) => {
+          if (receipt.items.length == 0) {
+            tempRec.splice(index, 1);
+          }
+        })
+      }
+      // -----------------------------------------------------------------------------------
+
+      tempRec.forEach(receipt => {
+        receipt.items.forEach((item: any) => {
+          this.salesTotal = (item.price * item.quantity) + this.salesTotal
+          this.tax = (item.itemTax * item.quantity) + this.tax
+          this.subTotal = (item.itemSubTotal * item.quantity) + this.subTotal
         })
       })
 

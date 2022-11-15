@@ -25,10 +25,20 @@ ul{
   padding: 0;
 }
 
+h3,h2{
+  padding: 0;
+  margin: 0;
+}
+
 @media print{
   @page {size: landscape}
 
   .noPrint{
     visibility: hidden;
+  }
+
+  h3,h2{
+    padding: 5px;
+    
   }
 }
