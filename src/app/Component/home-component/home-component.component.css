@@ -1,31 +1,32 @@
 /* Styles Page Not Found component */
+mat-toolbar{
+    background-color: white;
+    box-shadow: 0 4px 2px -2px rgb(206, 206, 206);
+}
+
+.content{
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+.example-spacer {
+    flex: 1 1 auto;
+}
 
 .card-holder {
-    width: 100vw;
-    min-height: 100vh;
+    width: 85vw;
+    min-height: 85vh;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-mat-card {
-    padding: 2rem;
-    margin: 2rem;
-    width: 66vw;
-    min-height: 75vh;
-    background-color: #f6f6f6;
+.card {
+    padding: 1rem;
+    margin: 1rem;
+    width: 70vw;
+    min-height: 70vh;
+    background-color: #fafafa;
     border-radius: 3rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
-mat-icon {
-    height: 7rem ;
-    width: 7rem;
-    font-size: 7rem;
-  }
 
-.icon{
-    color: rgb(190, 188, 188);
-    text-align: center;
-}

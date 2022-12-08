@@ -29,6 +29,7 @@
     "@angular/platform-browser-dynamic": "^14.1.0",
     "@angular/router": "^14.1.0",
     "bootstrap": "^5.2.1",
+    "chart.js": "^4.0.1",
     "electron-log": "^4.4.8",
     "firebase": "^9.13.0",
     "ngx-print": "^1.2.1",

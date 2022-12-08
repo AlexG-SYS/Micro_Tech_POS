@@ -9,7 +9,7 @@ table {
 }
 
 .table-container {
-  height: 550px;
+  height: 36rem;
   max-width: 100%;
   overflow: auto;
 }
@@ -35,8 +35,14 @@ table {
   border-color: #d8d8d8;
 }
 
-.red {
-  color: red;
+.error {
+  padding: .5rem;
+  color: white;
+  text-align: center;
+  background-color: red;
+  border-radius: 1rem;
+  width: 70%;
+
 }
 
 .payment-method-Btn {

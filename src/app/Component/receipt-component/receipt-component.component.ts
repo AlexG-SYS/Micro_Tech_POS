@@ -36,6 +36,7 @@ export class ReceiptComponentComponent implements OnInit {
   username: string = GlobalComponent.userName;
   privilege: string = GlobalComponent.privilege;
   itemList: Items[] = [];
+  clicked = false;
 
   constructor(private itemService: ItemService, private receiptService: ReceiptService,
     private changeDet: ChangeDetectorRef, private snackBar: MatSnackBar,
@@ -247,22 +248,25 @@ export class ReceiptComponentComponent implements OnInit {
   error = "";
 
   receiptItemSubmit(formData: NgForm) {
+    this.clicked = true;
 
     if (this.receiptItems.length < 1) {
-      this.error = "Receipt is Empty.";
+      this.error = "Receipt is Empty*";
+      this.clicked = false;
       return;
     }
     if (this.pymMethod.length < 1) {
-      this.error = "Payment Method is Empty.";
+      this.error = "Payment Method is Empty*";
+      this.clicked = false;
       return;
     }
     if (!formData.valid || formData.value.tendered < this.total) {
-      this.error = "Tendered Amount is Insufficient.";
+      this.error = "Tendered Amount is Insufficient*";
+      this.clicked = false;
       return;
     }
 
     else {
-
       this.change = (formData.value.tendered - this.total);
       this.receipt.customerName = "BMP " + this.pymMethod + " Customer"
       this.receipt.date = new Date().toLocaleDateString();
@@ -300,6 +304,7 @@ export class ReceiptComponentComponent implements OnInit {
 
               let printData = [this.change, rec];
               this.openPrintDialog(printData);
+              this.clicked = false;
             })
 
           }),

@@ -30,12 +30,15 @@ export class EditItemDialogComponent {
       online: [item.online, Validators.required]
     })
   }
-
+  
+  // -----------------------------------------------------------------------------------------------------------
   // Closes the Dialog
   close() {
     this.dialogRef.close();
   }
+  // -----------------------------------------------------------------------------------------------------------
 
+  // -----------------------------------------------------------------------------------------------------------
   // Executes when the save button is clicked. Calles the Item Update Funciton
   save() {
     if (this.itemForm.valid) {
@@ -54,5 +57,7 @@ export class EditItemDialogComponent {
       });
     }
   }
+  // -----------------------------------------------------------------------------------------------------------
+
 
 }

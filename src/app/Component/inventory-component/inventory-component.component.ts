@@ -7,6 +7,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { EditItemDialogComponent } from '../edit-item-dialog/edit-item-dialog.component';
+import { GlobalComponent } from 'src/app/global-component';
 
 @Component({
   selector: 'app-inventory-component',
@@ -15,6 +16,7 @@ import { EditItemDialogComponent } from '../edit-item-dialog/edit-item-dialog.co
 })
 export class InventoryComponentComponent implements OnInit {
 
+  privilege = GlobalComponent.privilege;
   dataSource = new MatTableDataSource<Items>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;

@@ -14,9 +14,11 @@ import {MatSortModule} from '@angular/material/sort';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatDialogModule} from '@angular/material/dialog';
+import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {NgxPrintModule} from 'ngx-print';
+import {MatTabsModule} from '@angular/material/tabs';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -41,7 +43,6 @@ import { AngularFireModule } from '@angular/fire/compat';
 import { PageNotFoundComponent } from './Page/page-not-found/page-not-found.component';
 import { InventoryComponentComponent } from './Component/inventory-component/inventory-component.component';
 import { ReceiptComponentComponent } from './Component/receipt-component/receipt-component.component';
-import { SettingsComponentComponent } from './Component/settings-component/settings-component.component';
 import { ReportComponentComponent } from './Component/report-component/report-component.component';
 import { HistoryComponentComponent } from './Component/history-component/history-component.component';
 import { AddItemFormComponentComponent } from './Component/add-item-form-component/add-item-form-component.component';
@@ -49,6 +50,11 @@ import { EditItemDialogComponent } from './Component/edit-item-dialog/edit-item-
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatDividerModule} from '@angular/material/divider';
 import { PrintReceiptDialogComponent } from './Component/print-receipt-dialog/print-receipt-dialog.component';
+import { InvoiceComponentComponent } from './Component/invoice-component/invoice-component.component';
+import { AccountComponentComponent } from './Component/account-component/account-component.component';
+import { UserSettingDialogComponent } from './Component/user-setting-dialog/user-setting-dialog.component';
+import { CopyRightDialogComponent } from './Component/copyRight-dialog/copyRight-dialog.component';
+import { CompanyUserSettingDialogComponent } from './Component/company-user-setting-dialog/company-user-setting-dialog.component';
 
 @NgModule({
   declarations: [
@@ -61,12 +67,16 @@ import { PrintReceiptDialogComponent } from './Component/print-receipt-dialog/pr
     PageNotFoundComponent,
     InventoryComponentComponent,
     ReceiptComponentComponent,
-    SettingsComponentComponent,
     ReportComponentComponent,
     HistoryComponentComponent,
     AddItemFormComponentComponent,
     EditItemDialogComponent,
     PrintReceiptDialogComponent,
+    InvoiceComponentComponent,
+    AccountComponentComponent,
+    UserSettingDialogComponent,
+    CopyRightDialogComponent,
+    CompanyUserSettingDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -103,7 +113,9 @@ import { PrintReceiptDialogComponent } from './Component/print-receipt-dialog/pr
     MatAutocompleteModule,
     MatDividerModule,
     MatProgressSpinnerModule,
-    NgxPrintModule
+    NgxPrintModule,
+    MatToolbarModule,
+    MatTabsModule
   ],
   providers: [
     ScreenTrackingService,UserTrackingService,

@@ -1,0 +1,52 @@
+<!-- User Settings Dialog Component -->
+
+<h2 mat-dialog-title class="text-capitalize d-flex justify-content-center">User Settings - {{username}}</h2>
+
+<mat-dialog-content [formGroup]="userForm">
+    <!-- If any error is thrown then the error is shown here -->
+    <div *ngIf="error" class="error pb-2 text-center">
+        {{ error }}
+    </div>
+
+    <!-- Username Input Field -->
+    <div class="row py-2">
+        <div class="col d-flex justify-content-center">
+            <mat-form-field hintLabel="Max 12 Characters" appearance="fill">
+                <mat-icon class="pt-1 mx-1" matPrefix>person</mat-icon>
+                <mat-label>Username</mat-label>
+                <input mat-icon-store type="text" matInput #usernameInput maxlength="12" formControlName="username">
+                <mat-hint align="end">{{usernameInput.value.length || 0}}/12</mat-hint>
+            </mat-form-field>
+        </div>
+    </div>
+
+    <!-- Current Password Input Field -->
+    <div class="row py-2">
+        <div class="col d-flex justify-content-center">
+            <mat-form-field hintLabel="Max 12 Characters" appearance="fill">
+                <mat-icon class="pt-1 mx-1" matPrefix>key</mat-icon>
+                <mat-label>Current Password</mat-label>
+                <input mat-icon-store type="password" matInput #currentPassInput maxlength="12" formControlName="currentPass">
+                <mat-hint align="end">{{currentPassInput.value.length || 0}}/12</mat-hint>
+            </mat-form-field>
+        </div>
+    </div>
+
+    <!-- New Password Input Field -->
+    <div class="row py-2">
+        <div class="col d-flex justify-content-center">
+            <mat-form-field hintLabel="Max 12 Characters" appearance="fill">
+                <mat-icon class="pt-1 mx-1" matPrefix>key</mat-icon>
+                <mat-label>New Password</mat-label>
+                <input mat-icon-store type="password" matInput #newPasswordInput maxlength="12" formControlName="password">
+                <mat-hint align="end">{{newPasswordInput.value.length || 0}}/12</mat-hint>
+            </mat-form-field>
+        </div>
+    </div>
+</mat-dialog-content>
+
+<!-- Cancel and Save Updated Item Buttons -->
+<mat-dialog-actions class="py-4 d-flex justify-content-end">
+    <button mat-raised-button (click)="close()" class="m-2">Close</button>
+    <button mat-raised-button color="primary" (click)="save()" class="m-2">Save</button>
+</mat-dialog-actions>

@@ -13,7 +13,7 @@
                     </mat-form-field>
 
                     <button mat-mini-fab class="m-2" color="accent" aria-label="New Item" (click)="addItemBtn()"
-                        id="addItemBtn">
+                        id="addItemBtn" *ngIf="privilege=='admin'">
                         <mat-icon>{{icon}}</mat-icon>
                     </button>
                 </div>
@@ -74,7 +74,7 @@
                             <mat-icon>more_vert</mat-icon>
                         </button>
                         <mat-menu #menu="matMenu">
-                            <button mat-menu-item (click)="editItemBtn(element)">
+                            <button mat-menu-item (click)="editItemBtn(element)" *ngIf="privilege=='admin'" >
                                 <mat-icon>edit</mat-icon>
                                 <span>Edit Item</span>
                             </button>
@@ -84,7 +84,7 @@
                 
                 <!-- Sets Table Column Names and Positions -->
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                <tr mat-row (click)="editItemBtn(row)" *matRowDef="let row; columns: displayedColumns;"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
             </table>
 
             <!-- Table Footer-->

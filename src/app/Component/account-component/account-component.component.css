@@ -1,0 +1,45 @@
+/* Styles all content in the account component */
+.content {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+table {
+  width: 100%;
+}
+
+.mat-column-menu {
+  text-align: end;
+}
+
+.mat-row:nth-child(even) {
+  background-color: #f0f0f0;
+}
+
+.addAccountForm {
+  background-color: #f6f6f6;
+  border-top-left-radius: 2rem;
+  border-bottom-left-radius: 2rem;
+  border: solid;
+  border-width: 1px;
+  border-color: #d8d8d8;
+}
+
+.red {
+  color: red;
+}
+
+.mat-row .mat-cell {
+  cursor: pointer;
+}
+
+.mat-row:hover .mat-cell {
+  font-weight: 500;
+}
+
+.card {
+  padding: 1rem;
+  margin: 1rem;
+  background-color: #fafafa;
+  border-radius: 2rem;
+}

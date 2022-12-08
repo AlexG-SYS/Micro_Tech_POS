@@ -1,5 +1,10 @@
  /* Styles SideNav Component */
- 
+
+ .logo {
+     height: 3rem;
+     width: auto;
+ }
+
  .name {
      margin: 0;
      margin-top: 8px;
@@ -13,18 +18,15 @@
  }
 
  button {
+     color: white;
      width: 5rem;
+     border-color: #673ab7;
      border-radius: 1rem;
  }
 
- .logout-div {
-     position: absolute;
-     right: .5rem;
-     left: .5rem;
-     bottom: 2rem;
- }
- .active{
-    background-color: rgb(224, 220, 220);
+ .active {
+    color: #673ab7;
+     background-color: white;
  }
 
  @media (max-width: 768px) {

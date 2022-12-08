@@ -23,8 +23,13 @@
   border-radius: .5rem;
 }
 
-.red {
-  color: red;
+.error {
+  padding: .5rem;
+  color: white;
+  text-align: center;
+  background-color: red;
+  border-radius: 1rem;
+  width: 50%;
 }
 
 @media (max-width: 1400px) {

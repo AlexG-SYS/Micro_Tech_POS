@@ -21,6 +21,7 @@ export class AddItemFormComponentComponent {
 
   error = "";
   selectedFile: any = null;
+  clicked = false;
 
   constructor(private itemService: ItemService, private snackBar: MatSnackBar, private changeDet: ChangeDetectorRef) {
   }
@@ -40,6 +41,7 @@ export class AddItemFormComponentComponent {
   // -----------------------------------------------------------------------------------------------------------
   // Submit and Reset Form Functions
   onNewItemSubmit(formData: NgForm) {
+    this.clicked = true;
     if (formData.valid) {
 
       const date = new Date().toLocaleDateString();
@@ -74,9 +76,11 @@ export class AddItemFormComponentComponent {
 
       formData.resetForm();
       this.resetInput();
+      this.clicked = false;
     }
     else {
       this.error = "Empty Fields*";
+      this.clicked = false;
     }
   }
 

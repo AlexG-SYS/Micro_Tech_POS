@@ -1,0 +1,112 @@
+<!-- Account Component -->
+<div class="content">
+    <div class="row">
+        <div class="container col m-4 mb-0 pt-2 ">
+            <div class="row">
+                <div class="col">
+                    <h1>Account List</h1>
+                </div>
+                <div class="col d-flex justify-content-end">
+                    <button mat-mini-fab class="m-2" color="accent" aria-label="New Account" (click)="addAccountBtn()"
+                        id="addItemBtn">
+                        <mat-icon>{{icon}}</mat-icon>
+                    </button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-3">
+                    <mat-form-field class="m-2">
+                        <mat-icon class="pt-1 mx-1" matPrefix>search</mat-icon>
+                        <input type="input" #accountSearch matInput placeholder="Search" name="search"
+                            (keyup)="applyFilter($event)">
+                    </mat-form-field>
+
+                    <table mat-table [dataSource]="dataSource" matSort matSortActive="name" matSortDirection="asc">
+
+                        <!-- Name Column -->
+                        <ng-container matColumnDef="name">
+                            <th class="p-2" mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+                            <td class="p-2" mat-cell *matCellDef="let element"
+                                [class.red]="element.status == 'inactive' ? 'red' : ''"> {{element.fullName}} </td>
+                        </ng-container>
+
+                        <!-- Balance Column -->
+                        <ng-container matColumnDef="balance">
+                            <th class="p-2" mat-header-cell *matHeaderCellDef mat-sort-header> Balance </th>
+                            <td class="p-2" mat-cell *matCellDef="let element"
+                                [class.red]="element.status == 'inactive' ? 'red' : ''"> ${{element.balance.toFixed(2)}}
+                            </td>
+                        </ng-container>
+
+                        <!-- Sets Table Column Names and Positions -->
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row (click)="fillAccountInfo(row)" *matRowDef="let row; columns: displayedColumns;">
+                        </tr>
+                    </table>
+
+                    <!-- Table Footer-->
+
+                    <div class="row">
+                        <!-- Hide or Show Inactive Items Button -->
+                        <div class="col">
+                            <button mat-stroked-button color="warn" class="my-3"
+                                (click)="showHideInactive()">{{showHide_Value}}</button>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="col card">
+                    <div class="row">
+                        <h2>Customer Information</h2>
+                        Name: {{fullName}}<br>
+                        ID: {{id}}<br>
+                        Phone: {{phone}}<br>
+                        Email: {{email}}<br>
+                        Street: {{street}}<br>
+                        City: {{city_town_village}}<br>
+                        Countrry: {{country}}<br>
+                        Balance: {{balance}}<br>
+                        Status: {{status}}<br>
+                        Date: {{date}}<br>
+                    </div>
+                    <div class="row">
+                        <!-- <mat-tab-group>
+                            <mat-tab>
+                                <ng-template mat-tab-label>
+                                    <mat-icon class="example-tab-icon">thumb_up</mat-icon>
+                                    First
+                                </ng-template>
+                                Content 1
+                            </mat-tab>
+
+                            <mat-tab>
+                                <ng-template mat-tab-label>
+                                    <mat-icon class="example-tab-icon">thumb_up</mat-icon>
+                                    Second
+                                </ng-template>
+                                Content 2
+                            </mat-tab>
+
+                            <mat-tab>
+                                <ng-template mat-tab-label>
+                                    <mat-icon class="example-tab-icon">thumb_up</mat-icon>
+                                    Third
+                                </ng-template>
+
+                                Content 3
+                            </mat-tab>
+                        </mat-tab-group> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add or Edit Account Form -->
+        <div *ngIf="show" class="addAccountForm col-4 pb-4 h-100">
+            <!-- <app-add-item-form-component (refreshActiveItemListEvent)="refreshTable($event)">
+            </app-add-item-form-component> -->
+        </div>
+    </div>
+
+</div>

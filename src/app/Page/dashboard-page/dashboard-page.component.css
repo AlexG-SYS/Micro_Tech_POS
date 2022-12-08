@@ -9,8 +9,9 @@
 }
 
 mat-sidenav {
-    background-color: #f6f6f6;
-    border-radius: 2rem;
+    background-color: #673ab7;
+    border-top-right-radius: 2rem;
+    border-bottom-right-radius: 2rem;
     padding: 1rem;
     text-align: center;
 }

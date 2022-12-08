@@ -1,0 +1,66 @@
+<!-- Compnay User Settings Dialog Component -->
+
+<h2 mat-dialog-title class="text-capitalize d-flex justify-content-center">Company User Settings</h2>
+
+<mat-dialog-content [formGroup]="companyUserForm">
+    <!-- If any error is thrown then the error is shown here -->
+    <div class="d-flex justify-content-center">
+        <div *ngIf="error" class="row error pb-2 justify-content-center">
+            {{ error }}
+        </div>
+    </div>
+
+    <div class="row py-2">
+        <!-- User to be edited selection -->
+        <div class="col d-flex justify-content-end">
+            <mat-form-field appearance="fill">
+                <mat-icon class="pt-1 mx-1" matPrefix>manage_accounts</mat-icon>
+                <mat-label>User</mat-label>
+                <mat-select name="userID" formControlName="userID">
+                    <mat-option *ngFor="let user of allUserCred" [value]="user.id">{{user.username}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+
+        <!-- Username Input Field -->
+        <div class="col d-flex justify-content-end">
+            <mat-form-field hintLabel="Max 12 Characters" appearance="fill">
+                <mat-icon class="pt-1 mx-1" matPrefix>person</mat-icon>
+                <mat-label>New Username</mat-label>
+                <input mat-icon-store type="text" matInput #usernameInput maxlength="12" formControlName="username">
+                <mat-hint align="end">{{usernameInput.value.length || 0}}/12</mat-hint>
+            </mat-form-field>
+        </div>
+    </div>
+
+    <!-- New Password Input Field -->
+    <div class="row py-2">
+        <div class="col d-flex justify-content-end">
+            <mat-form-field hintLabel="Max 12 Characters" appearance="fill">
+                <mat-icon class="pt-1 mx-1" matPrefix>key</mat-icon>
+                <mat-label>New Password</mat-label>
+                <input mat-icon-store type="password" matInput #newPasswordInput maxlength="12"
+                    formControlName="password">
+                <mat-hint align="end">{{newPasswordInput.value.length || 0}}/12</mat-hint>
+            </mat-form-field>
+        </div>
+    </div>
+
+    <!-- User to be edited selection -->
+    <div class="col d-flex justify-content-end">
+        <mat-form-field appearance="fill">
+            <mat-icon class="pt-1 mx-1" matPrefix>admin_panel_settings</mat-icon>
+            <mat-label>Privilege</mat-label>
+            <mat-select name="privilege" formControlName="privilege">
+                <mat-option value="admin">Admin</mat-option>
+                <mat-option value="sales">Sales</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+</mat-dialog-content>
+
+<!-- Cancel and Save Updated Item Buttons -->
+<mat-dialog-actions class="py-4 d-flex justify-content-end">
+    <button mat-raised-button (click)="close()" class="m-2">Close</button>
+    <button mat-raised-button color="primary" (click)="save()" class="m-2">Save</button>
+</mat-dialog-actions>

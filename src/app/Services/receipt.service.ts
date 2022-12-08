@@ -62,4 +62,5 @@ export class ReceiptService {
       map(snaps => convertSnaps<Receipt>(snaps))
     )
   }
+  
 }
