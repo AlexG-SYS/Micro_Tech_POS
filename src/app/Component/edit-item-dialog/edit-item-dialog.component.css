@@ -4,14 +4,14 @@
 .online,
 .quantity,
 .price,
-.mpn,
 .status,
-.category,
-.tax {
+.tax,
+.size,
+.cost {
   width: 12rem;
 }
 
-.description {
+.description, .category  {
   width: 26rem;
 }
 
@@ -29,14 +29,14 @@
   .online,
   .quantity,
   .price,
-  .mpn,
   .status,
-  .category,
-  .tax {
+  .tax,
+  .size,
+  .cost{
     width: 10rem;
   }
 
-  .description {
+  .description, .category  {
     width: 22rem;
   }
 }
@@ -47,11 +47,11 @@
   .online,
   .quantity,
   .price,
-  .mpn,
   .status,
-  .description,
-  .category,
-  .tax  {
+  .tax,
+  .size,
+  .cost,
+  .description, .category  {
     width: 16rem;
   }
 

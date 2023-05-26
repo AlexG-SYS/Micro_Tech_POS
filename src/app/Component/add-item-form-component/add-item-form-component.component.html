@@ -12,14 +12,13 @@
     </div>
 
     <form #newItemForm="ngForm" (ngSubmit)="onNewItemSubmit(newItemForm)">
-        <!-- UPC input field and Online input field-->
+        <!-- UPC input field and Status input field-->
         <div class="row py-2">
             <div class="col d-flex justify-content-center p-0 m-0">
-                <mat-form-field hintLabel="Max 12 Characters" appearance="fill" class=" upc">
+                <mat-form-field hintLabel="Max 12 Characters" appearance="fill" class="upc">
                     <mat-icon class="pt-1 mx-1" matPrefix>qr_code_2</mat-icon>
                     <mat-label>UPC</mat-label>
-                    <input mat-icon-store type="text" matInput #upcInput maxlength="12" name="upc" required
-                        ngModel>
+                    <input mat-icon-store type="text" matInput #upcInput maxlength="12" name="upc" required ngModel>
                     <mat-hint align="end">{{upcInput.value.length || 0}}/12</mat-hint>
                 </mat-form-field>
             </div>
@@ -34,7 +33,7 @@
                 </mat-form-field>
             </div>
         </div>
-        <!-- Description input field -->
+        <!-- Description input field-->
         <div class="row py-2">
             <div class="col d-flex justify-content-center p-0 m-0">
                 <mat-form-field appearance="fill" class="mx-1 description">
@@ -44,13 +43,58 @@
                 </mat-form-field>
             </div>
         </div>
-        <!-- Quantity input field and Price input field -->
+        <!-- Category input field -->
         <div class="row py-2">
+            <div class="col d-flex justify-content-center p-0 m-0">
+                <mat-form-field hintLabel="'Enter Button' or 'Comma Button' to add more" appearance="fill"
+                    class="mx-1 category">
+                    <mat-icon class="pt-1 mx-1" matPrefix>category</mat-icon>
+                    <mat-label>Category</mat-label>
+                    <mat-chip-list #chipList aria-label="Category selection">
+                        <mat-chip *ngFor="let category of category" (removed)="removeMatChip(category)">
+                            {{category.name}}
+                            <button matChipRemove>
+                                <mat-icon>cancel</mat-icon>
+                            </button>
+                        </mat-chip>
+                        <input placeholder="New Category..." [matChipInputFor]="chipList"
+                            [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
+                            (matChipInputTokenEnd)="addMatChip($event)" required>
+                    </mat-chip-list>
+                </mat-form-field>
+            </div>
+        </div>
+        <!-- Size input field and Quantity input field-->
+        <div class="row py-2">
+            <div class="col d-flex justify-content-center p-0 m-0">
+                <mat-form-field appearance="fill" class="mx-1 size">
+                    <mat-icon class="pt-1 mx-1" matPrefix>straighten</mat-icon>
+                    <mat-label>Size</mat-label>
+                    <mat-select name="size" required ngModel>
+                        <mat-option value="xs">X-Small</mat-option>
+                        <mat-option value="s">Small</mat-option>
+                        <mat-option value="m">Medium</mat-option>
+                        <mat-option value="l">Large</mat-option>
+                        <mat-option value="xl">X-Large</mat-option>
+                        <mat-option value="xxl">XX-Large</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
             <div class="col d-flex justify-content-center p-0 m-0">
                 <mat-form-field hintLabel="Max 999 Units" appearance="fill" class="mx-1 quantity">
                     <mat-icon class="pt-1 mx-1" matPrefix>tag</mat-icon>
                     <mat-label>Quantity</mat-label>
                     <input type="number" matInput name="quantity" min="0" max="999" required ngModel>
+                </mat-form-field>
+            </div>
+        </div>
+        <!-- Cost input field and Price input field -->
+        <div class="row py-2">
+            <div class="col d-flex justify-content-center p-0 m-0">
+                <mat-form-field appearance="fill" class="mx-1 cost">
+                    <mat-icon class="pt-1 mx-1" matPrefix>attach_money</mat-icon>
+                    <mat-label>Cost</mat-label>
+                    <input type="number" matInput name="cost" min="0" step=".01" required ngModel>
                 </mat-form-field>
             </div>
             <div class="col d-flex justify-content-center p-0 m-0">
@@ -61,19 +105,8 @@
                 </mat-form-field>
             </div>
         </div>
-        <!-- Category input field and Tax input Field -->
+        <!-- TAX input field and Online Input Field-->
         <div class="row py-2">
-            <div class="col d-flex justify-content-center p-0 m-0">
-                <mat-form-field appearance="fill" class="mx-1 category">
-                    <mat-icon class="pt-1 mx-1" matPrefix>category</mat-icon>
-                    <mat-label>Category</mat-label>
-                    <mat-select name="category" required ngModel>
-                        <mat-option value="male">Male</mat-option>
-                        <mat-option value="female">Female</mat-option>
-                        <mat-option value="other">Other</mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </div>
             <div class="col d-flex justify-content-center p-0 m-0">
                 <mat-form-field appearance="fill" class="mx-1 tax">
                     <mat-icon class="pt-1 mx-1" matPrefix>assured_workload</mat-icon>
@@ -82,17 +115,6 @@
                         <mat-option [value]="true">12.5%</mat-option>
                         <mat-option [value]="false">None</mat-option>
                     </mat-select>
-                </mat-form-field>
-            </div>
-        </div>
-        <!-- MPN input field and Online Input Field-->
-        <div class="row py-2">
-            <div class="col d-flex justify-content-center p-0 m-0">
-                <mat-form-field hintLabel="Max 9 Characters" appearance="fill" class="mx-1 mpn">
-                    <mat-icon class="pt-1 mx-1" matPrefix>warehouse</mat-icon>
-                    <mat-label>MPN</mat-label>
-                    <input type="text" matInput #mpnInput maxlength="9" name="mpn" ngModel>
-                    <mat-hint align="end">{{mpnInput.value.length || 0}}/9</mat-hint>
                 </mat-form-field>
             </div>
             <div class="col d-flex justify-content-center p-0 m-0">
@@ -118,9 +140,9 @@
         <!-- Clear and Save Buttons -->
         <div class="row py-2">
             <div class="col d-flex justify-content-center">
-                <button class="m-2" mat-raised-button type="reset"
-                    (click)="resetInput()">Clear</button>
-                <button class="m-2" mat-raised-button color="primary" type="submit" [disabled]="clicked">Save and New</button>
+                <button class="m-2" mat-raised-button type="reset" (click)="resetInput()">Clear</button>
+                <button class="m-2" mat-raised-button color="primary" type="submit" [disabled]="clicked">Save and
+                    New</button>
             </div>
         </div>
     </form>

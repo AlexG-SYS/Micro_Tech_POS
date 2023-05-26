@@ -47,9 +47,9 @@ export class ReportComponentComponent implements OnInit {
       for (let i = 0; i < 5; i++) {
         tempRec.forEach(receipt => {
           receipt.items.forEach((item, index) => {
-            if (item.category != "male") {
-              receipt.items.splice(index, 1)
-            }
+            // if (item.categories != "male") {
+            //   receipt.items.splice(index, 1)
+            // }
           })
         })
       }
@@ -90,9 +90,9 @@ export class ReportComponentComponent implements OnInit {
       for (let i = 0; i < 5; i++) {
         tempRec.forEach(receipt => {
           receipt.items.forEach((item, index) => {
-            if (item.category != "female") {
-              receipt.items.splice(index, 1)
-            }
+            // if (item.categories != "female") {
+            //   receipt.items.splice(index, 1)
+            // }
           })
         })
       }
@@ -133,9 +133,9 @@ export class ReportComponentComponent implements OnInit {
       for (let i = 0; i < 5; i++) {
         tempRec.forEach(receipt => {
           receipt.items.forEach((item, index) => {
-            if (item.category != "other") {
-              receipt.items.splice(index, 1)
-            }
+            // if (item.categories != "other") {
+            //   receipt.items.splice(index, 1)
+            // }
           })
         })
       }

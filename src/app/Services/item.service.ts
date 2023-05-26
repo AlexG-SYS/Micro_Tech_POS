@@ -16,7 +16,7 @@ export class ItemService {
 
   // Retrieves an array of items from the databse 
   getItemList(status: string): Observable<Items[]> {
-    return this.db.collection("/" + GlobalComponent.companyName + "/jodK1Ymec6nYUgcOhf1I-" + GlobalComponent.companyName + "/items",
+    return this.db.collection("/items",
       ref => ref.where("status", "==", status)
     ).get().pipe(
       map(snaps => convertSnaps<Items>(snaps))
@@ -25,7 +25,7 @@ export class ItemService {
   // Add an item to the databse 
   addItem(newItem: Partial<Items>, image: any) {
     let save$: Observable<any>;
-    save$ = from(this.db.collection("/" + GlobalComponent.companyName + "/jodK1Ymec6nYUgcOhf1I-" + GlobalComponent.companyName + "/items").add(newItem));
+    save$ = from(this.db.collection("/items").add(newItem));
     return save$.pipe(
       map(res => {
         return {
@@ -37,7 +37,7 @@ export class ItemService {
 
   // Updates an items on databse 
   updateItem(itemID: string, changes: Partial<Items>): Observable<any> {
-    return from(this.db.doc("/" + GlobalComponent.companyName + "/jodK1Ymec6nYUgcOhf1I-" + GlobalComponent.companyName + "/items/" + itemID).update(changes));
+    return from(this.db.doc("/items/" + itemID).update(changes));
   }
 
 

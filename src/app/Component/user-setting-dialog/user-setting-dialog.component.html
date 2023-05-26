@@ -4,7 +4,7 @@
 
 <mat-dialog-content [formGroup]="userForm">
     <!-- If any error is thrown then the error is shown here -->
-    <div *ngIf="error" class="error pb-2 text-center">
+    <div *ngIf="error" class="error mb-2 text-center">
         {{ error }}
     </div>
 
@@ -26,7 +26,8 @@
             <mat-form-field hintLabel="Max 12 Characters" appearance="fill">
                 <mat-icon class="pt-1 mx-1" matPrefix>key</mat-icon>
                 <mat-label>Current Password</mat-label>
-                <input mat-icon-store type="password" matInput #currentPassInput maxlength="12" formControlName="currentPass">
+                <input mat-icon-store type="password" matInput #currentPassInput maxlength="12"
+                    formControlName="currentPass">
                 <mat-hint align="end">{{currentPassInput.value.length || 0}}/12</mat-hint>
             </mat-form-field>
         </div>
@@ -38,7 +39,8 @@
             <mat-form-field hintLabel="Max 12 Characters" appearance="fill">
                 <mat-icon class="pt-1 mx-1" matPrefix>key</mat-icon>
                 <mat-label>New Password</mat-label>
-                <input mat-icon-store type="password" matInput #newPasswordInput maxlength="12" formControlName="password">
+                <input mat-icon-store type="password" matInput #newPasswordInput maxlength="12"
+                    formControlName="password">
                 <mat-hint align="end">{{newPasswordInput.value.length || 0}}/12</mat-hint>
             </mat-form-field>
         </div>

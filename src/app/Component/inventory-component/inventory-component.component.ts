@@ -42,19 +42,19 @@ export class InventoryComponentComponent implements OnInit {
   // -------------------------------------------------------------------------------------------------------------
   // Toggles function that shows inactive items or hides them
   showHide_Value = "Show Inactive";
-  showHideInactive(){
-    if(this.showHide_Value == "Show Inactive"){
+  showHideInactive() {
+    if (this.showHide_Value == "Show Inactive") {
       this.refreshInActiveItemList();
       this.showHide_Value = "Hide Inactive";
     }
-    else{
+    else {
       this.refreshActiveItemList();
       this.showHide_Value = "Show Inactive";
     }
   }
   // -------------------------------------------------------------------------------------------------------------
 
-  
+
   // -------------------------------------------------------------------------------------------------------------
   // Gets List of Items from the Database
   activeItemList!: any;
@@ -76,7 +76,7 @@ export class InventoryComponentComponent implements OnInit {
     });
   }
 
-  displayedColumns: string[] = ['upc', 'description', 'price', 'quantity', 'mpn', 'online', 'menu'];
+  displayedColumns: string[] = ['upc', 'description', 'price', 'quantity', 'size', 'online', 'menu'];
   // -------------------------------------------------------------------------------------------------------------
 
   // -------------------------------------------------------------------------------------------------------------
@@ -106,8 +106,8 @@ export class InventoryComponentComponent implements OnInit {
 
   // -----------------------------------------------------------------------------------------------------------
   // Refresh Item Table with new DataSource
-  refreshTable($event: any){
-    if($event){
+  refreshTable($event: any) {
+    if ($event) {
       this.refreshActiveItemList();
       this.showHide_Value = "Show Inactive";
     }
@@ -116,7 +116,7 @@ export class InventoryComponentComponent implements OnInit {
 
   // -----------------------------------------------------------------------------------------------------------
   // Calls methods to edit selected Item
-  editItemBtn(itemData: Items){
+  editItemBtn(itemData: Items) {
     const dialogConfig = new MatDialogConfig();
 
     dialogConfig.disableClose = true;
@@ -125,17 +125,17 @@ export class InventoryComponentComponent implements OnInit {
     dialogConfig.data = itemData;
 
     this.dialog.open(EditItemDialogComponent, dialogConfig)
-    .afterClosed().subscribe( val =>{
-      if(val){
-        console.log("item Edited", val);
-        this.refreshTable(true);
-        this.showHide_Value = "Show Inactive";
-        this.openSnackBar('Item Successfully Updated!','success-snakBar');
-      }
-      else{
-        this.openSnackBar('Item Was Not Updated!', 'error-snakBar');
-      }
-    })
+      .afterClosed().subscribe(val => {
+        if (val) {
+          console.log("item Edited", val.id);
+          this.refreshTable(true);
+          this.showHide_Value = "Show Inactive";
+          this.openSnackBar('Item Successfully Updated!', 'success-snakBar');
+        }
+        else {
+          this.openSnackBar('Item Was Not Updated!', 'error-snakBar');
+        }
+      })
   }
 
   // -----------------------------------------------------------------------------------------------------------

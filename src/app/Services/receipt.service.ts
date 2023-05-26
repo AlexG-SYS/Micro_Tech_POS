@@ -20,7 +20,7 @@ export class ReceiptService {
 
   // Adds receipt to the Database
   addReceipt(newReceipt: Partial<Receipt>) {
-    return this.db.collection("/" + GlobalComponent.companyName + "/jodK1Ymec6nYUgcOhf1I-" + GlobalComponent.companyName + "/receipts",
+    return this.db.collection("/receipts",
       ref => ref.orderBy("receiptNumber", "desc").limit(1))
       .get().pipe(map(result => {
         // if (result.empty) {
@@ -37,7 +37,7 @@ export class ReceiptService {
         }
         let save$: Observable<any>;
 
-        save$ = from(this.db.collection("/" + GlobalComponent.companyName + "/jodK1Ymec6nYUgcOhf1I-" + GlobalComponent.companyName + "/receipts").add(receipt));
+        save$ = from(this.db.collection("/receipts").add(receipt));
         return save$.pipe(
           map(result => {
             return {
@@ -50,17 +50,17 @@ export class ReceiptService {
   }
 
   // Finds a specific Receipt based on the Receipt ID
-  findReceipt(recID: string){
-    return this.db.doc("/" + GlobalComponent.companyName + "/jodK1Ymec6nYUgcOhf1I-" + GlobalComponent.companyName + "/receipts/" + recID).get()
+  findReceipt(recID: string) {
+    return this.db.doc("/receipts/" + recID).get()
   }
 
   // Retrieves an array of Receipts from the databse 
   getReceiptList(date: string): Observable<Receipt[]> {
-    return this.db.collection("/" + GlobalComponent.companyName + "/jodK1Ymec6nYUgcOhf1I-" + GlobalComponent.companyName + "/receipts",
+    return this.db.collection("/receipts",
       ref => ref.where("date", "==", date)
     ).get().pipe(
       map(snaps => convertSnaps<Receipt>(snaps))
     )
   }
-  
+
 }

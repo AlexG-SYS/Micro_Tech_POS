@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import{ GlobalComponent } from '../../global-component';
+import { GlobalComponent } from '../../global-component';
 import { Router } from '@angular/router';
 
 
@@ -10,8 +10,8 @@ import { Router } from '@angular/router';
 })
 export class DashboardPageComponent implements OnInit {
 
-  constructor(private router: Router) { 
-    if(GlobalComponent.companyName.length == 0 && GlobalComponent.userName.length == 0){
+  constructor(private router: Router) {
+    if (GlobalComponent.userName.length == 0) {
       this.router.navigate(['/login']);
     }
   }

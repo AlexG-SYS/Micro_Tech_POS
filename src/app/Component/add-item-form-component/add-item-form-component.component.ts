@@ -1,6 +1,8 @@
 import { Component, Output, EventEmitter, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Items } from 'src/app/Data-Model/item';
 import { ItemService } from '../../Services/item.service';
+import { MatChipInputEvent } from '@angular/material/chips';
 import { NgForm } from '@angular/forms';
 import { catchError, tap } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -32,6 +34,33 @@ export class AddItemFormComponentComponent {
   }
 
   // -----------------------------------------------------------------------------------------------------------
+  // Adds Chip functionality to Category Input Field
+  addOnBlur = true;
+  readonly separatorKeysCodes = [ENTER, COMMA] as const;
+  category: Category[] = [];
+
+  addMatChip(event: MatChipInputEvent): void {
+    const value = (event.value || '').trim();
+
+    // Add our category
+    if (value) {
+      this.category.push({ name: value });
+    }
+
+    // Clear the input value
+    event.chipInput!.clear();
+  }
+
+  removeMatChip(category: Category): void {
+    const index = this.category.indexOf(category);
+
+    if (index >= 0) {
+      this.category.splice(index, 1);
+    }
+  }
+  // -----------------------------------------------------------------------------------------------------------
+
+  // -----------------------------------------------------------------------------------------------------------
   // Controls image input field
   onFileSelected(event: any): void {
     this.selectedFile = event.target.files[0] ?? null;
@@ -40,6 +69,7 @@ export class AddItemFormComponentComponent {
 
   // -----------------------------------------------------------------------------------------------------------
   // Submit and Reset Form Functions
+  tempArray: string[] = [];
   onNewItemSubmit(formData: NgForm) {
     this.clicked = true;
     if (formData.valid) {
@@ -47,11 +77,16 @@ export class AddItemFormComponentComponent {
       const date = new Date().toLocaleDateString();
       const newItem = { ...formData.value } as Items;
 
-      if(newItem.tax){
+      this.category.forEach(element => {
+        this.tempArray.push(element.name.toLowerCase());
+      });
+      newItem.categories = this.tempArray;
+
+      if (newItem.tax) {
         newItem.itemTax = newItem.price * 0.125;
         newItem.itemSubTotal = newItem.price - newItem.itemTax;
       }
-      else{
+      else {
         newItem.itemTax = 0;
         newItem.itemSubTotal = newItem.price;
       }
@@ -86,7 +121,9 @@ export class AddItemFormComponentComponent {
 
   resetInput() {
     this.selectedFile = null;
+    this.category = [];
     this.error = "";
+    this.tempArray = [];
   }
   // -----------------------------------------------------------------------------------------------------------
 

@@ -14,7 +14,7 @@ export class AccountService {
   constructor(private db: AngularFirestore) { }
 
   getAccountList(status: string): Observable<Account[]> {
-    return this.db.collection("/" + GlobalComponent.companyName + "/jodK1Ymec6nYUgcOhf1I-" + GlobalComponent.companyName + "/accounts",
+    return this.db.collection("/accounts",
       ref => ref.where("status", "==", status)
     ).get().pipe(
       map(snaps => convertSnaps<Account>(snaps))

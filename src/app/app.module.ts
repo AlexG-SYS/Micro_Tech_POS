@@ -5,20 +5,20 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import {MatListModule} from '@angular/material/list';
-import {MatTableModule} from '@angular/material/table';
-import {MatMenuModule} from '@angular/material/menu';
-import {MatSelectModule} from '@angular/material/select';
-import {MatChipsModule} from '@angular/material/chips';
-import {MatSortModule} from '@angular/material/sort';
-import {MatSnackBarModule} from '@angular/material/snack-bar';
-import {MatPaginatorModule} from '@angular/material/paginator';
-import {MatDialogModule} from '@angular/material/dialog';
-import {MatToolbarModule} from '@angular/material/toolbar';
-import {MatAutocompleteModule} from '@angular/material/autocomplete';
-import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
-import {NgxPrintModule} from 'ngx-print';
-import {MatTabsModule} from '@angular/material/tabs';
+import { MatListModule } from '@angular/material/list';
+import { MatTableModule } from '@angular/material/table';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatSelectModule } from '@angular/material/select';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatSortModule } from '@angular/material/sort';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { NgxPrintModule } from 'ngx-print';
+import { MatTabsModule } from '@angular/material/tabs';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -30,14 +30,14 @@ import { MatButtonModule } from '@angular/material/button';
 import { DashboardPageComponent } from './Page/dashboard-page/dashboard-page.component';
 import { SidenavComponentComponent } from './Component/sidenav-component/sidenav-component.component';
 import { HomeComponentComponent } from './Component/home-component/home-component.component';
-import { initializeApp,provideFirebaseApp } from '@angular/fire/app';
+import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { environment } from '../environments/environment';
-import { provideAnalytics,getAnalytics,ScreenTrackingService,UserTrackingService } from '@angular/fire/analytics';
-import { provideAuth,getAuth } from '@angular/fire/auth';
-import { provideFirestore,getFirestore } from '@angular/fire/firestore';
-import { provideFunctions,getFunctions } from '@angular/fire/functions';
-import { providePerformance,getPerformance } from '@angular/fire/performance';
-import { provideStorage,getStorage } from '@angular/fire/storage';
+import { provideAnalytics, getAnalytics, ScreenTrackingService, UserTrackingService } from '@angular/fire/analytics';
+import { provideAuth, getAuth } from '@angular/fire/auth';
+import { provideFirestore, getFirestore } from '@angular/fire/firestore';
+import { provideFunctions, getFunctions } from '@angular/fire/functions';
+import { providePerformance, getPerformance } from '@angular/fire/performance';
+import { provideStorage, getStorage } from '@angular/fire/storage';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { AngularFireModule } from '@angular/fire/compat';
 import { PageNotFoundComponent } from './Page/page-not-found/page-not-found.component';
@@ -47,8 +47,8 @@ import { ReportComponentComponent } from './Component/report-component/report-co
 import { HistoryComponentComponent } from './Component/history-component/history-component.component';
 import { AddItemFormComponentComponent } from './Component/add-item-form-component/add-item-form-component.component';
 import { EditItemDialogComponent } from './Component/edit-item-dialog/edit-item-dialog.component';
-import {MatSlideToggleModule} from '@angular/material/slide-toggle';
-import {MatDividerModule} from '@angular/material/divider';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatDividerModule } from '@angular/material/divider';
 import { PrintReceiptDialogComponent } from './Component/print-receipt-dialog/print-receipt-dialog.component';
 import { InvoiceComponentComponent } from './Component/invoice-component/invoice-component.component';
 import { AccountComponentComponent } from './Component/account-component/account-component.component';
@@ -118,7 +118,7 @@ import { CompanyUserSettingDialogComponent } from './Component/company-user-sett
     MatTabsModule
   ],
   providers: [
-    ScreenTrackingService,UserTrackingService,
+    ScreenTrackingService, UserTrackingService,
   ],
   bootstrap: [AppComponent],
 })

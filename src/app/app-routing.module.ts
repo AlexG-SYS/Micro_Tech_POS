@@ -27,7 +27,7 @@ const routes: Routes = [
       { path: 'invoice', title: 'Dashboard - Invoice', component: InvoiceComponentComponent },
       { path: 'history', title: 'Dashboard - History', component: HistoryComponentComponent },
       { path: 'report', title: 'Dashboard - Report', component: ReportComponentComponent },
-      { path: '**', redirectTo: 'home', pathMatch: 'full' }
+      { path: '**', title: 'Error - POS', component: PageNotFoundComponent }
     ]
   },
   { path: '**', title: 'Error - POS', component: PageNotFoundComponent }
@@ -38,6 +38,6 @@ const routes: Routes = [
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
-export const ArrayOfComponents = [LoginPageComponent, 
+export const ArrayOfComponents = [LoginPageComponent,
   DashboardPageComponent, HomeComponentComponent,
-  InventoryComponentComponent,PageNotFoundComponent]
+  InventoryComponentComponent, PageNotFoundComponent]

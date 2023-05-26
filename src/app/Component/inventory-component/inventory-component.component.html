@@ -9,7 +9,8 @@
                 <div class="col d-flex justify-content-end">
                     <mat-form-field class="m-2">
                         <mat-icon class="pt-1 mx-1" matPrefix>search</mat-icon>
-                        <input type="input" #itemSearch matInput placeholder="Search" name="search" (keyup)="applyFilter($event)">
+                        <input type="input" #itemSearch matInput placeholder="Search" name="search"
+                            (keyup)="applyFilter($event)">
                     </mat-form-field>
 
                     <button mat-mini-fab class="m-2" color="accent" aria-label="New Item" (click)="addItemBtn()"
@@ -49,11 +50,11 @@
                         [class.red]="element.status == 'inactive' ? 'red' : ''"> {{element.quantity}} </td>
                 </ng-container>
 
-                <!-- MPN Column -->
-                <ng-container matColumnDef="mpn">
-                    <th class="p-2" mat-header-cell *matHeaderCellDef mat-sort-header> MPN </th>
-                    <td class="p-2" mat-cell *matCellDef="let element"
-                        [class.red]="element.status == 'inactive' ? 'red' : ''"> {{element.mpn}} </td>
+                <!-- Size Column -->
+                <ng-container matColumnDef="size">
+                    <th class="p-2" mat-header-cell *matHeaderCellDef mat-sort-header> Size </th>
+                    <td class="p-2 text-uppercase" mat-cell *matCellDef="let element"
+                        [class.red]="element.status == 'inactive' ? 'red' : ''"> {{element.size}} </td>
                 </ng-container>
 
                 <!-- Online Column -->
@@ -70,18 +71,19 @@
                 <ng-container matColumnDef="menu">
                     <th mat-header-cell *matHeaderCellDef></th>
                     <td mat-cell *matCellDef="let element">
-                        <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Item Menu Button">
+                        <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Item Menu Button"
+                            *ngIf="privilege=='admin'">
                             <mat-icon>more_vert</mat-icon>
                         </button>
                         <mat-menu #menu="matMenu">
-                            <button mat-menu-item (click)="editItemBtn(element)" *ngIf="privilege=='admin'" >
+                            <button mat-menu-item (click)="editItemBtn(element)" *ngIf="privilege=='admin'">
                                 <mat-icon>edit</mat-icon>
                                 <span>Edit Item</span>
                             </button>
                         </mat-menu>
                     </td>
                 </ng-container>
-                
+
                 <!-- Sets Table Column Names and Positions -->
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                 <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
