@@ -1,0 +1,72 @@
+/* Add Account CSS Styling */
+
+.fullName,
+.status,
+.phone,
+.email,
+.street,
+.city_town_village,
+.country {
+  width: 12rem;
+}
+
+.error {
+  padding: .5rem;
+  color: white;
+  text-align: center;
+  background-color: red;
+  border-radius: 1rem;
+  width: 50%;
+}
+
+@media (max-width: 1400px) {
+
+  .fullName,
+  .status,
+  .phone,
+  .email,
+  .street,
+  .city_town_village,
+  .country {
+    width: 10rem;
+  }
+}
+
+@media (max-width: 1200px) {
+
+  .fullName,
+  .status,
+  .phone,
+  .email,
+  .street,
+  .city_town_village,
+  .country {
+    width: 15rem;
+  }
+}
+
+@media (max-width: 768px) {
+
+  .fullName,
+  .status,
+  .phone,
+  .email,
+  .street,
+  .city_town_village,
+  .country {
+    width: 10rem;
+  }
+}
+
+@media (max-width: 360px) {
+
+  .fullName,
+  .status,
+  .phone,
+  .email,
+  .street,
+  .city_town_village,
+  .country {
+    width: 12rem;
+  }
+}

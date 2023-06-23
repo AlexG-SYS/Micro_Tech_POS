@@ -7,9 +7,11 @@
         </div>
         <!-- Company Description -->
         <div class="row ">
-            Royal Panda <br>
-            66W8+G99 <br>
-            Belmopan City <br>
+            {{companyName}} <br>
+            {{companyStreet}} <br>
+            {{companyCityTownVillage}} <br>
+            {{companyCountry}} <br>
+            TIN#: {{companyTIN}} <br>
         </div>
         <!-- Rceipt Number -->
         <div class="row justify-content-end">
@@ -84,5 +86,5 @@
     <button mat-raised-button (click)="close()" class="m-2">Close</button>
     <!-- Print Button uses ngx Print Function to print only the selected HTML called "printable-section" -->
     <button mat-raised-button color="primary" class="m-2" [useExistingCss]="true" printSectionId="printable-section"
-        ngxPrint >Print Receipt</button>
+        ngxPrint>Print Receipt</button>
 </mat-dialog-actions>

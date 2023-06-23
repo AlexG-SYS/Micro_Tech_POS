@@ -3,28 +3,27 @@
     <!-- ToolBar -->
     <mat-toolbar>
         <!-- Company name and welcome message in Toolbar -->
-        <span class="text-capitalize h3 p-2 pt-4">Ace Closet</span>
+        <span class="text-capitalize h3 p-2 pt-4">{{companyName}}</span>
         <span class="example-spacer"></span>
         <span class="text-capitalize fs-6 px-4">{{greetingMessage}}</span>
 
         <!-- Toolbar functions -->
-        <div class="px-2">
-            <button mat-icon-button (click)="copyright()">
-                <mat-icon>copyright</mat-icon>
-            </button>
-            <button mat-icon-button (click)="userSettings()">
-                <mat-icon>settings</mat-icon>
-            </button>
-            <button mat-icon-button (click)="editCompanyUsers()" *ngIf="privilege=='admin'">
-                <mat-icon>group</mat-icon>
-            </button>
-        </div>
-        <div class="px-2">
-            <button routerLink="/login" mat-stroked-button color="warn">
-                <mat-icon>logout</mat-icon>
-                <span>Sign out</span>
-            </button>
-        </div>
+        <button mat-icon-button (click)="copyright()">
+            <mat-icon>copyright</mat-icon>
+        </button>
+        <button mat-icon-button (click)="editCompany()" *ngIf="privilege=='admin'">
+            <mat-icon>business</mat-icon>
+        </button>
+        <button mat-icon-button (click)="userSettings()">
+            <mat-icon>settings</mat-icon>
+        </button>
+        <button mat-icon-button (click)="editCompanyUsers()" *ngIf="privilege=='admin'">
+            <mat-icon>groups</mat-icon>
+        </button>
+        <button routerLink="/login" mat-stroked-button color="warn" class="rounded-pill">
+            <mat-icon>logout</mat-icon>
+            <span>Sign out</span>
+        </button>
     </mat-toolbar>
 
     <!-- Daily Customer Graph -->

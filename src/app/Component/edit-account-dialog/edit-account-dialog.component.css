@@ -1,0 +1,11 @@
+/* Edit Account CSS Styling */
+
+.fullName,
+.status,
+.phone,
+.email,
+.street,
+.city_town_village,
+.country {
+  width: 12rem;
+}

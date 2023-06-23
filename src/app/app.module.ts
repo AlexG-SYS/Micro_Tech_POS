@@ -55,6 +55,11 @@ import { AccountComponentComponent } from './Component/account-component/account
 import { UserSettingDialogComponent } from './Component/user-setting-dialog/user-setting-dialog.component';
 import { CopyRightDialogComponent } from './Component/copyRight-dialog/copyRight-dialog.component';
 import { CompanyUserSettingDialogComponent } from './Component/company-user-setting-dialog/company-user-setting-dialog.component';
+import { AddAccountFormComponentComponent } from './Component/add-account-form-component/add-account-form-component.component';
+import { EditAccountDialogComponent } from './Component/edit-account-dialog/edit-account-dialog.component';
+import { ReceivePaymentDialogComponent } from './Component/receive-payment-dialog/receive-payment-dialog.component';
+import { PrintPaymentDialogComponent } from './Component/print-payment-dialog/print-payment-dialog.component';
+import { CompanySettingDialogComponent } from './Component/company-setting-dialog/company-setting-dialog.component';
 
 @NgModule({
   declarations: [
@@ -77,6 +82,11 @@ import { CompanyUserSettingDialogComponent } from './Component/company-user-sett
     UserSettingDialogComponent,
     CopyRightDialogComponent,
     CompanyUserSettingDialogComponent,
+    AddAccountFormComponentComponent,
+    EditAccountDialogComponent,
+    ReceivePaymentDialogComponent,
+    PrintPaymentDialogComponent,
+    CompanySettingDialogComponent,
   ],
   imports: [
     BrowserModule,

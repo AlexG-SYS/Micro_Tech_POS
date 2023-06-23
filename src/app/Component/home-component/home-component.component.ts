@@ -8,6 +8,8 @@ import { UserSettingDialogComponent } from '../user-setting-dialog/user-setting-
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CopyRightDialogComponent } from '../copyRight-dialog/copyRight-dialog.component';
 import { CompanyUserSettingDialogComponent } from '../company-user-setting-dialog/company-user-setting-dialog.component';
+import { CompanySettingDialogComponent } from '../company-setting-dialog/company-setting-dialog.component';
+import { UserService } from 'src/app/Services/user.service';
 
 @Component({
   selector: 'app-home-component',
@@ -16,20 +18,31 @@ import { CompanyUserSettingDialogComponent } from '../company-user-setting-dialo
 })
 export class HomeComponentComponent implements OnInit {
 
-  companyName: string = "";
+  companyName: string = '';
   currentDate = new Date();
   privilege = GlobalComponent.privilege;
   time = this.currentDate.getHours();
   chart!: any;
   greetingMessage: string = "";
 
-  constructor(private db: AngularFirestore, private receiptService: ReceiptService, private dialog: MatDialog, private snackBar: MatSnackBar) {
+  constructor(private db: AngularFirestore, private receiptService: ReceiptService, private dialog: MatDialog, private snackBar: MatSnackBar, private userService: UserService) {
     Chart.register(...registerables);
   }
 
   ngOnInit(): void {
-    this.companyName = GlobalComponent.companyName;
     
+    this.userService.getCompanyInfo().subscribe(data => {
+      const companyInfo: any = data.data();
+      this.companyName = companyInfo.name;
+      GlobalComponent.companyName = companyInfo.name;
+      GlobalComponent.companyStreet = companyInfo.street;
+      GlobalComponent.companyCityTownVillage = companyInfo.city_town_village;
+      GlobalComponent.companyCountry = companyInfo.country;
+      GlobalComponent.companyTIN = companyInfo.TIN;
+      GlobalComponent.companyPhoneNumber = companyInfo.phoneNumber;
+      GlobalComponent.companyEmail = companyInfo.email;
+    })
+
     if (this.time < 12) {
       this.greetingMessage = "Good Morning, " + GlobalComponent.userName;
     }
@@ -74,13 +87,15 @@ export class HomeComponentComponent implements OnInit {
   // -----------------------------------------------------------------------------------------------------------
   // Gets the total number of customers who bought something for the current month
   getData() {
-    let month = this.currentDate.getMonth() + 1;
+    var month = this.currentDate.getMonth() + 1;
     let year = this.currentDate.getFullYear();
 
     for (let day = 1; day <= this.currentDate.getDate(); day++) {
       this.receiptService.getReceiptList(month + "/" + day + "/" + year).subscribe(receiptData => {
 
-        let xData = day + "/" + month;
+        var monthString = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+        let xData = monthString[month-1] + "-" + day;
         let yData = receiptData.length;
         this.addData(this.chart, xData, yData);
       }
@@ -158,6 +173,29 @@ export class HomeComponentComponent implements OnInit {
         }
         else {
           this.openSnackBar('User Setting Was Not Updated!', 'error-snakBar');
+        }
+      })
+  }
+  // -----------------------------------------------------------------------------------------------------------
+
+  // -----------------------------------------------------------------------------------------------------------
+  editCompany(){
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.minWidth = "300px";
+    dialogConfig.maxWidth = "700px"
+    dialogConfig.data = [];
+
+    this.dialog.open(CompanySettingDialogComponent, dialogConfig)
+      .afterClosed().subscribe(val => {
+        if (val) {
+          console.log("Company Settings Edited");
+          this.openSnackBar('Company Information Updated!', 'success-snakBar');
+        }
+        else {
+          this.openSnackBar('Company Information Was Not Updated!', 'error-snakBar');
         }
       })
   }

@@ -1,0 +1,90 @@
+<!-- Add Account Component -->
+
+<div class="container h-100">
+    <!-- Form Title -->
+    <div class="row text-center my-4 pt-4 pb-2 d-flex justify-content-center">
+        <h1>New Customer</h1>
+
+        <!-- Error Message -->
+        <div *ngIf="error" class="error">
+            {{ error }}
+        </div>
+    </div>
+
+    <form #newAccountForm="ngForm" (ngSubmit)="onNewAccountSubmit(newAccountForm)">
+        <!-- Full Name input field and status input field-->
+        <div class="row py-2">
+            <div class="col d-flex justify-content-center p-0 m-0">
+                <mat-form-field appearance="fill" class="fullName">
+                    <mat-icon class="pt-1 mx-1" matPrefix>badge</mat-icon>
+                    <mat-label>Full Name</mat-label>
+                    <input mat-icon-store type="text" matInput #fullNameInput name="fullName" required ngModel>
+                </mat-form-field>
+            </div>
+            <div class="col d-flex justify-content-center p-0 m-0">
+                <mat-form-field appearance="fill" class="status">
+                    <mat-icon class="pt-1 mx-1" matPrefix>toggle_on</mat-icon>
+                    <mat-label>Status</mat-label>
+                    <mat-select name="status" required ngModel>
+                        <mat-option value="active">Active</mat-option>
+                        <mat-option value="inactive">Inactive</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </div>
+        <!-- Phone input field and Email input field -->
+        <div class="row py-2">
+            <div class="col d-flex justify-content-center p-0 m-0">
+                <mat-form-field appearance="fill" class="phone">
+                    <mat-icon class="pt-1 mx-1" matPrefix>call</mat-icon>
+                    <mat-label>Phone #</mat-label>
+                    <input type="tel" matInput name="phone" required ngModel>
+                </mat-form-field>
+            </div>
+            <div class="col d-flex justify-content-center p-0 m-0">
+                <mat-form-field appearance="fill" class="email">
+                    <mat-icon class="pt-1 mx-1" matPrefix>email</mat-icon>
+                    <mat-label>Email</mat-label>
+                    <input type="email" matInput name="email" ngModel>
+                </mat-form-field>
+            </div>
+        </div>
+        <!-- Street input field and city_town input Field -->
+        <div class="row py-2">
+            <div class="col d-flex justify-content-center p-0 m-0">
+                <mat-form-field appearance="fill" class="street">
+                    <mat-icon class="pt-1 mx-1" matPrefix>streetview</mat-icon>
+                    <mat-label>Street</mat-label>
+                    <input type="text" matInput name="street" required ngModel>
+                </mat-form-field>
+            </div>
+            <div class="col d-flex justify-content-center p-0 m-0">
+                <mat-form-field appearance="fill" class="city_town_village">
+                    <mat-icon class="pt-1 mx-1" matPrefix>location_city</mat-icon>
+                    <mat-label>City/Town/Village</mat-label>
+                    <input type="text" matInput name="city_town_village" required ngModel>
+                </mat-form-field>
+            </div>
+        </div>
+
+        <!-- Country input field -->
+        <div class="row py-2">
+            <div class="col d-flex justify-content-center p-0 m-0">
+                <mat-form-field appearance="fill" class="country">
+                    <mat-icon class="pt-1 mx-1" matPrefix>public</mat-icon>
+                    <mat-label>Country</mat-label>
+                    <input type="text" matInput name="country" required ngModel>
+                </mat-form-field>
+            </div>
+        </div>
+        
+        <!-- Clear and Save Buttons -->
+        <div class="row py-4">
+            <div class="col d-flex justify-content-center">
+                <button class="m-2" mat-raised-button type="reset" (click)="resetInput()">Clear</button>
+                <button class="m-2" mat-raised-button color="primary" type="submit" [disabled]="clicked">Save and
+                    New</button>
+            </div>
+        </div>
+    </form>
+</div>

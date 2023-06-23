@@ -32,4 +32,12 @@ export class UserService {
   updateUserCredentials(userID: string, changes: Partial<User>) {
     return from(this.db.doc("/users/" + userID).update(changes));
   }
+
+  getCompanyInfo() {
+    return this.db.doc("/companyInfo/companyInfoCurr").get()
+  }
+
+  updateCompanyInfo(companyInfo: any){
+    return from(this.db.doc("/companyInfo/companyInfoCurr").set(companyInfo));
+  }
 }

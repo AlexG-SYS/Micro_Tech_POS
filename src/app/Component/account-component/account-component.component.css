@@ -8,16 +8,32 @@ table {
   width: 100%;
 }
 
+.accountListTable {
+  height: 68vh;
+  max-width: 100%;
+  overflow-y: visible;
+  overflow-x: hidden;
+}
+
+.receiptTable,
+.invoiceTable,
+.paymentsTable {
+  height: 48vh;
+  max-width: 100%;
+  overflow: auto;
+}
+
 .mat-column-menu {
   text-align: end;
 }
 
-.mat-row:nth-child(even) {
+.mat-row:nth-child(odd) {
   background-color: #f0f0f0;
 }
 
 .addAccountForm {
-  background-color: #f6f6f6;
+  height: 100vh;
+  background-color: #f0f0f0;
   border-top-left-radius: 2rem;
   border-bottom-left-radius: 2rem;
   border: solid;
@@ -27,6 +43,10 @@ table {
 
 .red {
   color: red;
+}
+
+.purple {
+  color: #673ab7;
 }
 
 .mat-row .mat-cell {
@@ -40,6 +60,11 @@ table {
 .card {
   padding: 1rem;
   margin: 1rem;
-  background-color: #fafafa;
+  background-color: #f0f0f0;
+  border-color: #d8d8d8;
   border-radius: 2rem;
+}
+
+.semibold {
+  font-weight: 550;
 }

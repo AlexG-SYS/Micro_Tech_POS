@@ -1,3 +1,5 @@
+import { payments } from "./payments";
+
 // Item Data Model
 export interface Account{
     id: string;

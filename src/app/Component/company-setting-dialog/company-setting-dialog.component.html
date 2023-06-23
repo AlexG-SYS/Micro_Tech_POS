@@ -1,0 +1,76 @@
+<!-- Company Settings Dialog Component -->
+
+<h2 mat-dialog-title class="text-capitalize d-flex justify-content-center">Company Information</h2>
+
+<mat-dialog-content [formGroup]="companyInfoForm">
+    <!-- If any error is thrown then the error is shown here -->
+    <div class="d-flex justify-content-center">
+        <div *ngIf="error" class="row error pb-2 justify-content-center">
+            {{ error }}
+        </div>
+    </div>
+
+    <div class="row py-2">
+        <!-- Company Name Input Field -->
+        <div class="col d-flex justify-content-end">
+            <mat-form-field appearance="fill">
+                <mat-icon class="pt-1 mx-1" matPrefix>badge</mat-icon>
+                <mat-label>Company Name</mat-label>
+                <input mat-icon-store type="text" matInput formControlName="name">
+            </mat-form-field>
+        </div>
+        <!-- Street Input Field -->
+        <div class="col d-flex justify-content-end">
+            <mat-form-field appearance="fill">
+                <mat-icon class="pt-1 mx-1" matPrefix>street_view</mat-icon>
+                <mat-label>Street</mat-label>
+                <input mat-icon-store type="text" matInput formControlName="street">
+            </mat-form-field>
+        </div>
+    </div>
+    <div class="row py-2">
+        <!-- City/Town Input Field -->
+        <div class="col d-flex justify-content-end">
+            <mat-form-field appearance="fill">
+                <mat-icon class="pt-1 mx-1" matPrefix>location_city</mat-icon>
+                <mat-label>City/Town</mat-label>
+                <input mat-icon-store type="text" matInput formControlName="city_town_village">
+            </mat-form-field>
+        </div>
+        <!-- Country Input Field -->
+        <div class="col d-flex justify-content-end">
+            <mat-form-field appearance="fill">
+                <mat-icon class="pt-1 mx-1" matPrefix>public</mat-icon>
+                <mat-label>Country</mat-label>
+                <input mat-icon-store type="text" matInput formControlName="country">
+            </mat-form-field>
+        </div>
+    </div>
+    <div class="row py-2">
+        <!-- Phone Number Input Field -->
+        <div class="col d-flex justify-content-end">
+            <mat-form-field hintLabel="Max 12 Numbers" appearance="fill">
+                <mat-icon class="pt-1 mx-1" matPrefix>phone</mat-icon>
+                <mat-label>Phone #</mat-label>
+                <input mat-icon-store type="text" matInput #phoneInput maxlength="12" formControlName="phoneNumber">
+                <mat-hint align="end">{{phoneInput.value.length || 0}}/12</mat-hint>
+            </mat-form-field>
+        </div>
+        <!-- TIN Input Field -->
+        <div class="col d-flex justify-content-end">
+            <mat-form-field hintLabel="Max 12 Numbers" appearance="fill">
+                <mat-icon class="pt-1 mx-1" matPrefix>gavel</mat-icon>
+                <mat-label>TIN</mat-label>
+                <input mat-icon-store type="text" matInput #TINInput maxlength="12" formControlName="TIN">
+                <mat-hint align="end">{{TINInput.value.length || 0}}/12</mat-hint>
+            </mat-form-field>
+        </div>
+    </div>
+
+</mat-dialog-content>
+
+<!-- Cancel and Save Updated User Buttons -->
+<mat-dialog-actions class="py-4 d-flex justify-content-end">
+    <button mat-raised-button (click)="close()" class="m-2">Close</button>
+    <button mat-raised-button color="primary" (click)="save()" class="m-2">Save</button>
+</mat-dialog-actions>

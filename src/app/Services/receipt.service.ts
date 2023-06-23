@@ -63,4 +63,14 @@ export class ReceiptService {
     )
   }
 
+  // Retrieves an array with all receipts based on the customer ID
+  getReceiptsForAccount(customerID: string): Observable<Receipt[]> {
+    {
+      return this.db.collection("/receipts",
+        ref => ref.where("customerID", "==", customerID)
+      ).get().pipe(
+        map(snaps => convertSnaps<Receipt>(snaps))
+      )
+    }
+  }
 }

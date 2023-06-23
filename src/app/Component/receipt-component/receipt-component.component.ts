@@ -8,10 +8,14 @@ import { Observable } from 'rxjs';
 import { catchError, map, startWith, tap } from 'rxjs/operators';
 import { GlobalComponent } from 'src/app/global-component';
 import { ReceiptService } from 'src/app/Services/receipt.service';
+import { AccountService } from 'src/app/Services/account.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { PrintReceiptDialogComponent } from '../print-receipt-dialog/print-receipt-dialog.component';
 import { END } from '@angular/cdk/keycodes';
+import { ActivatedRoute } from '@angular/router';
+import { Account } from 'src/app/Data-Model/account';
+import { ThisReceiver } from '@angular/compiler';
 
 
 @Component({
@@ -21,40 +25,74 @@ import { END } from '@angular/cdk/keycodes';
 })
 export class ReceiptComponentComponent implements OnInit {
 
-  @ViewChild("itemSearch") searchField!: ElementRef;
+  @ViewChild("itemSearch") searchFieldItem!: ElementRef;
+  @ViewChild("accountSearch") searchFieldAccount!: ElementRef;
   @ViewChildren(MatTable) tablesItems!: QueryList<Items>;
+  accountID: string | null = '';
+  accountName: string | null = '';
+  accountPhone: string = '';
+  accountEmail: string = '';
+  accountStreet: string = '';
+  accountCity_town_village: string = '';
+  accountCountry: string = '';
   receiptDataSource: Items[] = [];
   receiptItems: Items[] = [];
   dataSource = new MatTableDataSource<Items>;
   itemSearchField = new FormControl('');
+  accountSearchField = new FormControl('');
   autoCompleteData: string[] = [];
+  autoCompleteDataAccount: string[] = [];
   filteredOptions!: Observable<string[]>;
+  filteredOptionsAccount!: Observable<string[]>;
   subTotal: number = 0;
   tax: number = 0;
   total: number = 0;
   change: number = 0;
   username: string = GlobalComponent.userName;
-  privilege: string = GlobalComponent.privilege;
   itemList: Items[] = [];
   clicked = false;
 
-  constructor(private itemService: ItemService, private receiptService: ReceiptService,
+  constructor(private itemService: ItemService, private receiptService: ReceiptService, private accountServicce: AccountService,
     private changeDet: ChangeDetectorRef, private snackBar: MatSnackBar,
-    private dialog: MatDialog) { }
+    private dialog: MatDialog, private activatedRoute: ActivatedRoute) { }
 
   // When the component is loaded ngOnInit is executed
   ngOnInit() {
+    if (this.activatedRoute.snapshot.paramMap.get('accountID') == '0' && this.activatedRoute.snapshot.paramMap.get('accountName') == 'new') {
+      this.accountID = '';
+      this.accountName = '';
+    }
+    else {
+      this.accountID = this.activatedRoute.snapshot.paramMap.get('accountID');
+      this.accountName = this.activatedRoute.snapshot.paramMap.get('accountName');
+      this.accountServicce.getAccount(this.accountID).subscribe(accountData => {
+
+        const customerInfo: any = accountData.data();
+
+        this.accountPhone = customerInfo.phone;
+        this.accountStreet = customerInfo.street;
+        this.accountCity_town_village = customerInfo.city_town_village;
+        this.accountCountry = customerInfo.country;
+      });
+    }
+
     this.paymentMethod(0);
     this.refreshActiveItemList();
     this.filteredOptions = this.itemSearchField.valueChanges.pipe(
       startWith(''),
       map(value => this._filter(value || '')),
     );
+
+    this.refreshActiveAccountList();
+    this.filteredOptionsAccount = this.accountSearchField.valueChanges.pipe(
+      startWith(''),
+      map(value => this._filterAccount(value || '')),
+    )
   }
 
   // When the component view has been shown ngAfterViewInit is executed
   ngAfterViewInit(): void {
-    this.searchField.nativeElement.focus();
+    this.searchFieldAccount.nativeElement.focus();
     this.changeDet.detectChanges();
   }
 
@@ -63,6 +101,13 @@ export class ReceiptComponentComponent implements OnInit {
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();
     return this.autoCompleteData.filter(autoCompleteData => autoCompleteData.toLowerCase().includes(filterValue));
+  }
+  // -------------------------------------------------------------------------------------------------------------
+
+  // -------------------------------------------------------------------------------------------------------------
+  private _filterAccount(value: string): string[] {
+    const filterValue = value.toLowerCase();
+    return this.autoCompleteDataAccount.filter(autoCompleteDataAccount => autoCompleteDataAccount.toLowerCase().includes(filterValue))
   }
   // -------------------------------------------------------------------------------------------------------------
 
@@ -87,7 +132,7 @@ export class ReceiptComponentComponent implements OnInit {
       });
 
       itemsData.forEach(item => {
-        this.autoCompleteData.push(item.upc + ": " + item.description);
+        this.autoCompleteData.push(item.upc + ": " + item.description + ": " + item.size);
         this.autoCompleteData = this.autoCompleteData.sort((n1, n2) => {
           if (n1 > n2) {
             return 1;
@@ -105,7 +150,31 @@ export class ReceiptComponentComponent implements OnInit {
     // this.itemService.getItem("active").subscribe(val => console.log(val));
   }
 
-  displayedColumns: string[] = ['UPC', 'Description', 'Qty', 'Price', 'Remove'];
+  displayedColumns: string[] = ['UPC', 'Description', 'Size', 'Qty', 'Price', 'Remove'];
+  // -------------------------------------------------------------------------------------------------------------
+
+  // -------------------------------------------------------------------------------------------------------------
+
+  refreshActiveAccountList(){
+    this.accountServicce.getAccountList("active").subscribe(accountData => {
+      accountData.forEach(account => {
+        this.autoCompleteDataAccount.push(account.fullName);
+        this.autoCompleteDataAccount = this.autoCompleteDataAccount.sort((n1, n2) => {
+          if (n1 > n2) {
+            return 1;
+          }
+
+          if (n1 < n2) {
+            return -1;
+          }
+
+          return 0;
+        });
+      });
+    });
+  }
+
+  // -------------------------------------------------------------------------------------------------------------
 
   // -------------------------------------------------------------------------------------------------------------
   // Adds item to the Receipt Object
@@ -115,17 +184,17 @@ export class ReceiptComponentComponent implements OnInit {
     if (item.source.selected) {
       const itemUPC = item.source.value.split(':', 1)
 
-      if(!this.isItemInReceipt(itemUPC)){
+      if (!this.isItemInReceipt(itemUPC)) {
 
         this.receiptDataSource.forEach(items => {
           if (items.upc == itemUPC[0]) {
-  
+
             this.itemList.forEach(element => {
               if (element.upc == items.upc) {
                 itemQty = element.quantity;
               }
             });
-  
+
             if (itemQty > 0) {
               items.quantity = 1;
               this.receiptItems.push(items);
@@ -144,6 +213,27 @@ export class ReceiptComponentComponent implements OnInit {
     this.dataSource.data = this.receiptItems;
     this.updateTotal();
   }
+  // -------------------------------------------------------------------------------------------------------------
+
+  // -------------------------------------------------------------------------------------------------------------
+
+  addAccountToReceipt(account: any){
+    const accountName = account.source.value.split(':', 1)
+    this.accountServicce.getAccountWithName(accountName[0]).subscribe(accountData => {
+      const customerInfo = accountData[0]; 
+        this.accountID = customerInfo.id
+        this.accountName = customerInfo.fullName
+        this.accountPhone = customerInfo.phone;
+        this.accountStreet = customerInfo.street;
+        this.accountCity_town_village = customerInfo.city_town_village;
+        this.accountCountry = customerInfo.country;
+    })
+
+
+    this.accountSearchField.reset();
+
+  }
+
   // -------------------------------------------------------------------------------------------------------------
 
   // -------------------------------------------------------------------------------------------------------------
@@ -239,6 +329,13 @@ export class ReceiptComponentComponent implements OnInit {
     this.error = "";
     this.paymentMethod(0);
     this.updateTotal();
+
+    this.accountID = '';
+    this.accountName =  '';
+    this.accountPhone = '';
+    this.accountStreet = '';
+    this.accountCity_town_village = '';
+    this.accountCountry = '';
   }
   // -------------------------------------------------------------------------------------------------------------
 
@@ -260,6 +357,11 @@ export class ReceiptComponentComponent implements OnInit {
       this.clicked = false;
       return;
     }
+    if (this.accountID == undefined || this.accountID.length < 1){
+      this.error = "No Customer Selected*";
+      this.clicked = false;
+      return;
+    }
     if (!formData.valid || formData.value.tendered < this.total) {
       this.error = "Tendered Amount is Insufficient*";
       this.clicked = false;
@@ -267,12 +369,16 @@ export class ReceiptComponentComponent implements OnInit {
     }
 
     else {
+
       this.change = (formData.value.tendered - this.total);
-      this.receipt.customerName = "BMP " + this.pymMethod + " Customer"
+      this.receipt.customerID = this.accountID?.toString();
+      this.receipt.customerName = this.accountName?.toString();
       this.receipt.date = new Date().toLocaleDateString();
       this.receipt.items = this.receiptItems;
       this.receipt.total = this.total;
       this.receipt.paymentMeth = this.pymMethod;
+      this.receipt.salesRep = this.username;
+      this.receipt.reference = formData.value.reference;
       this.receipt.memo = "Thank you for Choosing " + GlobalComponent.companyName.toUpperCase() + "!";
 
       this.receiptService.addReceipt(this.receipt)
@@ -345,11 +451,11 @@ export class ReceiptComponentComponent implements OnInit {
   }
   // -------------------------------------------------------------------------------------------------------------
 
-  isItemInReceipt(upc: string): boolean{
+  isItemInReceipt(upc: string): boolean {
     let result = false;
-    
-    this.receiptItems.forEach( item => {
-      if(item.upc == upc){
+
+    this.receiptItems.forEach(item => {
+      if (item.upc == upc) {
         this.increaseQty(item.id);
         result = true;
       }

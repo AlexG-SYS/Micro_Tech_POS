@@ -1,0 +1,75 @@
+<!-- Edit Account Dialog Component -->
+
+<h2 mat-dialog-title class="d-flex justify-content-center p-2">Edit Customer Account</h2>
+<mat-dialog-content [formGroup]="accountForm">
+    <!-- Full Name input field and status input field-->
+    <div class="row py-2">
+        <div class="col d-flex justify-content-center">
+            <mat-form-field appearance="fill" class="fullName">
+                <mat-icon class="pt-1 mx-1" matPrefix>badge</mat-icon>
+                <mat-label>Full Name</mat-label>
+                <input mat-icon-store type="text" matInput #fullNameInput name="fullName" formControlName="fullName">
+            </mat-form-field>
+        </div>
+        <div class="col d-flex justify-content-center">
+            <mat-form-field appearance="fill" class="status">
+                <mat-icon class="pt-1 mx-1" matPrefix>toggle_on</mat-icon>
+                <mat-label>Status</mat-label>
+                <mat-select name="status" formControlName="status">
+                    <mat-option value="active">Active</mat-option>
+                    <mat-option value="inactive">Inactive</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+    </div>
+    <!-- Phone input field and Email input field -->
+    <div class="row py-2">
+        <div class="col d-flex justify-content-center">
+            <mat-form-field appearance="fill" class="phone">
+                <mat-icon class="pt-1 mx-1" matPrefix>call</mat-icon>
+                <mat-label>Phone #</mat-label>
+                <input type="number" matInput name="phone" formControlName="phone">
+            </mat-form-field>
+        </div>
+        <div class="col d-flex justify-content-center">
+            <mat-form-field appearance="fill" class="email">
+                <mat-icon class="pt-1 mx-1" matPrefix>email</mat-icon>
+                <mat-label>Email</mat-label>
+                <input type="email" matInput name="email" formControlName="email">
+            </mat-form-field>
+        </div>
+    </div>
+    <!-- Street input field and city_town input Field -->
+    <div class="row py-2">
+        <div class="col d-flex justify-content-center">
+            <mat-form-field appearance="fill" class="street">
+                <mat-icon class="pt-1 mx-1" matPrefix>streetview</mat-icon>
+                <mat-label>Street</mat-label>
+                <input type="text" matInput name="street" formControlName="street">
+            </mat-form-field>
+        </div>
+        <div class="col d-flex justify-content-center">
+            <mat-form-field appearance="fill" class="city_town_village">
+                <mat-icon class="pt-1 mx-1" matPrefix>location_city</mat-icon>
+                <mat-label>City/Town/Village</mat-label>
+                <input type="text" matInput name="city_town_village" formControlName="city_town_village">
+            </mat-form-field>
+        </div>
+    </div>
+
+    <!-- Country input field -->
+    <div class="row py-2">
+        <div class="col d-flex justify-content-center">
+            <mat-form-field appearance="fill" class="country">
+                <mat-icon class="pt-1 mx-1" matPrefix>public</mat-icon>
+                <mat-label>Country</mat-label>
+                <input type="text" matInput name="country" formControlName="country">
+            </mat-form-field>
+        </div>
+    </div>
+</mat-dialog-content>
+<!-- Cancel and Save Buttons -->
+<mat-dialog-actions class="py-4 d-flex justify-content-end">
+    <button mat-raised-button (click)="close()" class="m-2">Close</button>
+    <button mat-raised-button color="primary" (click)="save()" class="m-2">Save</button>
+</mat-dialog-actions>

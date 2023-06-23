@@ -10,6 +10,13 @@ import { ReceiptService } from 'src/app/Services/receipt.service';
 })
 export class PrintReceiptDialogComponent implements OnInit {
 
+  companyName = GlobalComponent.companyName
+  companyStreet = GlobalComponent.companyStreet
+  companyCityTownVillage = GlobalComponent.companyCityTownVillage
+  companyCountry = GlobalComponent.companyCountry
+  companyTIN = GlobalComponent.companyTIN
+  companyPhoneNumber = GlobalComponent.companyPhoneNumber
+
   // Variables used in the Receipt Dialog
   change: number = 0;
   receiptData: any;

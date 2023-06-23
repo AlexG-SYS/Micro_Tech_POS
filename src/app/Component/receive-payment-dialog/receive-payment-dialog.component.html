@@ -1,0 +1,95 @@
+<!-- Receive Account Payment Dialog Component -->
+
+<h2 mat-dialog-title class="d-flex justify-content-center p-2">Customer Payment</h2>
+<mat-dialog-content [formGroup]="paymentForm">
+
+    <!-- Full Name input field and status input field-->
+    <div class="row">
+        <div class="col col-5">
+            <div class="row">
+                <div class="col d-flex align-items-center pb-2">
+                    <mat-icon>person</mat-icon>
+
+                    <div class="mx-3">
+                        <h5 class="m-0 p-0 pt-1 text-capitalize">Received From:</h5>
+                        <h3 class="text-capitalize bold">{{account.fullName}}</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <mat-form-field appearance="fill" class="paymentAmount">
+                    <mat-icon class="pt-1 mx-1" matPrefix>attach_money</mat-icon>
+                    <mat-label>Payment Amount</mat-label>
+                    <input mat-icon-store type="number" matInput min="0" step=".01" name="paymentAmount"
+                        formControlName="paymentAmount">
+                </mat-form-field>
+            </div>
+            <div class="row">
+                <mat-form-field appearance="fill" class="reference">
+                    <mat-icon class="pt-1 mx-1" matPrefix>tag</mat-icon>
+                    <mat-label>Reference</mat-label>
+                    <input mat-icon-store type="text" matInput name="reference" formControlName="reference">
+                </mat-form-field>
+            </div>
+            <div class="row">
+                <mat-form-field appearance="fill" class="memo">
+                    <mat-icon class="pt-1 mx-1" matPrefix>notes</mat-icon>
+                    <mat-label>Memo</mat-label>
+                    <input mat-icon-store type="text" matInput name="memo" formControlName="memo">
+                </mat-form-field>
+            </div>
+
+        </div>
+        <div class="col col-7">
+            <!-- Payment Methods -->
+            <div class="row px-4">
+                <!-- Cash Payment Mehtod Btn -->
+                <button mat-stroked-button id="Cash" color="primary" class="payment-method-Btn"
+                    (click)="paymentMethod(0)">
+                    <mat-icon>local_atm</mat-icon>
+                    <span class="d-md-block">Cash</span>
+                </button>
+                <!-- Card Payment Mehtod Btn -->
+                <button mat-stroked-button id="Card" color="primary" class="payment-method-Btn"
+                    (click)="paymentMethod(1)">
+                    <mat-icon>credit_card</mat-icon>
+                    <span class="d-md-block">Card</span>
+                </button>
+                <!-- Cheque Payment Mehtod Btn -->
+                <button mat-stroked-button id="Cheque" color="primary" class="payment-method-Btn"
+                    (click)="paymentMethod(2)">
+                    <mat-icon>money</mat-icon>
+                    <span class="d-md-block">Cheque</span>
+                </button>
+            </div>
+            <div class="row px-4">
+                <!-- E-Wallet Payment Mehtod Btn -->
+                <button mat-stroked-button id="E-Wallet" color="primary" class="payment-method-Btn"
+                    (click)="paymentMethod(3)">
+                    <mat-icon>wallet</mat-icon>
+                    <span class="d-md-block">E-Wallet</span>
+                </button>
+                <!-- Gift Card Payment Mehtod Btn -->
+                <button mat-stroked-button id="Gift Card" color="primary" class="payment-method-Btn"
+                    (click)="paymentMethod(4)">
+                    <mat-icon>card_giftcard</mat-icon>
+                    <span class="d-md-block">Gift Card</span>
+                </button>
+                <!-- Direct to Bank Payment Mehtod Btn -->
+                <button mat-stroked-button id="Direct To Bank" color="primary" class="payment-method-Btn"
+                    (click)="paymentMethod(5)">
+                    <mat-icon>account_balance</mat-icon>
+                    <span class="d-md-block">D.T.B</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+
+</mat-dialog-content>
+<!-- Cancel and Save Buttons -->
+<mat-dialog-actions class="py-4 d-flex justify-content-end">
+    <button mat-raised-button (click)="close()" class="m-2">Close</button>
+    <button mat-raised-button color="primary" (click)="save()" class="m-2">Save</button>
+</mat-dialog-actions>
