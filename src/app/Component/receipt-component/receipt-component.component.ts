@@ -1,4 +1,12 @@
-import { Component, ElementRef, OnInit, ViewChild, ViewChildren, ChangeDetectorRef, QueryList } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild,
+  ViewChildren,
+  ChangeDetectorRef,
+  QueryList,
+} from '@angular/core';
 import { FormControl, NgForm } from '@angular/forms';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { Items } from 'src/app/Data-Model/item';
@@ -17,16 +25,14 @@ import { ActivatedRoute } from '@angular/router';
 import { Account } from 'src/app/Data-Model/account';
 import { ThisReceiver } from '@angular/compiler';
 
-
 @Component({
   selector: 'app-receipt-component',
   templateUrl: './receipt-component.component.html',
-  styleUrls: ['./receipt-component.component.css']
+  styleUrls: ['./receipt-component.component.css'],
 })
 export class ReceiptComponentComponent implements OnInit {
-
-  @ViewChild("itemSearch") searchFieldItem!: ElementRef;
-  @ViewChild("accountSearch") searchFieldAccount!: ElementRef;
+  @ViewChild('itemSearch') searchFieldItem!: ElementRef;
+  @ViewChild('accountSearch') searchFieldAccount!: ElementRef;
   @ViewChildren(MatTable) tablesItems!: QueryList<Items>;
   accountID: string | null = '';
   accountName: string | null = '';
@@ -37,7 +43,7 @@ export class ReceiptComponentComponent implements OnInit {
   accountCountry: string = '';
   receiptDataSource: Items[] = [];
   receiptItems: Items[] = [];
-  dataSource = new MatTableDataSource<Items>;
+  dataSource = new MatTableDataSource<Items>();
   itemSearchField = new FormControl('');
   accountSearchField = new FormControl('');
   autoCompleteData: string[] = [];
@@ -52,42 +58,52 @@ export class ReceiptComponentComponent implements OnInit {
   itemList: Items[] = [];
   clicked = false;
 
-  constructor(private itemService: ItemService, private receiptService: ReceiptService, private accountServicce: AccountService,
-    private changeDet: ChangeDetectorRef, private snackBar: MatSnackBar,
-    private dialog: MatDialog, private activatedRoute: ActivatedRoute) { }
+  constructor(
+    private itemService: ItemService,
+    private receiptService: ReceiptService,
+    private accountServicce: AccountService,
+    private changeDet: ChangeDetectorRef,
+    private snackBar: MatSnackBar,
+    private dialog: MatDialog,
+    private activatedRoute: ActivatedRoute
+  ) {}
 
   // When the component is loaded ngOnInit is executed
   ngOnInit() {
-    if (this.activatedRoute.snapshot.paramMap.get('accountID') == '0' && this.activatedRoute.snapshot.paramMap.get('accountName') == 'new') {
+    if (
+      this.activatedRoute.snapshot.paramMap.get('accountID') == '0' &&
+      this.activatedRoute.snapshot.paramMap.get('accountName') == 'new'
+    ) {
       this.accountID = '';
       this.accountName = '';
-    }
-    else {
+    } else {
       this.accountID = this.activatedRoute.snapshot.paramMap.get('accountID');
-      this.accountName = this.activatedRoute.snapshot.paramMap.get('accountName');
-      this.accountServicce.getAccount(this.accountID).subscribe(accountData => {
+      this.accountName =
+        this.activatedRoute.snapshot.paramMap.get('accountName');
+      this.accountServicce
+        .getAccount(this.accountID)
+        .subscribe((accountData) => {
+          const customerInfo: any = accountData.data();
 
-        const customerInfo: any = accountData.data();
-
-        this.accountPhone = customerInfo.phone;
-        this.accountStreet = customerInfo.street;
-        this.accountCity_town_village = customerInfo.city_town_village;
-        this.accountCountry = customerInfo.country;
-      });
+          this.accountPhone = customerInfo.phone;
+          this.accountStreet = customerInfo.street;
+          this.accountCity_town_village = customerInfo.city_town_village;
+          this.accountCountry = customerInfo.country;
+        });
     }
 
     this.paymentMethod(0);
     this.refreshActiveItemList();
     this.filteredOptions = this.itemSearchField.valueChanges.pipe(
       startWith(''),
-      map(value => this._filter(value || '')),
+      map((value) => this._filter(value || ''))
     );
 
     this.refreshActiveAccountList();
     this.filteredOptionsAccount = this.accountSearchField.valueChanges.pipe(
       startWith(''),
-      map(value => this._filterAccount(value || '')),
-    )
+      map((value) => this._filterAccount(value || ''))
+    );
   }
 
   // When the component view has been shown ngAfterViewInit is executed
@@ -100,14 +116,18 @@ export class ReceiptComponentComponent implements OnInit {
   // Function returns the value if the filtered value is true
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();
-    return this.autoCompleteData.filter(autoCompleteData => autoCompleteData.toLowerCase().includes(filterValue));
+    return this.autoCompleteData.filter((autoCompleteData) =>
+      autoCompleteData.toLowerCase().includes(filterValue)
+    );
   }
   // -------------------------------------------------------------------------------------------------------------
 
   // -------------------------------------------------------------------------------------------------------------
   private _filterAccount(value: string): string[] {
     const filterValue = value.toLowerCase();
-    return this.autoCompleteDataAccount.filter(autoCompleteDataAccount => autoCompleteDataAccount.toLowerCase().includes(filterValue))
+    return this.autoCompleteDataAccount.filter((autoCompleteDataAccount) =>
+      autoCompleteDataAccount.toLowerCase().includes(filterValue)
+    );
   }
   // -------------------------------------------------------------------------------------------------------------
 
@@ -116,12 +136,11 @@ export class ReceiptComponentComponent implements OnInit {
   activeItemList!: any;
 
   refreshActiveItemList() {
-    this.itemService.getItemList("active").subscribe(itemsData => {
+    this.itemService.getItemList('active').subscribe((itemsData) => {
       this.itemList = itemsData;
     });
 
-    this.itemService.getItemList("active").subscribe(itemsData => {
-
+    this.itemService.getItemList('active').subscribe((itemsData) => {
       this.receiptDataSource = itemsData;
 
       this.receiptDataSource.forEach((item: any) => {
@@ -131,8 +150,10 @@ export class ReceiptComponentComponent implements OnInit {
         delete item.status;
       });
 
-      itemsData.forEach(item => {
-        this.autoCompleteData.push(item.upc + ": " + item.description + ": " + item.size);
+      itemsData.forEach((item) => {
+        this.autoCompleteData.push(
+          item.upc + ': ' + item.description + ': ' + item.size
+        );
         this.autoCompleteData = this.autoCompleteData.sort((n1, n2) => {
           if (n1 > n2) {
             return 1;
@@ -144,32 +165,40 @@ export class ReceiptComponentComponent implements OnInit {
 
           return 0;
         });
-
       });
     });
     // this.itemService.getItem("active").subscribe(val => console.log(val));
   }
 
-  displayedColumns: string[] = ['UPC', 'Description', 'Size', 'Qty', 'Price', 'Remove'];
+  displayedColumns: string[] = [
+    'UPC',
+    'Description',
+    'Size',
+    'Qty',
+    'Price',
+    'Remove',
+  ];
   // -------------------------------------------------------------------------------------------------------------
 
   // -------------------------------------------------------------------------------------------------------------
 
-  refreshActiveAccountList(){
-    this.accountServicce.getAccountList("active").subscribe(accountData => {
-      accountData.forEach(account => {
+  refreshActiveAccountList() {
+    this.accountServicce.getAccountList('active').subscribe((accountData) => {
+      accountData.forEach((account) => {
         this.autoCompleteDataAccount.push(account.fullName);
-        this.autoCompleteDataAccount = this.autoCompleteDataAccount.sort((n1, n2) => {
-          if (n1 > n2) {
-            return 1;
-          }
+        this.autoCompleteDataAccount = this.autoCompleteDataAccount.sort(
+          (n1, n2) => {
+            if (n1 > n2) {
+              return 1;
+            }
 
-          if (n1 < n2) {
-            return -1;
-          }
+            if (n1 < n2) {
+              return -1;
+            }
 
-          return 0;
-        });
+            return 0;
+          }
+        );
       });
     });
   }
@@ -182,14 +211,12 @@ export class ReceiptComponentComponent implements OnInit {
     let itemQty = 0;
 
     if (item.source.selected) {
-      const itemUPC = item.source.value.split(':', 1)
+      const itemUPC = item.source.value.split(':', 1);
 
       if (!this.isItemInReceipt(itemUPC)) {
-
-        this.receiptDataSource.forEach(items => {
+        this.receiptDataSource.forEach((items) => {
           if (items.upc == itemUPC[0]) {
-
-            this.itemList.forEach(element => {
+            this.itemList.forEach((element) => {
               if (element.upc == items.upc) {
                 itemQty = element.quantity;
               }
@@ -198,14 +225,13 @@ export class ReceiptComponentComponent implements OnInit {
             if (itemQty > 0) {
               items.quantity = 1;
               this.receiptItems.push(items);
-              this.error = "";
-            }
-            else {
-              this.error = items.description + ": Insufficient quantity";
+              this.error = '';
+            } else {
+              this.error = items.description + ': Insufficient quantity';
               return;
             }
           }
-        })
+        });
       }
 
       this.itemSearchField.reset();
@@ -217,21 +243,21 @@ export class ReceiptComponentComponent implements OnInit {
 
   // -------------------------------------------------------------------------------------------------------------
 
-  addAccountToReceipt(account: any){
-    const accountName = account.source.value.split(':', 1)
-    this.accountServicce.getAccountWithName(accountName[0]).subscribe(accountData => {
-      const customerInfo = accountData[0]; 
-        this.accountID = customerInfo.id
-        this.accountName = customerInfo.fullName
+  addAccountToReceipt(account: any) {
+    const accountName = account.source.value.split(':', 1);
+    this.accountServicce
+      .getAccountWithName(accountName[0])
+      .subscribe((accountData) => {
+        const customerInfo = accountData[0];
+        this.accountID = customerInfo.id;
+        this.accountName = customerInfo.fullName;
         this.accountPhone = customerInfo.phone;
         this.accountStreet = customerInfo.street;
         this.accountCity_town_village = customerInfo.city_town_village;
         this.accountCountry = customerInfo.country;
-    })
-
+      });
 
     this.accountSearchField.reset();
-
   }
 
   // -------------------------------------------------------------------------------------------------------------
@@ -241,26 +267,24 @@ export class ReceiptComponentComponent implements OnInit {
   increaseQty(itemID: string) {
     let itemQty = 0;
 
-    this.itemList.forEach(element => {
+    this.itemList.forEach((element) => {
       if (element.id == itemID) {
         itemQty = element.quantity;
       }
     });
 
-    this.receiptItems.forEach(item => {
-
+    this.receiptItems.forEach((item) => {
       if (item.id == itemID && itemQty > item.quantity) {
         item.quantity++;
-        this.error = "";
-      }
-      else {
+        this.error = '';
+      } else {
         let qty = item.quantity;
         if (item.id == itemID && itemQty < ++qty) {
-          this.error = item.description + ": Insufficient quantity";
+          this.error = item.description + ': Insufficient quantity';
           return;
         }
       }
-    })
+    });
     this.updateTotal();
   }
   // -------------------------------------------------------------------------------------------------------------
@@ -268,19 +292,18 @@ export class ReceiptComponentComponent implements OnInit {
   // -------------------------------------------------------------------------------------------------------------
   // Decreases the Qty if the Item
   decreaseQty(itemID: string) {
-    this.receiptItems.forEach(item => {
+    this.receiptItems.forEach((item) => {
       if (item.id == itemID && item.quantity > 0) {
         item.quantity--;
-        this.error = "";
-      }
-      else {
+        this.error = '';
+      } else {
         let qty = item.quantity;
         if (item.id == itemID && --qty < 0) {
-          this.error = item.description + ": Insufficient quantity";
+          this.error = item.description + ': Insufficient quantity';
           return;
         }
       }
-    })
+    });
 
     this.updateTotal();
   }
@@ -299,20 +322,20 @@ export class ReceiptComponentComponent implements OnInit {
   // Calcualtes the Total, Subtoal and Tax
   updateTotal() {
     this.total = 0;
-    this.receiptItems.forEach(item => {
-      this.total = (item.quantity * item.price) + this.total;
-    })
-    this.tax = (this.total * 0.125);
+    this.receiptItems.forEach((item) => {
+      this.total = item.quantity * item.price + this.total;
+    });
+    this.tax = this.total * 0.125;
     this.subTotal = this.total - this.tax;
   }
   // -------------------------------------------------------------------------------------------------------------
 
   // -------------------------------------------------------------------------------------------------------------
   // Selects the Payment Method
-  pymMethod: string = "";
+  pymMethod: string = '';
   paymentMethod(index: number) {
     const pmtMethod = document.querySelectorAll('.payment-method-Btn');
-    pmtMethod.forEach(element => {
+    pmtMethod.forEach((element) => {
       element.classList.remove('active');
     });
     pmtMethod[index].classList.add('active');
@@ -326,12 +349,12 @@ export class ReceiptComponentComponent implements OnInit {
     this.dataSource.data = [];
     this.receiptItems = [];
     this.dataSource.data = this.dataSource.data;
-    this.error = "";
+    this.error = '';
     this.paymentMethod(0);
     this.updateTotal();
 
     this.accountID = '';
-    this.accountName =  '';
+    this.accountName = '';
     this.accountPhone = '';
     this.accountStreet = '';
     this.accountCity_town_village = '';
@@ -342,35 +365,32 @@ export class ReceiptComponentComponent implements OnInit {
   // -------------------------------------------------------------------------------------------------------------
   // Addes the Receipt Object to the Datbase
   receipt: Partial<Receipt> = {};
-  error = "";
+  error = '';
 
   receiptItemSubmit(formData: NgForm) {
     this.clicked = true;
 
     if (this.receiptItems.length < 1) {
-      this.error = "Receipt is Empty*";
+      this.error = 'Receipt is Empty*';
       this.clicked = false;
       return;
     }
     if (this.pymMethod.length < 1) {
-      this.error = "Payment Method is Empty*";
+      this.error = 'Payment Method is Empty*';
       this.clicked = false;
       return;
     }
-    if (this.accountID == undefined || this.accountID.length < 1){
-      this.error = "No Customer Selected*";
+    if (this.accountID == undefined || this.accountID.length < 1) {
+      this.error = 'No Customer Selected*';
       this.clicked = false;
       return;
     }
     if (!formData.valid || formData.value.tendered < this.total) {
-      this.error = "Tendered Amount is Insufficient*";
+      this.error = 'Tendered Amount is Insufficient*';
       this.clicked = false;
       return;
-    }
-
-    else {
-
-      this.change = (formData.value.tendered - this.total);
+    } else {
+      this.change = formData.value.tendered - this.total;
       this.receipt.customerID = this.accountID?.toString();
       this.receipt.customerName = this.accountName?.toString();
       this.receipt.date = new Date().toLocaleDateString();
@@ -379,45 +399,54 @@ export class ReceiptComponentComponent implements OnInit {
       this.receipt.paymentMeth = this.pymMethod;
       this.receipt.salesRep = this.username;
       this.receipt.reference = formData.value.reference;
-      this.receipt.memo = "Thank you for Choosing " + GlobalComponent.companyName.toUpperCase() + "!";
+      this.receipt.memo =
+        'Thank you for Choosing ' +
+        GlobalComponent.companyName.toUpperCase() +
+        '!';
 
-      this.receiptService.addReceipt(this.receipt)
+      this.receiptService
+        .addReceipt(this.receipt)
         .pipe(
-          tap(receipt => {
-            receipt.subscribe(rec => {
-
-
-              this.itemList.forEach(item => {
-                this.receipt.items?.forEach(recItem => {
+          tap((receipt) => {
+            receipt.subscribe((rec) => {
+              this.itemList.forEach((item) => {
+                this.receipt.items?.forEach((recItem) => {
                   if (recItem.id == item.id) {
                     if (recItem.quantity != undefined) {
                       item.quantity = item.quantity - recItem.quantity;
-                      this.itemService.updateItem(recItem.id, item)
+                      this.itemService.updateItem(recItem.id, item);
                     }
                   }
-                })
+                });
               });
 
-              console.log("Receipt Successfully Added! ID:", rec.id);
+              console.log('Receipt Successfully Added! ID:', rec.id);
               this.resetReceipt();
               formData.resetForm();
 
               this.filteredOptions = this.itemSearchField.valueChanges.pipe(
                 startWith(''),
-                map(value => this._filter(value || '')),
+                map((value) => this._filter(value || ''))
               );
-              this.openSnackBar('Receipt Successfully Saved!', 'success-snakBar');
+              this.openSnackBar(
+                'Receipt Successfully Saved!',
+                'success-snakBar'
+              );
 
               let printData = [this.change, rec];
               this.openPrintDialog(printData);
               this.clicked = false;
-            })
-
+            });
           }),
-          catchError(error => {
-            this.openSnackBar('An Error Occured While Saving!', 'error-snakBar');
+          catchError((error) => {
+            this.openSnackBar(
+              'An Error Occured While Saving!',
+              'error-snakBar'
+            );
             throw catchError(error);
-          })).subscribe();
+          })
+        )
+        .subscribe();
     }
   }
   // -------------------------------------------------------------------------------------------------------------
@@ -439,27 +468,29 @@ export class ReceiptComponentComponent implements OnInit {
 
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
-    dialogConfig.minWidth = "350px";
+    dialogConfig.minWidth = '350px';
     dialogConfig.data = data;
 
-    this.dialog.open(PrintReceiptDialogComponent, dialogConfig)
-      .afterClosed().subscribe(val => {
+    this.dialog
+      .open(PrintReceiptDialogComponent, dialogConfig)
+      .afterClosed()
+      .subscribe((val) => {
         if (val) {
-          console.log("Receipt Printed", val);
+          console.log('Receipt Printed', val);
         }
-      })
+      });
   }
   // -------------------------------------------------------------------------------------------------------------
 
   isItemInReceipt(upc: string): boolean {
     let result = false;
 
-    this.receiptItems.forEach(item => {
+    this.receiptItems.forEach((item) => {
       if (item.upc == upc) {
         this.increaseQty(item.id);
         result = true;
       }
-    })
+    });
 
     return result;
   }

@@ -8,44 +8,63 @@ table {
 }
 
 .table-container {
-  height: 28rem;
+  height: 69vh;
   max-width: 100%;
   overflow: auto;
 }
 
-.px-2{
-  padding-left: .5rem;
-  padding-right: .5rem;
+.px-2 {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
 }
 
-.padTop-4{
+.padTop-4 {
   padding-top: 1rem;
 }
 
-.justify-content-end{
+.justify-content-end {
   display: flex;
   justify-content: flex-end;
 }
 
-ul{
+ul {
   padding: 0;
 }
 
-h3,h2{
+h3,
+h2 {
   padding: 0;
   margin: 0;
 }
 
-@media print{
-  @page {size: landscape}
+@media print {
+  @page {
+    margin: 2rem;
+    size: portrait;
+  }
 
-  .noPrint{
+  .noPrint {
     visibility: hidden;
   }
 
-  h3,h2{
-    padding: 5px;
-    
+  h1 {
+    font-size: x-large;
+  }
+
+  h3 {
+    padding: 3px;
+    font-size: medium;
+    font-weight: 400;
+  }
+
+  h2 {
+    padding: 4px;
+    font-size: larger;
+  }
+
+  th,
+  td {
+    font-size: small;
   }
 
   .table-container {

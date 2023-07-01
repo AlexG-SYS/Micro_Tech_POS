@@ -27,7 +27,8 @@ table {
 }
 
 .receiptSideBar {
-  background-color: #f6f6f6;
+  height: 100vh;
+  background-color: #f0f0f0;
   border-top-left-radius: 2rem;
   border-bottom-left-radius: 2rem;
   border: solid;
@@ -36,13 +37,12 @@ table {
 }
 
 .error {
-  padding: .5rem;
+  padding: 0.5rem;
   color: white;
   text-align: center;
   background-color: red;
   border-radius: 1rem;
   width: 70%;
-
 }
 
 .payment-method-Btn {
@@ -55,11 +55,10 @@ table {
   margin-left: 0;
 }
 
-.active{
+.active {
   background-color: rgb(224, 220, 220);
 }
 
-.profile-image{
-	border-radius: 1rem;
+.profile-image {
+  border-radius: 1rem;
 }
-

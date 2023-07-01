@@ -1,5 +1,5 @@
 /* Styles all content in the inventory component */
-.content{
+.content {
   max-width: 100%;
   overflow-x: hidden;
 }
@@ -12,12 +12,13 @@ table {
   text-align: end;
 }
 
-.mat-row:nth-child(even){
+.mat-row:nth-child(even) {
   background-color: #f0f0f0;
 }
 
 .addItemForm {
-  background-color: #f6f6f6;
+  height: 100vh;
+  background-color: #f0f0f0;
   border-top-left-radius: 2rem;
   border-bottom-left-radius: 2rem;
   border: solid;
