@@ -57,6 +57,18 @@
             </mat-select>
         </mat-form-field>
     </div>
+
+    <!-- Discount Limit Input Field -->
+    <div class="row py-2">
+        <div class="col d-flex justify-content-end">
+            <mat-form-field hintLabel="1-100%" appearance="fill">
+                <mat-icon class="pt-1 mx-1" matSuffix>percent</mat-icon>
+                <mat-label>Discount Limit</mat-label>
+                <input mat-icon-store type="numer" matInput #discountLimitInput maxlength="3"
+                    formControlName="discountLimit">
+            </mat-form-field>
+        </div>
+    </div>
 </mat-dialog-content>
 
 <!-- Cancel and Save Updated Item Buttons -->

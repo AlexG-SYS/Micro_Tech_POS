@@ -3,7 +3,7 @@
     <div class="row">
         <div class="container col m-4 mt-0 mb-0 pt-2">
 
-            <div class="row pb-2">
+            <div class="row pb-2 mt-4">
                 <!-- Heading -->
                 <div class="col">
                     <h1 class="my-2">Sales Receipt</h1>
@@ -102,10 +102,10 @@
         </div>
 
         <!-- Receipt SideBar -->
-        <div class="receiptSideBar col-4 pb-4">
+        <div class="receiptSideBar col-4 pb-2">
             <div class="container h-100">
 
-                <div class="row text-center d-flex justify-content-center mt-4 py-2">
+                <div class="row text-center d-flex justify-content-center mt-2 py-2">
                     <h1 class="m-0">Checkout</h1>
                     <!-- Error Message -->
                     <div *ngIf="error" class="error mt-2">
@@ -117,53 +117,61 @@
                 <div class="row my-2">
                     <div class="col d-flex align-items-center pb-2">
                         <div>
-                            <h3 class="m-0 p-0 pt-1 pb-1 text-capitalize fw-bold">Sold To:</h3>
-                            <h4 class="m-0 p-0 text-capitalize">{{accountName}}</h4>
-                            <h4 class="m-0 p-0 text-capitalize">{{accountStreet}}</h4>
-                            <h4 class="m-0 p-0 text-capitalize">{{accountCity_town_village}}</h4>
-                            <h4 class="m-0 p-0 text-capitalize">{{accountCountry}}</h4>
-                            <h4 class="m-0 p-0 text-capitalize">{{accountPhone}}</h4>
+                            <h3 class="m-0 p-0 pb-1 text-capitalize fw-bold">Sold To:</h3>
+                            <h4 class="m-0 p-0 text-capitalize">'{{accountName}}'</h4>
+                            <h4 class="m-0 p-0 text-capitalize">'{{accountStreet}}'</h4>
+                            <h4 class="m-0 p-0 text-capitalize">'{{accountCity_town_village}}'</h4>
+                            <h4 class="m-0 p-0 text-capitalize">'{{accountPhone}}'</h4>
                         </div>
                     </div>
                 </div>
 
                 <mat-divider class="my-2"></mat-divider>
                 <!-- Sub Total -->
-                <div class="row p-0 pt-2">
+                <div class="row p-0">
                     <div class="col">
-                        <h4 class="mx-2">Sub Total:</h4>
+                        <h4 class="mx-2 mb-1">Sub Total:</h4>
                     </div>
                     <div class="col d-flex justify-content-end">
-                        <h4 class="mx-4">${{subTotal.toFixed(2)}}</h4>
+                        <h4 class="mx-4 mb-1">${{subTotal | number : '1.2-2'}}</h4>
+                    </div>
+                </div>
+                <!-- Discount -->
+                <div class="row p-0">
+                    <div class="col">
+                        <h4 class="mx-2 mb-1">Discount:</h4>
+                    </div>
+                    <div class="col d-flex justify-content-end">
+                        <h4 class="mx-4 mb-1">${{discount | number : '1.2-2'}}</h4>
                     </div>
                 </div>
                 <!-- Tax -->
                 <div class="row p-0">
                     <div class="col">
-                        <h4 class="mx-2">Tax (12.5%):</h4>
+                        <h4 class="mx-2 mb-1">Tax (12.5%):</h4>
                     </div>
                     <div class="col d-flex justify-content-end">
-                        <h4 class="mx-4">${{tax.toFixed(2)}}</h4>
+                        <h4 class="mx-4 mb-1">${{tax | number : '1.2-2'}}</h4>
                     </div>
                 </div>
                 <!-- Total -->
                 <div class="row">
                     <div class="col">
-                        <h2 class="mx-2">Total:</h2>
+                        <h2 class="mx-2 mb-2">Total:</h2>
                     </div>
                     <div class="col d-flex justify-content-end">
-                        <h2 class="mx-4">${{total.toFixed(2)}}</h2>
+                        <h2 class="mx-4 mb-2">${{total | number : '1.2-2'}}</h2>
                     </div>
                 </div>
 
                 <mat-divider class="mb-2"></mat-divider>
 
                 <!-- Payment Method Titel -->
-                <div class="row pt-2">
+                <div class="row">
                     <h2 class="mx-2 fw-normal">Payment Method</h2>
                 </div>
                 <!-- Payment Methods -->
-                <div class="row no-gutters pb-2">
+                <div class="row no-gutters">
                     <div class="col-4 my-1 d-flex justify-content-end">
                         <!-- Cash Payment Mehtod Btn -->
                         <button mat-stroked-button id="Cash" color="primary" class="payment-method-Btn"
@@ -219,6 +227,17 @@
 
                 <form #receiptForm="ngForm" (ngSubmit)="receiptItemSubmit(receiptForm)">
                     <div class="row py-2">
+                        <div class="col d-flex justify-content-center p-0 m-0">
+                            <!-- Discount Input Field -->
+                            <mat-form-field appearance="fill" class="reference">
+                                <mat-icon class="pt-1 mx-1" matSuffix>percent</mat-icon>
+                                <mat-label>Discount</mat-label>
+                                <input mat-icon-store type="text" matInput name="discount" maxlength="3"
+                                    (ngModelChange)="discountChange($event)" ngModel>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
                         <div class="col d-flex justify-content-center p-0 m-0">
                             <!-- Tendered Amount Input Field -->
                             <mat-form-field appearance="fill" class="tendered">

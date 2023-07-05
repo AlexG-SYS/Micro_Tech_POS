@@ -7,30 +7,37 @@ import { UserService } from 'src/app/Services/user.service';
 @Component({
   selector: 'app-company-user-setting-dialog',
   templateUrl: './company-user-setting-dialog.component.html',
-  styleUrls: ['./company-user-setting-dialog.component.css']
+  styleUrls: ['./company-user-setting-dialog.component.css'],
 })
 export class CompanyUserSettingDialogComponent implements OnInit {
-
-  companyname = GlobalComponent.companyName
-  username = GlobalComponent.userName
+  companyname = GlobalComponent.companyName;
+  username = GlobalComponent.userName;
   companyUserForm!: FormGroup;
   allUserCred: any[] = [];
-  error = "";
+  error = '';
 
-  constructor(private dialogRef: MatDialogRef<CompanyUserSettingDialogComponent>, private formB: FormBuilder, private userService: UserService) { 
+  constructor(
+    private dialogRef: MatDialogRef<CompanyUserSettingDialogComponent>,
+    private formB: FormBuilder,
+    private userService: UserService
+  ) {
     this.companyUserForm = this.formB.group({
       userID: [, Validators.required],
       username: [, Validators.required],
       password: [, Validators.required],
       privilege: [, Validators.required],
-    })
+      discountLimit: [
+        ,
+        [Validators.required, Validators.min(1), Validators.max(100)],
+      ],
+    });
   }
 
   ngOnInit(): void {
-    this.userService.getAllUserCredentials().subscribe(userData => {
-      userData.forEach( user => {
-        this.allUserCred.push(user)
-      })
+    this.userService.getAllUserCredentials().subscribe((userData) => {
+      userData.forEach((user) => {
+        this.allUserCred.push(user);
+      });
     });
   }
 
@@ -49,16 +56,16 @@ export class CompanyUserSettingDialogComponent implements OnInit {
       const userID = userCredentials.userID;
       delete userCredentials.userID;
       userCredentials.username = userCredentials.username.toLowerCase();
+      userCredentials.discountLimit = +userCredentials.discountLimit;
 
-      this.userService.updateUserCredentials(userID, userCredentials).subscribe(() => {
-        this.dialogRef.close(userCredentials);
-      })
-      
-    }
-    else {
-      this.error = "Empty Field"
+      this.userService
+        .updateUserCredentials(userID, userCredentials)
+        .subscribe(() => {
+          this.dialogRef.close(userCredentials);
+        });
+    } else {
+      this.error = 'Invalid Input*';
     }
   }
   // -----------------------------------------------------------------------------------------------------------
-
 }

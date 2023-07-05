@@ -16,22 +16,22 @@
         <!-- Rceipt Number -->
         <div class="row justify-content-end">
             <div class="col-2">Receipt No:</div>
-            <div class="col-2">{{receiptData?.receiptNumber}}</div>
+            <div class="col-2">{{receiptData.receiptNumber}}</div>
         </div>
         <!-- Sold to: section -->
         <div class="row  py-2">
             Sold To:<br>
-            {{receiptData?.customerName}}
+            {{receiptData.customerName}}
         </div>
         <!-- Payment method, Date and Sales Rep section -->
         <div class="row py-2">
             <div class="col">
                 Pay't Method<br>
-                {{receiptData?.paymentMeth}}
+                {{receiptData.paymentMeth}}
             </div>
             <div class="col">
                 Date<br>
-                {{receiptData?.date}}
+                {{receiptData.date}}
             </div>
             <div class="col text-capitalize">
                 Sales Rep<br>
@@ -50,7 +50,7 @@
                 <tr class="py-2" *ngFor="let item of receiptData.items">
                     <td class="px-4">{{item.description}}</td>
                     <td class="px-4">{{item.quantity}}</td>
-                    <td class="px-4">{{item.price.toFixed(2)}}</td>
+                    <td class="px-4">{{item.price | number : '1.2-2'}}</td>
                 </tr>
 
             </table>
@@ -58,27 +58,32 @@
         <!-- Subtotal Section -->
         <div class="row justify-content-end pt-4">
             <div class="col-2 bold">Subtotal</div>
-            <div class="col-2">${{subTotal.toFixed(2)}}</div>
+            <div class="col-2">${{subTotal | number : '1.2-2'}}</div>
+        </div>
+        <!-- Discount Section -->
+        <div class="row justify-content-end pt-2">
+            <div class="col-2 bold">Discount</div>
+            <div class="col-2">${{discount | number : '1.2-2'}}</div>
         </div>
         <!-- Tax Section -->
         <div class="row justify-content-end py-2">
             <div class="col-2 bold">Tax (12.5%)</div>
-            <div class="col-2">${{tax.toFixed(2)}}</div>
+            <div class="col-2">${{tax | number : '1.2-2'}}</div>
         </div>
         <!-- Total Section -->
         <div class="row justify-content-end pb-4">
             <div class="col-2 bold totalBigger">Total</div>
-            <div class="col-2 totalBigger">${{total.toFixed(2)}}</div>
+            <div class="col-2 totalBigger">${{total | number : '1.2-2'}}</div>
         </div>
         <!-- Memo Section -->
         <div class="row justify-content-center py-6">
-            {{receiptData?.memo}}
+            {{receiptData.memo}}
         </div>
     </div>
     <!-- Change Section for the Receipt Dialog, this doesnt appear on the print out -->
     <div class="">
         <p mat-dialog-title class="d-flex justify-content-center">Change:</p>
-        <h1 class="fw-bold d-flex justify-content-center px-2">${{change.toFixed(2)}}</h1>
+        <h1 class="fw-bold d-flex justify-content-center px-2">${{change | number : '1.2-2'}}</h1>
     </div>
 </mat-dialog-content>
 

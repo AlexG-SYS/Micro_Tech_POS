@@ -53,6 +53,8 @@ export class ReceiptComponentComponent implements OnInit {
   subTotal: number = 0;
   tax: number = 0;
   total: number = 0;
+  discountPercentage: number = 0;
+  discount: number = 0;
   change: number = 0;
   username: string = GlobalComponent.userName;
   itemList: Items[] = [];
@@ -237,7 +239,7 @@ export class ReceiptComponentComponent implements OnInit {
       this.itemSearchField.reset();
     }
     this.dataSource.data = this.receiptItems;
-    this.updateTotal();
+    this.discountChange(this.discountPercentage);
   }
   // -------------------------------------------------------------------------------------------------------------
 
@@ -285,7 +287,7 @@ export class ReceiptComponentComponent implements OnInit {
         }
       }
     });
-    this.updateTotal();
+    this.discountChange(this.discountPercentage);
   }
   // -------------------------------------------------------------------------------------------------------------
 
@@ -305,7 +307,7 @@ export class ReceiptComponentComponent implements OnInit {
       }
     });
 
-    this.updateTotal();
+    this.discountChange(this.discountPercentage);
   }
   // -------------------------------------------------------------------------------------------------------------
 
@@ -314,7 +316,7 @@ export class ReceiptComponentComponent implements OnInit {
   removeItem(index: number) {
     this.dataSource.data.splice(index, 1);
     this.dataSource.data = this.dataSource.data;
-    this.updateTotal();
+    this.discountChange(this.discountPercentage);
   }
   // -------------------------------------------------------------------------------------------------------------
 
@@ -322,11 +324,58 @@ export class ReceiptComponentComponent implements OnInit {
   // Calcualtes the Total, Subtoal and Tax
   updateTotal() {
     this.total = 0;
+    this.subTotal = 0;
+    this.tax = 0;
     this.receiptItems.forEach((item) => {
+      if (item.tax == true) {
+        this.tax = item.quantity * item.itemTax + this.tax;
+      }
+      this.subTotal = item.quantity * item.itemSubTotal + this.subTotal;
       this.total = item.quantity * item.price + this.total;
     });
-    this.tax = this.total * 0.125;
-    this.subTotal = this.total - this.tax;
+  }
+  // -------------------------------------------------------------------------------------------------------------
+
+  // -------------------------------------------------------------------------------------------------------------
+  //calculates disocunt and re-calculates total, subtotal and Tax
+  discountChange(discountValue: number) {
+    const discountLimit = GlobalComponent.discountLimit;
+
+    if (discountValue > 0 && discountValue <= discountLimit) {
+      this.error = '';
+      this.discountPercentage = discountValue;
+      this.subTotal = 0;
+      this.tax = 0;
+      this.discount = 0;
+
+      this.receiptItems.forEach((item) => {
+        this.discount =
+          this.discount +
+          item.quantity * (item.itemSubTotal * (this.discountPercentage / 100));
+
+        this.subTotal =
+          this.subTotal +
+          item.quantity *
+            (item.itemSubTotal -
+              item.itemSubTotal * (this.discountPercentage / 100));
+
+        if (item.tax == true) {
+          this.tax =
+            this.tax +
+            0.125 *
+              (item.quantity *
+                (item.itemSubTotal -
+                  item.itemSubTotal * (this.discountPercentage / 100)));
+        }
+      });
+      this.total = this.subTotal + this.tax;
+    } else if (discountValue >= discountLimit || discountValue < 0) {
+      this.error = 'User Discount Limit is: ' + discountLimit + '%';
+    } else {
+      this.discountPercentage = 0;
+      this.discount = 0;
+      this.updateTotal();
+    }
   }
   // -------------------------------------------------------------------------------------------------------------
 
@@ -395,6 +444,10 @@ export class ReceiptComponentComponent implements OnInit {
       this.receipt.customerName = this.accountName?.toString();
       this.receipt.date = new Date().toLocaleDateString();
       this.receipt.items = this.receiptItems;
+      this.receipt.subtotal = this.subTotal;
+      this.receipt.discountPercentage = this.discountPercentage;
+      this.receipt.discount = this.discount;
+      this.receipt.TAX = this.tax;
       this.receipt.total = this.total;
       this.receipt.paymentMeth = this.pymMethod;
       this.receipt.salesRep = this.username;
