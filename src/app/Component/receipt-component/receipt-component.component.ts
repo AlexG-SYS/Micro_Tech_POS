@@ -46,6 +46,7 @@ export class ReceiptComponentComponent implements OnInit {
   dataSource = new MatTableDataSource<Items>();
   itemSearchField = new FormControl('');
   accountSearchField = new FormControl('');
+  discountField = new FormControl('');
   autoCompleteData: string[] = [];
   autoCompleteDataAccount: string[] = [];
   filteredOptions!: Observable<string[]>;
@@ -408,6 +409,9 @@ export class ReceiptComponentComponent implements OnInit {
     this.accountStreet = '';
     this.accountCity_town_village = '';
     this.accountCountry = '';
+    this.discountPercentage = 0;
+    this.discount = 0;
+    this.discountField.reset();
   }
   // -------------------------------------------------------------------------------------------------------------
 

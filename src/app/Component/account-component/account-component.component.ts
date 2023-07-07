@@ -1,4 +1,10 @@
-import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
@@ -17,22 +23,25 @@ import { ReceivePaymentDialogComponent } from '../receive-payment-dialog/receive
 @Component({
   selector: 'app-account-component',
   templateUrl: './account-component.component.html',
-  styleUrls: ['./account-component.component.css']
+  styleUrls: ['./account-component.component.css'],
 })
 export class AccountComponentComponent implements OnInit {
-
   privilege = GlobalComponent.privilege;
-  dataSource = new MatTableDataSource<Account>;
-  dataSourceReceipt = new MatTableDataSource<Receipt>;
-  dataSourcePayments = new MatTableDataSource<payments>;
+  dataSource = new MatTableDataSource<Account>();
+  dataSourceReceipt = new MatTableDataSource<Receipt>();
+  dataSourcePayments = new MatTableDataSource<payments>();
   @ViewChild('matSortAccounts') sortAccounts!: MatSort;
   @ViewChild('matSortReceipt') sortReceipt!: MatSort;
   @ViewChild('matSortPayments') sortPayments!: MatSort;
-  @ViewChild("accountSearch") searchField!: ElementRef;
+  @ViewChild('accountSearch') searchField!: ElementRef;
 
-  constructor(private accountService: AccountService, private receiptService: ReceiptService, private snackBar: MatSnackBar, private dialog: MatDialog,
-    private changeDet: ChangeDetectorRef) {
-  }
+  constructor(
+    private accountService: AccountService,
+    private receiptService: ReceiptService,
+    private snackBar: MatSnackBar,
+    private dialog: MatDialog,
+    private changeDet: ChangeDetectorRef
+  ) {}
 
   // When the component is loaded ngOnInit is executed
   ngOnInit(): void {
@@ -50,15 +59,14 @@ export class AccountComponentComponent implements OnInit {
 
   // -------------------------------------------------------------------------------------------------------------
   // Toggles function that shows inactive accounts or hides them
-  showHide_Value = "Show Inactive";
+  showHide_Value = 'Show Inactive';
   showHideInactive() {
-    if (this.showHide_Value == "Show Inactive") {
+    if (this.showHide_Value == 'Show Inactive') {
       this.refreshInActiveAccountList();
-      this.showHide_Value = "Hide Inactive";
-    }
-    else {
+      this.showHide_Value = 'Hide Inactive';
+    } else {
       this.refreshActiveAccountList();
-      this.showHide_Value = "Show Inactive";
+      this.showHide_Value = 'Show Inactive';
     }
   }
   // -------------------------------------------------------------------------------------------------------------
@@ -66,15 +74,15 @@ export class AccountComponentComponent implements OnInit {
   // -------------------------------------------------------------------------------------------------------------
   // Gets List of Active Accounts from the Database
   refreshActiveAccountList() {
-    this.accountService.getAccountList("active").subscribe(accountData => {
+    this.accountService.getAccountList('active').subscribe((accountData) => {
       this.dataSource.data = accountData;
     });
   }
 
   // Gets List of in-active Accounts from the Database
   refreshInActiveAccountList() {
-    this.accountService.getAccountList("inactive").subscribe(accountData => {
-      accountData.forEach(data => {
+    this.accountService.getAccountList('inactive').subscribe((accountData) => {
+      accountData.forEach((data) => {
         this.dataSource.data.push(data);
         this.dataSource.data = this.dataSource.data;
       });
@@ -87,15 +95,21 @@ export class AccountComponentComponent implements OnInit {
   // -------------------------------------------------------------------------------------------------------------
   // Gets list of receipts based on the Account ID
   refreshAccountReceiptHistory(customerID: string) {
-    this.receiptService.getReceiptsForAccount(customerID).subscribe(receiptList => {
-      this.dataSourceReceipt.data = receiptList;
-    })
+    this.receiptService
+      .getReceiptsForAccount(customerID)
+      .subscribe((receiptList) => {
+        this.dataSourceReceipt.data = receiptList;
+      });
   }
-  displayedColumnsReceipt: string[] = ['receiptNumber', 'date', 'paymentMeth', 'total', 'menu']
+  displayedColumnsReceipt: string[] = [
+    'receiptNumber',
+    'date',
+    'paymentMeth',
+    'total',
+    'menu',
+  ];
 
-  editReceiptBtn(data: Partial<Receipt>) {
-
-  }
+  editReceiptBtn(data: Partial<Receipt>) {}
 
   viewReceipt(recData: Array<any>) {
     let printData = [0, recData];
@@ -104,50 +118,81 @@ export class AccountComponentComponent implements OnInit {
 
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
-    dialogConfig.minWidth = "450px";
+    dialogConfig.minWidth = '450px';
     dialogConfig.data = printData;
 
-    this.dialog.open(PrintReceiptDialogComponent, dialogConfig)
-      .afterClosed().subscribe(val => {
+    this.dialog
+      .open(PrintReceiptDialogComponent, dialogConfig)
+      .afterClosed()
+      .subscribe((val) => {
         if (val) {
-          console.log("Receipt Printed", val);
+          console.log('Receipt Printed', val);
         }
-      })
+      });
   }
 
   // Gets list of payments based on the Account ID
   refreshAccountPaymentHistory(customerID: string) {
-    this.accountService.getPaymentsForAccount(customerID).subscribe(paymentList => {
-      this.dataSourcePayments.data = paymentList;
-    })
+    this.accountService
+      .getPaymentsForAccount(customerID)
+      .subscribe((paymentList) => {
+        this.dataSourcePayments.data = paymentList;
+      });
   }
-  displayedColumnsPayment: string[] = ['paymentMethod', 'reference', 'date', 'paymentAmount', 'unappliedAmount', 'memo', 'menu']
+  displayedColumnsPayment: string[] = [
+    'paymentMethod',
+    'reference',
+    'date',
+    'paymentAmount',
+    'unappliedAmount',
+    'memo',
+    'menu',
+  ];
 
   editPaymentBtn(data: Partial<payments>) {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.minWidth = '300px';
+    dialogConfig.data = data;
 
+    this.dialog
+      .open(ReceivePaymentDialogComponent, dialogConfig)
+      .afterClosed()
+      .subscribe((val) => {
+        if (val) {
+          this.refreshTable(true);
+          this.refreshAccountPaymentHistory(this.id);
+          this.showHide_Value = 'Show Inactive';
+          this.openSnackBar('Payment Updated!', 'success-snakBar');
+        } else {
+          this.openSnackBar('Payment was not Saved!', 'error-snakBar');
+        }
+      });
   }
 
   viewPayment(paymentData: Partial<payments>) {
-
     const dialogConfig = new MatDialogConfig();
 
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
-    dialogConfig.minWidth = "450px";
+    dialogConfig.minWidth = '450px';
     dialogConfig.data = paymentData;
 
-    this.dialog.open(PrintPaymentDialogComponent, dialogConfig)
-      .afterClosed().subscribe(val => {
+    this.dialog
+      .open(PrintPaymentDialogComponent, dialogConfig)
+      .afterClosed()
+      .subscribe((val) => {
         if (val) {
-          console.log("Payment Printed", val);
+          console.log('Payment Printed', val);
         }
-      })
+      });
   }
 
   // -------------------------------------------------------------------------------------------------------------
 
   // -------------------------------------------------------------------------------------------------------------
-  // Filters the data in the Accounts Table 
+  // Filters the data in the Accounts Table
   applyFilter(filterValue: any) {
     filterValue = filterValue.target.value;
     filterValue = filterValue.trim(); // Remove whitespace
@@ -164,7 +209,7 @@ export class AccountComponentComponent implements OnInit {
   addAccountBtn() {
     this.show = !this.show;
     if (this.icon == 'add') {
-      this.icon = 'close'
+      this.icon = 'close';
     } else {
       this.icon = 'add';
     }
@@ -176,7 +221,7 @@ export class AccountComponentComponent implements OnInit {
   refreshTable($event: any) {
     if ($event) {
       this.refreshActiveAccountList();
-      this.showHide_Value = "Show Inactive";
+      this.showHide_Value = 'Show Inactive';
     }
   }
   // -----------------------------------------------------------------------------------------------------------
@@ -188,46 +233,47 @@ export class AccountComponentComponent implements OnInit {
 
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
-    dialogConfig.minWidth = "300px";
+    dialogConfig.minWidth = '300px';
     dialogConfig.data = accountData;
 
-    this.dialog.open(EditAccountDialogComponent, dialogConfig)
-      .afterClosed().subscribe(val => {
+    this.dialog
+      .open(EditAccountDialogComponent, dialogConfig)
+      .afterClosed()
+      .subscribe((val) => {
         if (val) {
-          console.log("Account Edited", val);
+          console.log('Account Edited', val);
           this.refreshTable(true);
-          this.showHide_Value = "Show Inactive";
+          this.showHide_Value = 'Show Inactive';
           this.openSnackBar('Account Successfully Updated!', 'success-snakBar');
-        }
-        else {
+        } else {
           this.openSnackBar('Account Was Not Updated!', 'error-snakBar');
         }
-      })
+      });
   }
   // -------------------------------------------------------------------------------------------------------------
 
   // -------------------------------------------------------------------------------------------------------------
   // Opens dialog to receive payment from the customer
   receivePayment(accountData: Account) {
-
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
-    dialogConfig.minWidth = "300px";
+    dialogConfig.minWidth = '300px';
     dialogConfig.data = accountData;
 
-    this.dialog.open(ReceivePaymentDialogComponent, dialogConfig)
-      .afterClosed().subscribe(val => {
+    this.dialog
+      .open(ReceivePaymentDialogComponent, dialogConfig)
+      .afterClosed()
+      .subscribe((val) => {
         if (val) {
           this.refreshTable(true);
           this.refreshAccountPaymentHistory(this.id);
-          this.showHide_Value = "Show Inactive";
+          this.showHide_Value = 'Show Inactive';
           this.openSnackBar('Payment Received!', 'success-snakBar');
-        }
-        else {
+        } else {
           this.openSnackBar('Payment was not Saved!', 'error-snakBar');
         }
-      })
+      });
   }
   // -------------------------------------------------------------------------------------------------------------
 
