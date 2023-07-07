@@ -112,7 +112,7 @@ export class AccountComponentComponent implements OnInit {
   editReceiptBtn(data: Partial<Receipt>) {}
 
   viewReceipt(recData: Array<any>) {
-    let printData = [0, recData];
+    let printData = [recData];
 
     const dialogConfig = new MatDialogConfig();
 

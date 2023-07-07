@@ -9,7 +9,7 @@ table {
 }
 
 .table-container {
-  height: 36rem;
+  height: 79vh;
   max-width: 100%;
   overflow: auto;
 }

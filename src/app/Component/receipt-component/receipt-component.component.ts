@@ -422,6 +422,10 @@ export class ReceiptComponentComponent implements OnInit {
 
   receiptItemSubmit(formData: NgForm) {
     this.clicked = true;
+    this.subTotal = parseFloat(this.subTotal.toFixed(2));
+    this.discount = parseFloat(this.discount.toFixed(2));
+    this.tax = parseFloat(this.tax.toFixed(2));
+    this.total = parseFloat(this.total.toFixed(2));
 
     if (this.receiptItems.length < 1) {
       this.error = 'Receipt is Empty*';
@@ -456,6 +460,7 @@ export class ReceiptComponentComponent implements OnInit {
       this.receipt.paymentMeth = this.pymMethod;
       this.receipt.salesRep = this.username;
       this.receipt.reference = formData.value.reference;
+      this.receipt.change = this.change;
       this.receipt.memo =
         'Thank you for Choosing ' +
         GlobalComponent.companyName.toUpperCase() +
@@ -490,7 +495,7 @@ export class ReceiptComponentComponent implements OnInit {
                 'success-snakBar'
               );
 
-              let printData = [this.change, rec];
+              let printData = [rec];
               this.openPrintDialog(printData);
               this.clicked = false;
             });

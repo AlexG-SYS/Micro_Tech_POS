@@ -61,30 +61,101 @@
             <div class="col-2">${{subTotal | number : '1.2-2'}}</div>
         </div>
         <!-- Discount Section -->
-        <div class="row justify-content-end pt-2">
+        <div class="row justify-content-end pt-1">
             <div class="col-2 bold">Discount</div>
             <div class="col-2">${{discount | number : '1.2-2'}}</div>
         </div>
         <!-- Tax Section -->
-        <div class="row justify-content-end py-2">
+        <div class="row justify-content-end pt-1">
             <div class="col-2 bold">Tax (12.5%)</div>
             <div class="col-2">${{tax | number : '1.2-2'}}</div>
         </div>
         <!-- Total Section -->
-        <div class="row justify-content-end pb-4">
+        <div class="row justify-content-end pt-1 pb-4">
             <div class="col-2 bold totalBigger">Total</div>
             <div class="col-2 totalBigger">${{total | number : '1.2-2'}}</div>
+        </div>
+        <!-- Tendered Section -->
+        <div class="row justify-content-end pt-4">
+            <div class="col-2 bold totalBigger">Tendered</div>
+            <div class="col-2 totalBigger">${{total + change | number : '1.2-2'}}</div>
+        </div>
+        <!-- Change Section -->
+        <div class="row justify-content-end ">
+            <div class="col-2 bold totalBigger">Change</div>
+            <div class="col-2 totalBigger">${{change | number : '1.2-2'}}</div>
         </div>
         <!-- Memo Section -->
         <div class="row justify-content-center py-6">
             {{receiptData.memo}}
         </div>
     </div>
+
     <!-- Change Section for the Receipt Dialog, this doesnt appear on the print out -->
-    <div class="">
-        <p mat-dialog-title class="d-flex justify-content-center">Change:</p>
-        <h1 class="fw-bold d-flex justify-content-center px-2">${{change | number : '1.2-2'}}</h1>
+    <div class="d-flex justify-content-center m-4">
+        <mat-icon class="circle-icon" aria-hidden="false" aria-label="Check mark" fontIcon="done"></mat-icon>
     </div>
+
+    <div>
+        <!-- Change Section -->
+        <div class="row pb-4">
+            <div class="col d-flex justify-content-end fs-3">Change:</div>
+            <div class=" col primary-color fw-bold fs-3">${{change | number : '1.2-2'}}</div>
+        </div>
+
+        <mat-divider class="my-2 px-2"></mat-divider>
+
+        <!-- Receipt Number Section -->
+        <div class="row pt-2">
+            <div class="col bold fs-6 justify-content-end">Receipt No:</div>
+            <div class="col fs-6">{{receiptData.receiptNumber}}</div>
+        </div>
+
+        <!-- Date Section -->
+        <div class="row">
+            <div class="col bold fs-6 justify-content-end">Date</div>
+            <div class="col fs-6">{{receiptData.date}}</div>
+        </div>
+
+        <!-- Payment Method Section -->
+        <div class="row">
+            <div class="col bold fs-6 justify-content-end">Pay't Method</div>
+            <div class="col fs-6">{{receiptData.paymentMeth}}</div>
+        </div>
+
+        <!-- Sold to Section -->
+        <div class="row pb-2">
+            <div class="col bold fs-6 justify-content-end">Sold To:</div>
+            <div class="col fs-6">{{receiptData.customerName}}</div>
+        </div>
+
+        <mat-divider class="my-2 px-2"></mat-divider>
+
+        <!-- Subtotal Section -->
+        <div class="row pt-2">
+            <div class="col bold fs-6 justify-content-end">Subtotal</div>
+            <div class="col fs-6">${{subTotal | number : '1.2-2'}}</div>
+        </div>
+
+        <!-- Discount Section -->
+        <div class="row">
+            <div class="col bold fs-6 justify-content-end">Discount</div>
+            <div class="col fs-6">${{discount | number : '1.2-2'}}</div>
+        </div>
+
+        <!-- Tax Section -->
+        <div class="row">
+            <div class="col bold fs-6 justify-content-end">Tax (12.5%)</div>
+            <div class="col fs-6">${{tax | number : '1.2-2'}}</div>
+        </div>
+
+        <!-- Total Section -->
+        <div class="row pb-2">
+            <div class="col bold fs-6 justify-content-end">Total</div>
+            <div class="col fs-6">${{total | number : '1.2-2'}}</div>
+        </div>
+    </div>
+
 </mat-dialog-content>
 
 <mat-dialog-actions class="py-2 pb-4 d-flex justify-content-center">

@@ -17,4 +17,5 @@ export interface Receipt {
   paymentMeth: string;
   memo: string;
   salesRep: string;
+  change: number;
 }

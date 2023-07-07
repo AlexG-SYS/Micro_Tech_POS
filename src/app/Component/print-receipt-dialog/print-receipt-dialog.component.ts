@@ -29,15 +29,15 @@ export class PrintReceiptDialogComponent implements OnInit {
   // Constructor Initiallizing the receipt data
   constructor(
     private dialogRef: MatDialogRef<PrintReceiptDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) printData: Array<any>,
+    @Inject(MAT_DIALOG_DATA) printData: any,
     private recService: ReceiptService
   ) {
-    this.change = printData[0];
-    this.receiptData = printData[1];
+    this.receiptData = printData[0];
     this.subTotal = this.receiptData.subtotal;
     this.discount = this.receiptData.discount;
     this.tax = this.receiptData.TAX;
     this.total = this.receiptData.total;
+    this.change = this.receiptData.change;
   }
 
   ngOnInit(): void {}
