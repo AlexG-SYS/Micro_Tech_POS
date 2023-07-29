@@ -17,8 +17,15 @@ export class LoginComponentComponent {
     private router: Router
   ) {
     // Sets the Global Variables to NULL
+    GlobalComponent.companyName = '';
+    GlobalComponent.companyNameDB = '';
     GlobalComponent.userName = '';
     GlobalComponent.privilege = '';
+    GlobalComponent.companyStreet = '';
+    GlobalComponent.companyCityTownVillage = '';
+    GlobalComponent.companyCountry = '';
+    GlobalComponent.companyPhoneNumber = '';
+    GlobalComponent.companyTIN = '';
   }
 
   @Output() error = '';
@@ -29,6 +36,7 @@ export class LoginComponentComponent {
     this.clicked = true;
     // Checks input fields for empty string
     if (
+      loginData.value.companyName.length == 0 ||
       loginData.value.username.length == 0 ||
       loginData.value.password.length == 0
     ) {
@@ -38,31 +46,52 @@ export class LoginComponentComponent {
       this.clicked = false;
       this.myInputField.nativeElement.focus();
     } else {
-      // If not empty checks the database to verify username and password
-      this.userService
-        .getUserCredentials(loginData.value.username.toLowerCase())
-        .subscribe((userData) => {
-          if (
-            userData.length != 0 &&
-            userData[0].username == loginData.value.username.toLowerCase() &&
-            userData[0].password == loginData.value.password
-          ) {
-            // If login credentials are correct it saves the Username to global variable
-            console.log('LOGIN Successful');
-            GlobalComponent.userName = loginData.value.username.toLowerCase();
-            GlobalComponent.privilege = userData[0].privilege;
-            GlobalComponent.discountLimit = userData[0].discountLimit;
-
-            // Resets the form and navigates to Dashboard page
-            loginData.resetForm();
-            this.error = '';
-            this.router.navigate(['/dashboard/home']);
-          } else {
-            // If login credentials are not correct then reset form and show error message
-            this.error = 'Incorrect Username or Password';
+      // If not empty checks the database for company name
+      GlobalComponent.companyNameDB = loginData.value.companyName.toLowerCase();
+      this.db
+        .collection(loginData.value.companyName.toLowerCase())
+        .get()
+        .subscribe((snaps) => {
+          if (snaps.empty) {
+            // If company name does not exist return error
+            this.error = 'Company File Does Not Exist';
             loginData.resetForm();
             this.clicked = false;
             this.myInputField.nativeElement.focus();
+            GlobalComponent.companyNameDB = '';
+          } else {
+            // If not empty checks the database to verify username and password
+            this.userService
+              .getUserCredentials(loginData.value.username.toLowerCase())
+              .subscribe((userData) => {
+                if (
+                  userData.length != 0 &&
+                  userData[0].username ==
+                    loginData.value.username.toLowerCase() &&
+                  userData[0].password == loginData.value.password
+                ) {
+                  // If login credentials are correct it saves the Username to global variable
+                  console.log('LOGIN Successful');
+                  GlobalComponent.companyName =
+                    loginData.value.companyName.toLowerCase();
+                  GlobalComponent.userName =
+                    loginData.value.username.toLowerCase();
+                  GlobalComponent.privilege = userData[0].privilege;
+                  GlobalComponent.discountLimit = userData[0].discountLimit;
+
+                  // Resets the form and navigates to Dashboard page
+                  loginData.resetForm();
+                  this.error = '';
+                  this.router.navigate(['/dashboard/home']);
+                } else {
+                  // If login credentials are not correct then reset form and show error message
+                  this.error = 'Incorrect Username or Password';
+                  loginData.resetForm();
+                  this.clicked = false;
+                  this.myInputField.nativeElement.focus();
+                  GlobalComponent.companyNameDB = '';
+                }
+              });
           }
         });
     }

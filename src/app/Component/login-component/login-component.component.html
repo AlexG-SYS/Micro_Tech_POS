@@ -5,11 +5,19 @@
 
     <!-- Login Form -->
     <form #loginForm="ngForm" (ngSubmit)="onLoginSubmit(loginForm)">
+        <!-- Company name input field -->
+        <p class="pt-2 mx-4">
+            <mat-form-field>
+                <mat-icon class="pt-1 mx-1" matPrefix>store</mat-icon>
+                <input #firstInput mat-icon-store type="text" matInput autofocus placeholder="Company Name"
+                    name="companyName" ngModel>
+            </mat-form-field>
+        </p>
         <!-- Username input field -->
         <p class="pt-2 mx-4">
             <mat-form-field>
                 <mat-icon class="pt-1 mx-1" matPrefix>person</mat-icon>
-                <input type="text" matInput placeholder="Username" name="username" #firstInput autofocus ngModel />
+                <input type="text" matInput placeholder="Username" name="username" autofocus ngModel />
             </mat-form-field>
         </p>
         <!-- Password input field -->

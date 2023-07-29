@@ -9,6 +9,7 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { Router } from '@angular/router';
 import { Account } from 'src/app/Data-Model/account';
 import { payments } from 'src/app/Data-Model/payments';
 import { Receipt } from 'src/app/Data-Model/receipt';
@@ -40,7 +41,8 @@ export class AccountComponentComponent implements OnInit {
     private receiptService: ReceiptService,
     private snackBar: MatSnackBar,
     private dialog: MatDialog,
-    private changeDet: ChangeDetectorRef
+    private changeDet: ChangeDetectorRef,
+    public rounter: Router
   ) {}
 
   // When the component is loaded ngOnInit is executed
@@ -109,7 +111,21 @@ export class AccountComponentComponent implements OnInit {
     'menu',
   ];
 
-  editReceiptBtn(data: Partial<Receipt>) {}
+  createReceipt() {
+    this.rounter.navigate([
+      '/dashboard/receipt/' + this.id + '/' + this.fullName + '/0',
+    ]);
+  }
+
+  createInvoice() {
+    this.rounter.navigate([
+      '/dashboard/invoice/' + this.id + '/' + this.fullName + '/0',
+    ]);
+  }
+
+  editReceiptBtn(data: Partial<Receipt>) {
+    this.rounter.navigate(['/dashboard/receipt/0/new/' + data.id]);
+  }
 
   viewReceipt(recData: Array<any>) {
     let printData = [recData];

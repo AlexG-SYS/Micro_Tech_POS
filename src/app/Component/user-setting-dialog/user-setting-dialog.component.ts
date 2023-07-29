@@ -7,25 +7,27 @@ import { UserService } from 'src/app/Services/user.service';
 @Component({
   selector: 'app-user-setting-dialog',
   templateUrl: './user-setting-dialog.component.html',
-  styleUrls: ['./user-setting-dialog.component.css']
+  styleUrls: ['./user-setting-dialog.component.css'],
 })
 export class UserSettingDialogComponent implements OnInit {
-
-  companyname = GlobalComponent.companyName
-  username = GlobalComponent.userName
+  companyname = GlobalComponent.companyName;
+  username = GlobalComponent.userName;
   userForm!: FormGroup;
-  error = "";
+  error = '';
 
-  constructor(private dialogRef: MatDialogRef<UserSettingDialogComponent>, private formB: FormBuilder, private userService: UserService) {
+  constructor(
+    private dialogRef: MatDialogRef<UserSettingDialogComponent>,
+    private formB: FormBuilder,
+    private userService: UserService
+  ) {
     this.userForm = this.formB.group({
       username: [this.username, Validators.required],
       currentPass: [, Validators.required],
       password: [, Validators.required],
-    })
+    });
   }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   // -----------------------------------------------------------------------------------------------------------
   // Closes the Dialog
@@ -39,22 +41,24 @@ export class UserSettingDialogComponent implements OnInit {
   save() {
     if (this.userForm.valid) {
       const userCredentials = this.userForm.value;
-      this.userService.getUserCredentials(this.username).subscribe(userData => {
-        if (userData[0].password == userCredentials.currentPass) {
-          delete userCredentials.currentPass;
-          userCredentials.username = userCredentials.username.toLowerCase();
-          
-          this.userService.updateUserCredentials(userData[0].id, userCredentials).subscribe(() => {
-            this.dialogRef.close(userCredentials);
-          });
-        }
-        else {
-          this.error = "Current password mismatch"
-        }
-      })
-    }
-    else {
-      this.error = "Empty Field"
+      this.userService
+        .getUserCredentials(this.username)
+        .subscribe((userData) => {
+          if (userData[0].password == userCredentials.currentPass) {
+            delete userCredentials.currentPass;
+            userCredentials.username = userCredentials.username.toLowerCase();
+
+            this.userService
+              .updateUserCredentials(userData[0].id, userCredentials)
+              .subscribe(() => {
+                this.dialogRef.close(userCredentials);
+              });
+          } else {
+            this.error = 'Current password mismatch';
+          }
+        });
+    } else {
+      this.error = 'Empty Field';
     }
   }
   // -----------------------------------------------------------------------------------------------------------

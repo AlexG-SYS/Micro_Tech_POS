@@ -16,28 +16,62 @@ const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', title: 'Login - POS', component: LoginPageComponent },
   {
-    path: 'dashboard', title: 'Dashboard - POS', component: DashboardPageComponent,
+    path: 'dashboard',
+    title: 'Dashboard - POS',
+    component: DashboardPageComponent,
     children: [
       // Children Routes for Dashboard page
       { path: '', redirectTo: 'home', pathMatch: 'full' },
-      { path: 'home', title: 'Dashboard - Home', component: HomeComponentComponent },
-      { path: 'account', title: 'Dashboard - Account', component: AccountComponentComponent },
-      { path: 'inventory', title: 'Dashboard - Inventory', component: InventoryComponentComponent },
-      { path: 'receipt/:accountID/:accountName', title: 'Dashboard - Receipt', component: ReceiptComponentComponent },
-      { path: 'invoice/:accountID/:accountName', title: 'Dashboard - Invoice', component: InvoiceComponentComponent },
-      { path: 'history', title: 'Dashboard - History', component: HistoryComponentComponent },
-      { path: 'report', title: 'Dashboard - Report', component: ReportComponentComponent },
-      { path: '**', redirectTo: 'home', pathMatch: 'full' }
-    ]
+      {
+        path: 'home',
+        title: 'Dashboard - Home',
+        component: HomeComponentComponent,
+      },
+      {
+        path: 'account',
+        title: 'Dashboard - Account',
+        component: AccountComponentComponent,
+      },
+      {
+        path: 'inventory',
+        title: 'Dashboard - Inventory',
+        component: InventoryComponentComponent,
+      },
+      {
+        path: 'receipt/:accountID/:accountName/:receiptID',
+        title: 'Dashboard - Receipt',
+        component: ReceiptComponentComponent,
+      },
+      {
+        path: 'invoice/:accountID/:accountName/:invoiceID',
+        title: 'Dashboard - Invoice',
+        component: InvoiceComponentComponent,
+      },
+      {
+        path: 'history',
+        title: 'Dashboard - History',
+        component: HistoryComponentComponent,
+      },
+      {
+        path: 'report',
+        title: 'Dashboard - Report',
+        component: ReportComponentComponent,
+      },
+      { path: '**', redirectTo: 'home', pathMatch: 'full' },
+    ],
   },
-  { path: '**', title: 'Error - POS', component: PageNotFoundComponent }
+  { path: '**', title: 'Error - POS', component: PageNotFoundComponent },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
-export const ArrayOfComponents = [LoginPageComponent, 
-  DashboardPageComponent, HomeComponentComponent,
-  InventoryComponentComponent,PageNotFoundComponent]
+export class AppRoutingModule {}
+export const ArrayOfComponents = [
+  LoginPageComponent,
+  DashboardPageComponent,
+  HomeComponentComponent,
+  InventoryComponentComponent,
+  PageNotFoundComponent,
+];

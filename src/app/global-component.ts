@@ -6,7 +6,7 @@ export class GlobalComponent {
   public static userName: string = '';
   public static privilege: string = '';
   public static discountLimit: number = 0;
-
+  public static companyNameDB: string = '';
   public static companyName: string = '';
   public static companyStreet: string = '';
   public static companyCityTownVillage: string = '';

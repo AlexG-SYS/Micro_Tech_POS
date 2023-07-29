@@ -41,13 +41,13 @@
                                         <mat-icon>more_vert</mat-icon>
                                     </button>
                                     <mat-menu #menu="matMenu">
-                                        <button mat-menu-item routerLink="/dashboard/receipt/{{id}}/{{fullName}}"
-                                            routerLinkActive="active" *ngIf="element.status == 'active'">
+                                        <button mat-menu-item (click)="createReceipt()"
+                                            *ngIf="element.status == 'active'">
                                             <mat-icon>receipt</mat-icon>
                                             <span>Create Receipt</span>
                                         </button>
-                                        <button mat-menu-item routerLink="/dashboard/invoice/{{id}}/{{fullName}}"
-                                            routerLinkActive="active" *ngIf="element.status == 'active'">
+                                        <button mat-menu-item (click)="createInvoice()"
+                                            *ngIf="element.status == 'active'">
                                             <mat-icon>receipt_long</mat-icon>
                                             <span>Create Invoice</span>
                                         </button>

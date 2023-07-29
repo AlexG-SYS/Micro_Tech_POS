@@ -7,7 +7,7 @@ import {
   ChangeDetectorRef,
   QueryList,
 } from '@angular/core';
-import { FormControl, NgForm } from '@angular/forms';
+import { FormControl, NgForm, Validators } from '@angular/forms';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { Items } from 'src/app/Data-Model/item';
 import { Receipt } from 'src/app/Data-Model/receipt';
@@ -21,9 +21,10 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { PrintReceiptDialogComponent } from '../print-receipt-dialog/print-receipt-dialog.component';
 import { END } from '@angular/cdk/keycodes';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Account } from 'src/app/Data-Model/account';
 import { ThisReceiver } from '@angular/compiler';
+import { Item } from 'firebase/analytics';
 
 @Component({
   selector: 'app-receipt-component',
@@ -44,6 +45,8 @@ export class ReceiptComponentComponent implements OnInit {
   receiptDataSource: Items[] = [];
   receiptItems: Items[] = [];
   dataSource = new MatTableDataSource<Items>();
+  tenderedField = new FormControl('', Validators.required);
+  referenceField = new FormControl('');
   itemSearchField = new FormControl('');
   accountSearchField = new FormControl('');
   discountField = new FormControl('');
@@ -60,6 +63,9 @@ export class ReceiptComponentComponent implements OnInit {
   username: string = GlobalComponent.userName;
   itemList: Items[] = [];
   clicked = false;
+  editReceiptID: string = '';
+  editReceiptItems: Items[] = [];
+  receiptNumber!: number;
 
   constructor(
     private itemService: ItemService,
@@ -68,18 +74,20 @@ export class ReceiptComponentComponent implements OnInit {
     private changeDet: ChangeDetectorRef,
     private snackBar: MatSnackBar,
     private dialog: MatDialog,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    public rounter: Router
   ) {}
 
   // When the component is loaded ngOnInit is executed
   ngOnInit() {
     if (
       this.activatedRoute.snapshot.paramMap.get('accountID') == '0' &&
-      this.activatedRoute.snapshot.paramMap.get('accountName') == 'new'
+      this.activatedRoute.snapshot.paramMap.get('accountName') == 'new' &&
+      this.activatedRoute.snapshot.paramMap.get('receiptID') == '0'
     ) {
       this.accountID = '';
       this.accountName = '';
-    } else {
+    } else if (this.activatedRoute.snapshot.paramMap.get('accountID') != '0') {
       this.accountID = this.activatedRoute.snapshot.paramMap.get('accountID');
       this.accountName =
         this.activatedRoute.snapshot.paramMap.get('accountName');
@@ -92,6 +100,56 @@ export class ReceiptComponentComponent implements OnInit {
           this.accountStreet = customerInfo.street;
           this.accountCity_town_village = customerInfo.city_town_village;
           this.accountCountry = customerInfo.country;
+        });
+    } else if (this.activatedRoute.snapshot.paramMap.get('receiptID') != '0') {
+      this.editReceiptID =
+        this.activatedRoute.snapshot.paramMap.get('receiptID')!;
+      this.refreshActiveItemList();
+      this.receiptService
+        .findReceipt(this.editReceiptID)
+        .subscribe((recData) => {
+          const tempRecData: any = recData.data();
+
+          this.addAccountToReceipt(tempRecData.customerName);
+
+          tempRecData.items.forEach((item: any) => {
+            this.addToEditReceipt(item);
+          });
+
+          this.discountField.setValue(tempRecData.discountPercentage);
+          this.discountChange(tempRecData.discountPercentage);
+
+          switch (tempRecData.paymentMeth) {
+            case 'Cash':
+              this.paymentMethod(0);
+              break;
+            case 'Card':
+              this.paymentMethod(1);
+              break;
+            case 'Cheque':
+              this.paymentMethod(2);
+              break;
+            case 'E-Wallet':
+              this.paymentMethod(3);
+              break;
+            case 'Gift Card':
+              this.paymentMethod(4);
+              break;
+            case 'Direct To Bank':
+              this.paymentMethod(5);
+              break;
+            default:
+              this.paymentMethod(0);
+              break;
+          }
+
+          this.tenderedField.setValue(tempRecData.total + tempRecData.change);
+          this.referenceField.setValue(tempRecData.reference);
+          this.receiptNumber = tempRecData.receiptNumber;
+
+          tempRecData.items.forEach((item: any) => {
+            this.editReceiptItems.push(item);
+          });
         });
     }
 
@@ -244,12 +302,27 @@ export class ReceiptComponentComponent implements OnInit {
   }
   // -------------------------------------------------------------------------------------------------------------
 
+  addToEditReceipt(item: Items) {
+    this.receiptItems.push(item);
+
+    this.itemSearchField.reset();
+
+    this.dataSource.data = this.receiptItems;
+    this.discountChange(this.discountPercentage);
+  }
+
   // -------------------------------------------------------------------------------------------------------------
 
   addAccountToReceipt(account: any) {
-    const accountName = account.source.value.split(':', 1);
+    let accountName: string;
+    if (typeof account === 'string') {
+      accountName = account;
+    } else {
+      accountName = account.source.value;
+    }
+
     this.accountServicce
-      .getAccountWithName(accountName[0])
+      .getAccountWithName(accountName)
       .subscribe((accountData) => {
         const customerInfo = accountData[0];
         this.accountID = customerInfo.id;
@@ -412,6 +485,10 @@ export class ReceiptComponentComponent implements OnInit {
     this.discountPercentage = 0;
     this.discount = 0;
     this.discountField.reset();
+    this.tenderedField.reset();
+    this.referenceField.reset();
+
+    this.rounter.navigate(['/dashboard/receipt/0/new/0']);
   }
   // -------------------------------------------------------------------------------------------------------------
 
@@ -420,7 +497,8 @@ export class ReceiptComponentComponent implements OnInit {
   receipt: Partial<Receipt> = {};
   error = '';
 
-  receiptItemSubmit(formData: NgForm) {
+  receiptItemSubmit() {
+    let tendered = +this.tenderedField.value!;
     this.clicked = true;
     this.subTotal = parseFloat(this.subTotal.toFixed(2));
     this.discount = parseFloat(this.discount.toFixed(2));
@@ -442,12 +520,13 @@ export class ReceiptComponentComponent implements OnInit {
       this.clicked = false;
       return;
     }
-    if (!formData.valid || formData.value.tendered < this.total) {
+    if (!this.tenderedField.valid || tendered < this.total) {
       this.error = 'Tendered Amount is Insufficient*';
       this.clicked = false;
       return;
     } else {
-      this.change = formData.value.tendered - this.total;
+      this.change = tendered - this.total;
+      this.change = parseFloat(this.change.toFixed(2));
       this.receipt.customerID = this.accountID?.toString();
       this.receipt.customerName = this.accountName?.toString();
       this.receipt.date = new Date().toLocaleDateString();
@@ -459,56 +538,95 @@ export class ReceiptComponentComponent implements OnInit {
       this.receipt.total = this.total;
       this.receipt.paymentMeth = this.pymMethod;
       this.receipt.salesRep = this.username;
-      this.receipt.reference = formData.value.reference;
+      this.receipt.reference = this.referenceField.value!;
       this.receipt.change = this.change;
       this.receipt.memo =
         'Thank you for Choosing ' +
         GlobalComponent.companyName.toUpperCase() +
         '!';
 
-      this.receiptService
-        .addReceipt(this.receipt)
-        .pipe(
-          tap((receipt) => {
-            receipt.subscribe((rec) => {
-              this.itemList.forEach((item) => {
-                this.receipt.items?.forEach((recItem) => {
-                  if (recItem.id == item.id) {
-                    if (recItem.quantity != undefined) {
-                      item.quantity = item.quantity - recItem.quantity;
-                      this.itemService.updateItem(recItem.id, item);
-                    }
+      if (this.editReceiptID) {
+        this.receipt.receiptNumber = this.receiptNumber;
+        this.receiptService
+          .editReceipt(this.editReceiptID, this.receipt)
+          .subscribe(() => {
+            this.itemList.forEach((item) => {
+              this.receipt.items?.forEach((recItem) => {
+                this.editReceiptItems.forEach((oldRecItem) => {
+                  if (
+                    recItem.id == item.id &&
+                    recItem.id == oldRecItem.id &&
+                    recItem.quantity != undefined
+                  ) {
+                    console.log(recItem.quantity);
+                    console.log(oldRecItem.quantity);
+                    // this.itemService.updateItem(recItem.id, item);
                   }
                 });
               });
-
-              console.log('Receipt Successfully Added! ID:', rec.id);
-              this.resetReceipt();
-              formData.resetForm();
-
-              this.filteredOptions = this.itemSearchField.valueChanges.pipe(
-                startWith(''),
-                map((value) => this._filter(value || ''))
-              );
-              this.openSnackBar(
-                'Receipt Successfully Saved!',
-                'success-snakBar'
-              );
-
-              let printData = [rec];
-              this.openPrintDialog(printData);
-              this.clicked = false;
             });
-          }),
-          catchError((error) => {
-            this.openSnackBar(
-              'An Error Occured While Saving!',
-              'error-snakBar'
+
+            console.log(
+              'Receipt Successfully Updated! ID:',
+              this.editReceiptID
             );
-            throw catchError(error);
-          })
-        )
-        .subscribe();
+            this.resetReceipt();
+
+            this.filteredOptions = this.itemSearchField.valueChanges.pipe(
+              startWith(''),
+              map((value) => this._filter(value || ''))
+            );
+
+            this.openSnackBar('Receipt Updated!', 'success-snakBar');
+
+            let printData = [this.receipt];
+            this.openPrintDialog(printData);
+            this.clicked = false;
+          });
+      } else {
+        this.receiptService
+          .addReceipt(this.receipt)
+          .pipe(
+            tap((receipt) => {
+              receipt.subscribe((rec) => {
+                this.itemList.forEach((item) => {
+                  this.receipt.items?.forEach((recItem) => {
+                    if (recItem.id == item.id) {
+                      if (recItem.quantity != undefined) {
+                        item.quantity = item.quantity - recItem.quantity;
+                        this.itemService.updateItem(recItem.id, item);
+                      }
+                    }
+                  });
+                });
+
+                console.log('Receipt Successfully Added! ID:', rec.id);
+                this.resetReceipt();
+
+                this.filteredOptions = this.itemSearchField.valueChanges.pipe(
+                  startWith(''),
+                  map((value) => this._filter(value || ''))
+                );
+                this.openSnackBar(
+                  'Receipt Successfully Saved!',
+                  'success-snakBar'
+                );
+
+                let printData = [rec];
+                this.openPrintDialog(printData);
+                this.clicked = false;
+              });
+            }),
+            catchError((error) => {
+              this.openSnackBar(
+                'An Error Occured While Saving!',
+                'error-snakBar'
+              );
+              throw catchError(error);
+            })
+          )
+          .subscribe();
+      }
     }
   }
   // -------------------------------------------------------------------------------------------------------------

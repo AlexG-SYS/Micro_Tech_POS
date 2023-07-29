@@ -8,6 +8,16 @@
                 <div class="col">
                     <h1 class="my-2">Sales Receipt</h1>
                 </div>
+
+                <div class="col-2">
+                    <button mat-fab extended color="primary">
+                        <mat-icon>search</mat-icon> Find
+                    </button>
+                    <button mat-fab extended color="primary">
+                        <mat-icon>favorite</mat-icon>
+                        Primary
+                    </button>
+                </div>
             </div>
 
             <div class="row pt-2">
@@ -239,14 +249,15 @@
 
                 <mat-divider class="my-2"></mat-divider>
 
-                <form #receiptForm="ngForm" (ngSubmit)="receiptItemSubmit(receiptForm)">
+                <form (ngSubmit)="receiptItemSubmit()">
                     <div class="row pt-2">
                         <div class="col d-flex justify-content-center p-0 m-0">
                             <!-- Tendered Amount Input Field -->
                             <mat-form-field appearance="fill" class="tendered">
                                 <mat-icon class="pt-1 mx-1" matPrefix>attach_money</mat-icon>
-                                <mat-label>Amount</mat-label>
-                                <input type="number" matInput name="tendered" min="0" step=".01" required ngModel>
+                                <mat-label>Tendered Amount</mat-label>
+                                <input type="number" matInput name="tendered" min="0" step=".01" required
+                                    [formControl]="tenderedField">
                             </mat-form-field>
                         </div>
                         <div class="col d-flex justify-content-center p-0 m-0">
@@ -254,7 +265,8 @@
                             <mat-form-field appearance="fill" class="reference">
                                 <mat-icon class="pt-1 mx-1" matPrefix>tag</mat-icon>
                                 <mat-label>Reference</mat-label>
-                                <input mat-icon-store type="text" matInput name="reference" ngModel>
+                                <input mat-icon-store type="text" matInput name="reference"
+                                    [formControl]="referenceField">
                             </mat-form-field>
                         </div>
                     </div>
