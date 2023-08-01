@@ -18,7 +18,7 @@ table {
   text-align: end;
 }
 
-.mat-row:nth-child(even) {
+.mat-mdc-row:nth-child(even) {
   background-color: #f0f0f0;
 }
 
@@ -36,10 +36,10 @@ table {
   color: red;
 }
 
-.mat-row .mat-cell {
+.mat-mdc-row .mat-mdc-cell {
   cursor: pointer;
 }
 
-.mat-row:hover .mat-cell {
+.mat-mdc-row:hover .mat-mdc-cell {
   font-weight: 500;
 }

@@ -1,30 +1,32 @@
 <!-- Login Component -->
 
-<mat-card class="m-4 px-4">
+<mat-card appearance="outlined" class="m-4 px-4">
     <mat-card-title class="mx-4 my-2 py-2">Login</mat-card-title>
 
     <!-- Login Form -->
     <form #loginForm="ngForm" (ngSubmit)="onLoginSubmit(loginForm)">
         <!-- Company name input field -->
-        <p class="pt-2 mx-4">
-            <mat-form-field>
+        <p class="pt-2 mx-4 ">
+            <mat-form-field appearance="outline" subscriptSizing='dynamic'>
+                <mat-label>Company Name</mat-label>
                 <mat-icon class="pt-1 mx-1" matPrefix>store</mat-icon>
-                <input #firstInput mat-icon-store type="text" matInput autofocus placeholder="Company Name"
-                    name="companyName" ngModel>
+                <input #firstInput mat-icon-store type="text" matInput autofocus name="companyName" ngModel>
             </mat-form-field>
         </p>
         <!-- Username input field -->
-        <p class="pt-2 mx-4">
-            <mat-form-field>
+        <p class="mx-4">
+            <mat-form-field appearance="outline" subscriptSizing='dynamic'>
+                <mat-label>Username</mat-label>
                 <mat-icon class="pt-1 mx-1" matPrefix>person</mat-icon>
-                <input type="text" matInput placeholder="Username" name="username" autofocus ngModel />
+                <input type="text" matInput name="username" autofocus ngModel />
             </mat-form-field>
         </p>
         <!-- Password input field -->
         <p class="mx-4">
-            <mat-form-field>
+            <mat-form-field appearance="outline" subscriptSizing='dynamic'>
+                <mat-label>Password</mat-label>
                 <mat-icon class="pt-1 mx-1" matPrefix>key</mat-icon>
-                <input type="password" matInput placeholder="Password" name="password" ngModel />
+                <input type="password" matInput name="password" ngModel />
             </mat-form-field>
         </p>
         <!-- Error Message -->
@@ -32,7 +34,7 @@
             {{ error }}
         </p>
         <!-- Login Button -->
-        <div class="button mx-4 py-2">
+        <div class="button m-4">
             <button type="submit" [disabled]="clicked" mat-raised-button color="primary">
                 Login
             </button>

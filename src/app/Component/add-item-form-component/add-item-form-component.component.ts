@@ -2,10 +2,10 @@ import { Component, Output, EventEmitter, ViewChild, ElementRef, ChangeDetectorR
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Items } from 'src/app/Data-Model/item';
 import { ItemService } from '../../Services/item.service';
-import { MatLegacyChipInputEvent as MatChipInputEvent } from '@angular/material/legacy-chips';
+import { MatChipInputEvent } from '@angular/material/chips';
 import { NgForm } from '@angular/forms';
 import { catchError, tap } from 'rxjs';
-import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 export interface Category {
   name: string;

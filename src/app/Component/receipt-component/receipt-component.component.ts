@@ -8,7 +8,7 @@ import {
   QueryList,
 } from '@angular/core';
 import { FormControl, NgForm, Validators } from '@angular/forms';
-import { MatLegacyTable as MatTable, MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
+import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { Items } from 'src/app/Data-Model/item';
 import { Receipt } from 'src/app/Data-Model/receipt';
 import { ItemService } from 'src/app/Services/item.service';
@@ -17,8 +17,8 @@ import { catchError, map, startWith, tap } from 'rxjs/operators';
 import { GlobalComponent } from 'src/app/global-component';
 import { ReceiptService } from 'src/app/Services/receipt.service';
 import { AccountService } from 'src/app/Services/account.service';
-import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
-import { MatLegacyDialog as MatDialog, MatLegacyDialogConfig as MatDialogConfig } from '@angular/material/legacy-dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { PrintReceiptDialogComponent } from '../print-receipt-dialog/print-receipt-dialog.component';
 import { END } from '@angular/cdk/keycodes';
 import { ActivatedRoute, Router } from '@angular/router';

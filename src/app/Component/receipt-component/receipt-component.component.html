@@ -10,12 +10,8 @@
                 </div>
 
                 <div class="col-2">
-                    <button mat-fab extended color="primary">
+                    <button mat-raised-button color="primary" class="rounded-pill">
                         <mat-icon>search</mat-icon> Find
-                    </button>
-                    <button mat-fab extended color="primary">
-                        <mat-icon>favorite</mat-icon>
-                        Primary
                     </button>
                 </div>
             </div>
@@ -23,9 +19,10 @@
             <div class="row pt-2">
                 <!-- Search Customer Input Field -->
                 <div class="col ">
-                    <mat-form-field class="m-2 w-75">
+                    <mat-form-field class="m-2 w-75" appearance="outline">
                         <mat-icon class="pt-1 mx-1" matPrefix>person</mat-icon>
-                        <input #accountSearch type="input" placeholder="Search Customer" matInput
+                        <mat-label>Search Customer</mat-label>
+                        <input #accountSearch type="input" matInput
                             [formControl]="accountSearchField" [matAutocomplete]="auto1" autocomplete="off">
 
                         <mat-autocomplete autoActiveFirstOption #auto1="matAutocomplete">
@@ -37,10 +34,11 @@
                     </mat-form-field>
                 </div>
                 <!-- Search Item Input Field -->
-                <div class="col ">
-                    <mat-form-field class="m-2 w-75">
+                <div class="col">
+                    <mat-form-field class="m-2 w-75" appearance="outline">
                         <mat-icon class="pt-1 mx-1" matPrefix>search</mat-icon>
-                        <input #itemSearch type="input" placeholder="Search Item" matInput
+                        <mat-label>Search Item</mat-label>
+                        <input #itemSearch type="input" matInput
                             [formControl]="itemSearchField" [matAutocomplete]="auto2" autocomplete="off">
 
                         <mat-autocomplete autoActiveFirstOption #auto2="matAutocomplete">

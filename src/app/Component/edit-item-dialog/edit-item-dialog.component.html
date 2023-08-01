@@ -39,17 +39,17 @@
             <mat-form-field hintLabel="'Enter Button' or 'Comma Button' to add more" appearance="fill" class="category">
                 <mat-icon class="pt-1 mx-1" matPrefix>category</mat-icon>
                 <mat-label>Category</mat-label>
-                <mat-chip-list #chipList aria-label="Category selection">
-                    <mat-chip *ngFor="let category of categories" (removed)="removeMatChip(category)">
+                <mat-chip-grid #chipList aria-label="Category selection">
+                    <mat-chip-row *ngFor="let category of categories" (removed)="removeMatChip(category)">
                         {{category.name}}
                         <button matChipRemove>
                             <mat-icon>cancel</mat-icon>
                         </button>
-                    </mat-chip>
+                    </mat-chip-row>
                     <input placeholder="New Category..." [matChipInputFor]="chipList"
                         [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
                         (matChipInputTokenEnd)="addMatChip($event)" formControlName="categories">
-                </mat-chip-list>
+                </mat-chip-grid>
             </mat-form-field>
         </div>
     </div>
