@@ -1,14 +1,23 @@
 /* You can add global styles to this file, and also import other style files */
 @import "~bootstrap/dist/css/bootstrap.css";
-html, body { height: 100%; background-color:#eae8e8;}
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+  height: 100%;
+  background-color: #eae8e8;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
 
-.success-snakBar{
-    background-color: #673ab7;
-    color: white;
-  }
+.success-snakBar {
+  --mdc-snackbar-container-color: #673ab7;
+  --mdc-snackbar-supporting-text-color: white;
+  --mat-mdc-snack-bar-button-color: #00a673;
+}
 
-.error-snakBar{
-    background-color: red;
-    color: white;
-  }
+.error-snakBar {
+  --mdc-snackbar-container-color: red;
+  --mdc-snackbar-supporting-text-color: white;
+  --mat-mdc-snack-bar-button-color: rgb(114, 2, 2);
+}

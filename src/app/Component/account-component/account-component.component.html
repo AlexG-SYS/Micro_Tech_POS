@@ -7,10 +7,11 @@
 
                     <h1>Account List</h1>
                     <!-- Account List Filter -->
-                    <mat-form-field class="m-2">
+                    <mat-form-field class="m-2" appearance="outline" subscriptSizing='dynamic'>
+                        <mat-label>Search Account</mat-label>
                         <mat-icon class="pt-1 mx-1" matPrefix>search</mat-icon>
-                        <input type="input" #accountSearch matInput placeholder="Search" name="search"
-                            (keyup)="applyFilter($event)" autocomplete="off">
+                        <input type="input" #accountSearch matInput name="search" (keyup)="applyFilter($event)"
+                            autocomplete="off">
                     </mat-form-field>
                     <!-- Account List Table -->
                     <div class="accountListTable">

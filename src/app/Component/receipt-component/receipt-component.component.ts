@@ -570,13 +570,13 @@ export class ReceiptComponentComponent implements OnInit {
               'Receipt Successfully Updated! ID:',
               this.editReceiptID
             );
-            this.resetReceipt();
 
             this.filteredOptions = this.itemSearchField.valueChanges.pipe(
               startWith(''),
               map((value) => this._filter(value || ''))
             );
 
+            this.resetReceipt();
             this.openSnackBar('Receipt Updated!', 'success-snakBar');
 
             let printData = [this.receipt];
@@ -601,12 +601,13 @@ export class ReceiptComponentComponent implements OnInit {
                 });
 
                 console.log('Receipt Successfully Added! ID:', rec.id);
-                this.resetReceipt();
 
                 this.filteredOptions = this.itemSearchField.valueChanges.pipe(
                   startWith(''),
                   map((value) => this._filter(value || ''))
                 );
+
+                this.resetReceipt();
                 this.openSnackBar(
                   'Receipt Successfully Saved!',
                   'success-snakBar'

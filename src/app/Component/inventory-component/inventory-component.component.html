@@ -7,10 +7,11 @@
                     <h1>Inventory List</h1>
                 </div>
                 <div class="col d-flex justify-content-end mt-4">
-                    <mat-form-field class="m-2">
+                    <mat-form-field class="m-2 px-4" appearance="outline" subscriptSizing='dynamic'>
+                        <mat-label>Search Item</mat-label>
                         <mat-icon class="pt-1 mx-1" matPrefix>search</mat-icon>
-                        <input type="input" #itemSearch matInput placeholder="Search" name="search"
-                            (keyup)="applyFilter($event)">
+                        <input type="input" #itemSearch matInput name="search" (keyup)="applyFilter($event)"
+                            autocomplete="off">
                     </mat-form-field>
 
                     <button mat-mini-fab class="m-2" color="accent" aria-label="New Item" (click)="addItemBtn()"
@@ -92,19 +93,18 @@
 
 
             <!-- Table Footer-->
-            <div class="container">
-                <div class="row">
-                    <!-- Hide or Show Inactive Items Button -->
-                    <div class="col">
-                        <button mat-stroked-button color="warn" class="my-3"
-                            (click)="showHideInactive()">{{showHide_Value}}</button>
-                    </div>
-                    <!-- Item Table Paginator -->
-                    <div class="col">
-                        <mat-paginator [pageSizeOptions]="[10, 20, 50, 100]"></mat-paginator>
-                    </div>
+            <div class="row">
+                <!-- Hide or Show Inactive Items Button -->
+                <div class="col">
+                    <button mat-stroked-button color="warn" class="my-3"
+                        (click)="showHideInactive()">{{showHide_Value}}</button>
+                </div>
+                <!-- Item Table Paginator -->
+                <div class="col">
+                    <mat-paginator [pageSizeOptions]="[12, 24, 50, 100]"></mat-paginator>
                 </div>
             </div>
+
 
         </div>
 

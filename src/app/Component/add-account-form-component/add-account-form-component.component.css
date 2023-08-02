@@ -7,11 +7,11 @@
 .street,
 .city_town_village,
 .country {
-  width: 12rem;
+  width: 16rem;
 }
 
 .error {
-  padding: .5rem;
+  padding: 0.5rem;
   color: white;
   text-align: center;
   background-color: red;
@@ -20,7 +20,6 @@
 }
 
 @media (max-width: 1400px) {
-
   .fullName,
   .status,
   .phone,
@@ -33,7 +32,6 @@
 }
 
 @media (max-width: 1200px) {
-
   .fullName,
   .status,
   .phone,
@@ -46,7 +44,6 @@
 }
 
 @media (max-width: 768px) {
-
   .fullName,
   .status,
   .phone,
@@ -59,7 +56,6 @@
 }
 
 @media (max-width: 360px) {
-
   .fullName,
   .status,
   .phone,

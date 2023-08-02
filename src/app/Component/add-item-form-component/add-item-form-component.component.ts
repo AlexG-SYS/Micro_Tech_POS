@@ -1,4 +1,11 @@
-import { Component, Output, EventEmitter, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
+import {
+  Component,
+  Output,
+  EventEmitter,
+  ViewChild,
+  ElementRef,
+  ChangeDetectorRef,
+} from '@angular/core';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Items } from 'src/app/Data-Model/item';
 import { ItemService } from '../../Services/item.service';
@@ -14,19 +21,22 @@ export interface Category {
 @Component({
   selector: 'app-add-item-form-component',
   templateUrl: './add-item-form-component.component.html',
-  styleUrls: ['./add-item-form-component.component.css']
+  styleUrls: ['./add-item-form-component.component.css'],
 })
 export class AddItemFormComponentComponent {
+  @Output() refreshActiveItemListEvent: EventEmitter<boolean> =
+    new EventEmitter();
+  @ViewChild('upcInput') searchField!: ElementRef;
 
-  @Output() refreshActiveItemListEvent: EventEmitter<boolean> = new EventEmitter();
-  @ViewChild("upcInput") searchField!: ElementRef;
-
-  error = "";
+  error = '';
   selectedFile: any = null;
   clicked = false;
 
-  constructor(private itemService: ItemService, private snackBar: MatSnackBar, private changeDet: ChangeDetectorRef) {
-  }
+  constructor(
+    private itemService: ItemService,
+    private snackBar: MatSnackBar,
+    private changeDet: ChangeDetectorRef
+  ) {}
 
   ngAfterViewInit() {
     this.searchField.nativeElement.focus();
@@ -73,11 +83,10 @@ export class AddItemFormComponentComponent {
   onNewItemSubmit(formData: NgForm) {
     this.clicked = true;
     if (formData.valid) {
-
       const date = new Date().toLocaleDateString();
       const newItem = { ...formData.value } as Items;
 
-      this.category.forEach(element => {
+      this.category.forEach((element) => {
         this.tempArray.push(element.name.toLowerCase());
       });
       newItem.categories = this.tempArray;
@@ -85,8 +94,7 @@ export class AddItemFormComponentComponent {
       if (newItem.tax) {
         newItem.itemTax = newItem.price * 0.125;
         newItem.itemSubTotal = newItem.price - newItem.itemTax;
-      }
-      else {
+      } else {
         newItem.itemTax = 0;
         newItem.itemSubTotal = newItem.price;
       }
@@ -94,27 +102,31 @@ export class AddItemFormComponentComponent {
       newItem.price = Number(newItem.price.toFixed(2));
       newItem.date = date;
 
-      this.itemService.addItem(newItem, this.selectedFile)
+      this.itemService
+        .addItem(newItem, this.selectedFile)
         .pipe(
-          tap(item => {
-            console.log("Item Successfully Added! ID:", item.id);
+          tap((item) => {
+            console.log('Item Successfully Added! ID:', item.id);
             this.resetInput();
             formData.resetForm();
             this.refreshActiveItemListEvent.emit(true);
             this.openSnackBar('Item Successfully Added!', 'success-snakBar');
           }),
-          catchError(error => {
-            this.openSnackBar('An Error Occured While Saving!', 'error-snakBar');
+          catchError((error) => {
+            this.openSnackBar(
+              'An Error Occured While Saving!',
+              'error-snakBar'
+            );
             throw catchError(error);
           })
-        ).subscribe();
+        )
+        .subscribe();
 
       formData.resetForm();
       this.resetInput();
       this.clicked = false;
-    }
-    else {
-      this.error = "Empty Fields*";
+    } else {
+      this.error = 'Empty Fields*';
       this.clicked = false;
     }
   }
@@ -122,7 +134,7 @@ export class AddItemFormComponentComponent {
   resetInput() {
     this.selectedFile = null;
     this.category = [];
-    this.error = "";
+    this.error = '';
     this.tempArray = [];
   }
   // -----------------------------------------------------------------------------------------------------------
@@ -136,5 +148,4 @@ export class AddItemFormComponentComponent {
     });
   }
   // -----------------------------------------------------------------------------------------------------------
-
 }

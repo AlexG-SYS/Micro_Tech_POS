@@ -8,14 +8,26 @@ table {
 }
 
 .table-container {
-  height: 69vh;
+  height: 71vh;
   max-width: 100%;
   overflow: auto;
+}
+
+.mat-column-menu {
+  text-align: end;
 }
 
 .px-2 {
   padding-left: 0.5rem;
   padding-right: 0.5rem;
+}
+
+.mat-mdc-row .mat-mdc-cell {
+  cursor: pointer;
+}
+
+.mat-mdc-row:hover .mat-mdc-cell {
+  font-weight: 500;
 }
 
 .padTop-4 {

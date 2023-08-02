@@ -44,42 +44,42 @@
             <!-- Payment Methods -->
             <div class="row px-4">
                 <!-- Cash Payment Mehtod Btn -->
-                <button mat-stroked-button id="Cash" color="primary" class="payment-method-Btn"
+                <button mat-stroked-button id="Cash" color="primary" class="payment-method-Btn d-flex flex-column"
                     (click)="paymentMethod(0)">
-                    <mat-icon>local_atm</mat-icon>
-                    <span class="d-md-block">Cash</span>
+                    <mat-icon class="icon-display">local_atm</mat-icon>
+                    <span>Cash</span>
                 </button>
                 <!-- Card Payment Mehtod Btn -->
-                <button mat-stroked-button id="Card" color="primary" class="payment-method-Btn"
+                <button mat-stroked-button id="Card" color="primary" class="payment-method-Btn d-flex flex-column"
                     (click)="paymentMethod(1)">
-                    <mat-icon>credit_card</mat-icon>
-                    <span class="d-md-block">Card</span>
+                    <mat-icon class="icon-display">credit_card</mat-icon>
+                    <span>Card</span>
                 </button>
                 <!-- Cheque Payment Mehtod Btn -->
-                <button mat-stroked-button id="Cheque" color="primary" class="payment-method-Btn"
+                <button mat-stroked-button id="Cheque" color="primary" class="payment-method-Btn d-flex flex-column"
                     (click)="paymentMethod(2)">
-                    <mat-icon>money</mat-icon>
-                    <span class="d-md-block">Cheque</span>
+                    <mat-icon class="icon-display">money</mat-icon>
+                    <span>Cheque</span>
                 </button>
             </div>
             <div class="row px-4">
                 <!-- E-Wallet Payment Mehtod Btn -->
-                <button mat-stroked-button id="E-Wallet" color="primary" class="payment-method-Btn"
+                <button mat-stroked-button id="E-Wallet" color="primary" class="payment-method-Btn d-flex flex-column"
                     (click)="paymentMethod(3)">
-                    <mat-icon>wallet</mat-icon>
-                    <span class="d-md-block">E-Wallet</span>
+                    <mat-icon class="icon-display">wallet</mat-icon>
+                    <span>E-Wallet</span>
                 </button>
                 <!-- Gift Card Payment Mehtod Btn -->
-                <button mat-stroked-button id="Gift Card" color="primary" class="payment-method-Btn"
+                <button mat-stroked-button id="Gift Card" color="primary" class="payment-method-Btn d-flex flex-column"
                     (click)="paymentMethod(4)">
-                    <mat-icon>card_giftcard</mat-icon>
-                    <span class="d-md-block">Gift Card</span>
+                    <mat-icon class="icon-display">card_giftcard</mat-icon>
+                    <span>Gift Card</span>
                 </button>
                 <!-- Direct to Bank Payment Mehtod Btn -->
-                <button mat-stroked-button id="Direct To Bank" color="primary" class="payment-method-Btn"
-                    (click)="paymentMethod(5)">
-                    <mat-icon>account_balance</mat-icon>
-                    <span class="d-md-block">D.T.B</span>
+                <button mat-stroked-button id="Direct To Bank" color="primary"
+                    class="payment-method-Btn d-flex flex-column" (click)="paymentMethod(5)">
+                    <mat-icon class="icon-display">account_balance</mat-icon>
+                    <span>D.T.B</span>
                 </button>
             </div>
         </div>

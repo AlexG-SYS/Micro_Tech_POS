@@ -5,11 +5,11 @@
     <!-- UPC input field and Status input field-->
     <div class="row py-2">
         <div class="col d-flex justify-content-center">
-            <mat-form-field hintLabel="Max 12 Characters" appearance="fill" class="upc">
+            <mat-form-field hintLabel="Max 14 Characters" appearance="fill" class="upc">
                 <mat-icon class="pt-1 mx-1" matPrefix>qr_code_2</mat-icon>
                 <mat-label>UPC</mat-label>
-                <input mat-icon-store type="text" matInput #upcInput maxlength="12" name="upc" formControlName="upc">
-                <mat-hint align="end">{{upcInput.value.length || 0}}/12</mat-hint>
+                <input mat-icon-store type="text" matInput #upcInput maxlength="14" name="upc" formControlName="upc">
+                <mat-hint align="end">{{upcInput.value.length || 0}}/14</mat-hint>
             </mat-form-field>
         </div>
         <div class="col d-flex justify-content-center">

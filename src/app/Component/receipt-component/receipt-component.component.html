@@ -9,9 +9,15 @@
                     <h1 class="my-2">Sales Receipt</h1>
                 </div>
 
-                <div class="col-2">
-                    <button mat-raised-button color="primary" class="rounded-pill">
+                <div class="col-4 d-flex justify-content-end align-items-center">
+                    <button mat-icon-button color="primary">
+                        <mat-icon>arrow_back</mat-icon>
+                    </button>
+                    <button mat-stroked-button color="primary" class="rounded-pill">
                         <mat-icon>search</mat-icon> Find
+                    </button>
+                    <button mat-icon-button color="primary">
+                        <mat-icon>arrow_forward</mat-icon>
                     </button>
                 </div>
             </div>
@@ -22,8 +28,8 @@
                     <mat-form-field class="m-2 w-75" appearance="outline">
                         <mat-icon class="pt-1 mx-1" matPrefix>person</mat-icon>
                         <mat-label>Search Customer</mat-label>
-                        <input #accountSearch type="input" matInput
-                            [formControl]="accountSearchField" [matAutocomplete]="auto1" autocomplete="off">
+                        <input #accountSearch type="input" matInput [formControl]="accountSearchField"
+                            [matAutocomplete]="auto1" autocomplete="off">
 
                         <mat-autocomplete autoActiveFirstOption #auto1="matAutocomplete">
                             <mat-option *ngFor="let autoCompleteDataAccount of filteredOptionsAccount | async"
@@ -38,8 +44,8 @@
                     <mat-form-field class="m-2 w-75" appearance="outline">
                         <mat-icon class="pt-1 mx-1" matPrefix>search</mat-icon>
                         <mat-label>Search Item</mat-label>
-                        <input #itemSearch type="input" matInput
-                            [formControl]="itemSearchField" [matAutocomplete]="auto2" autocomplete="off">
+                        <input #itemSearch type="input" matInput [formControl]="itemSearchField"
+                            [matAutocomplete]="auto2" autocomplete="off">
 
                         <mat-autocomplete autoActiveFirstOption #auto2="matAutocomplete">
                             <mat-option *ngFor="let autoCompleteData of filteredOptions | async"
@@ -75,12 +81,13 @@
                     <!-- Qty Column -->
                     <ng-container matColumnDef="Qty">
                         <th class="p-2 text-center" mat-header-cell *matHeaderCellDef> Qty </th>
-                        <td class="p-2 text-center" mat-cell *matCellDef="let element">
+                        <td class="p-2 d-flex justify-content-center align-items-center" mat-cell
+                            *matCellDef="let element">
                             <button mat-icon-button color="primary" aria-label="Subtraction"
                                 (click)="decreaseQty(element.id)">
                                 <mat-icon>remove</mat-icon>
                             </button>
-                            {{element.quantity}}
+                            <span>{{element.quantity}}</span>
                             <button mat-icon-button color="primary" aria-label="Addition"
                                 (click)="increaseQty(element.id)">
                                 <mat-icon>add</mat-icon>
@@ -196,50 +203,50 @@
                 <div class="row no-gutters pb-2">
                     <div class="col-4 my-1 d-flex justify-content-end">
                         <!-- Cash Payment Mehtod Btn -->
-                        <button mat-stroked-button id="Cash" color="primary" class="payment-method-Btn"
-                            (click)="paymentMethod(0)">
-                            <mat-icon>local_atm</mat-icon>
+                        <button mat-stroked-button id="Cash" color="primary"
+                            class="payment-method-Btn d-flex flex-column" (click)="paymentMethod(0)">
+                            <mat-icon class="icon-display">local_atm</mat-icon>
                             <span class="d-md-block">Cash</span>
                         </button>
                     </div>
                     <div class="col-4 my-1 d-flex justify-content-center">
                         <!-- Card Payment Mehtod Btn -->
-                        <button mat-stroked-button id="Card" color="primary" class="payment-method-Btn"
-                            (click)="paymentMethod(1)">
-                            <mat-icon>credit_card</mat-icon>
+                        <button mat-stroked-button id="Card" color="primary"
+                            class="payment-method-Btn d-flex flex-column" (click)="paymentMethod(1)">
+                            <mat-icon class="icon-display">credit_card</mat-icon>
                             <span class="d-md-block">Card</span>
                         </button>
                     </div>
                     <div class="col-4 my-1 d-flex justify-content-start">
                         <!-- Cheque Payment Mehtod Btn -->
-                        <button mat-stroked-button id="Cheque" color="primary" class="payment-method-Btn"
-                            (click)="paymentMethod(2)">
-                            <mat-icon>money</mat-icon>
+                        <button mat-stroked-button id="Cheque" color="primary"
+                            class="payment-method-Btn d-flex flex-column" (click)="paymentMethod(2)">
+                            <mat-icon class="icon-display">money</mat-icon>
                             <span class="d-md-block">Cheque</span>
                         </button>
                     </div>
 
                     <div class="col-4 my-1 d-flex justify-content-end">
                         <!-- E-Wallet Payment Mehtod Btn -->
-                        <button mat-stroked-button id="E-Wallet" color="primary" class="payment-method-Btn"
-                            (click)="paymentMethod(3)">
-                            <mat-icon>wallet</mat-icon>
+                        <button mat-stroked-button id="E-Wallet" color="primary"
+                            class="payment-method-Btn d-flex flex-column" (click)="paymentMethod(3)">
+                            <mat-icon class="icon-display">wallet</mat-icon>
                             <span class="d-md-block">E-Wallet</span>
                         </button>
                     </div>
                     <div class="col-4 my-1 d-flex justify-content-center">
                         <!-- Gift Card Payment Mehtod Btn -->
-                        <button mat-stroked-button id="Gift Card" color="primary" class="payment-method-Btn"
-                            (click)="paymentMethod(4)">
-                            <mat-icon>card_giftcard</mat-icon>
+                        <button mat-stroked-button id="Gift Card" color="primary"
+                            class="payment-method-Btn d-flex flex-column" (click)="paymentMethod(4)">
+                            <mat-icon class="icon-display">card_giftcard</mat-icon>
                             <span class="d-md-block">Gift Card</span>
                         </button>
                     </div>
                     <div class="col-4 my-1 d-flex justify-content-start">
                         <!-- Direct to Bank Payment Mehtod Btn -->
-                        <button mat-stroked-button id="Direct To Bank" color="primary" class="payment-method-Btn"
-                            (click)="paymentMethod(5)">
-                            <mat-icon>account_balance</mat-icon>
+                        <button mat-stroked-button id="Direct To Bank" color="primary"
+                            class="payment-method-Btn d-flex flex-column" (click)="paymentMethod(5)">
+                            <mat-icon class="icon-display">account_balance</mat-icon>
                             <span class="d-md-block">D.T.B</span>
                         </button>
                     </div>
@@ -254,7 +261,7 @@
                             <mat-form-field appearance="fill" class="tendered">
                                 <mat-icon class="pt-1 mx-1" matPrefix>attach_money</mat-icon>
                                 <mat-label>Tendered Amount</mat-label>
-                                <input type="number" matInput name="tendered" min="0" step=".01" required
+                                <input type="number" matInput name="tendered" min="0" step=".01"
                                     [formControl]="tenderedField">
                             </mat-form-field>
                         </div>

@@ -47,6 +47,7 @@ table {
 
 .payment-method-Btn {
   width: 5rem;
+  height: 5rem;
   border-radius: 1rem;
 }
 
@@ -59,6 +60,7 @@ table {
   background-color: rgb(224, 220, 220);
 }
 
-.profile-image {
-  border-radius: 1rem;
+.icon-display {
+  margin: 0.5rem;
+  transform: scale(1.5);
 }
