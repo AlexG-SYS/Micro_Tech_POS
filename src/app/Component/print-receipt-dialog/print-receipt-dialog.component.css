@@ -1,6 +1,6 @@
 /* Print Receipt Dialog and Actual Physicall Receipt Styling */
 .totalBigger {
-  font-size: larger;
+  font-size: large;
 }
 
 .primary-color {
@@ -8,41 +8,41 @@
 }
 
 .p-2 {
-  padding: 0.5rem;
+  padding: 0.3rem;
 }
 .pt-1 {
-  padding-top: 0.25rem;
+  padding-top: 0.05rem;
 }
 .pt-2 {
-  padding-top: 0.5rem;
+  padding-top: 0.3rem;
 }
 .py-2 {
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
+  padding-top: 0.3rem;
+  padding-bottom: 0.3rem;
 }
 .py-4 {
-  padding-top: 1rem;
-  padding-bottom: 1rem;
+  padding-top: 0.8rem;
+  padding-bottom: 0.8rem;
 }
 .py-6 {
-  padding-top: 1.5rem;
-  padding-bottom: 1.5rem;
+  padding-top: 1.3rem;
+  padding-bottom: 1.3rem;
 }
 
 .px-2 {
-  padding-left: 0.5rem;
-  padding-right: 0.5rem;
+  padding-left: 0.3rem;
+  padding-right: 0.3rem;
 }
 .px-4 {
-  padding-left: 1rem;
-  padding-right: 1rem;
+  padding-left: 0.8rem;
+  padding-right: 0.8rem;
 }
 .pt-4 {
-  padding-top: 1rem;
+  padding-top: 0.8rem;
 }
 
 .pb-4 {
-  padding-bottom: 1rem;
+  padding-bottom: 0.8rem;
 }
 
 .bold {
@@ -54,13 +54,13 @@
 }
 
 .col {
-  padding-left: 1rem;
-  padding-right: 1rem;
+  padding-left: 0.8rem;
+  padding-right: 0.8rem;
 }
 
 .col-2 {
-  padding-left: 0.5rem;
-  padding-right: 0.5rem;
+  padding-left: 0.3rem;
+  padding-right: 0.3rem;
 }
 
 .justify-content-end {

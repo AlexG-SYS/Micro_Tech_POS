@@ -28,7 +28,12 @@ export class CompanyUserSettingDialogComponent implements OnInit {
       privilege: [, Validators.required],
       discountLimit: [
         ,
-        [Validators.required, Validators.min(1), Validators.max(100)],
+        [
+          Validators.required,
+          Validators.min(1),
+          Validators.max(100),
+          Validators.pattern('^[0-9]*$'),
+        ],
       ],
     });
   }

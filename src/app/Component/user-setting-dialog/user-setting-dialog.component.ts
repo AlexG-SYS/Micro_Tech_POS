@@ -58,7 +58,7 @@ export class UserSettingDialogComponent implements OnInit {
           }
         });
     } else {
-      this.error = 'Empty Field';
+      this.error = 'Invalid Input*';
     }
   }
   // -----------------------------------------------------------------------------------------------------------

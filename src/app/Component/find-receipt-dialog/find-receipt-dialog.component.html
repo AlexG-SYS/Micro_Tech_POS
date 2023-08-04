@@ -1,0 +1,111 @@
+<!-- Find Receipt Dialog Component -->
+
+<h2 mat-dialog-title class="d-flex justify-content-center pt-4 mb-0">Find Sales Receipt</h2>
+
+<mat-dialog-content>
+    <!-- If any error is thrown then the error is shown here -->
+    <div class="d-flex justify-content-center">
+        <div *ngIf="error" class="row error mb-2 justify-content-center">
+            {{ error }}
+        </div>
+    </div>
+
+    <!-- Search Input Field -->
+    <div class="row py-2">
+        <div class="col d-flex justify-content-center">
+            <mat-form-field appearance="outline">
+                <mat-label>Receipt No.</mat-label>
+                <input mat-icon-store type="number" matInput [formControl]="receiptSearchField" autocomplete="off">
+                <button mat-icon-button color="primary" matSuffix (click)="findReceiptByNum()">
+                    <mat-icon>search</mat-icon>
+                </button>
+            </mat-form-field>
+        </div>
+
+        <div class="col d-flex justify-content-center">
+            <mat-form-field appearance="outline">
+                <mat-label>Customer Name</mat-label>
+                <input mat-icon-store type="text" matInput [formControl]="accountSearchField" [matAutocomplete]="auto1"
+                    autocomplete="off">
+                <mat-autocomplete autoActiveFirstOption #auto1="matAutocomplete">
+                    <mat-option *ngFor="let autoCompleteDataAccount of filteredOptionsAccount | async"
+                        [value]="autoCompleteDataAccount" (onSelectionChange)="findReceiptByName($event)">
+                        {{autoCompleteDataAccount}}
+                    </mat-option>
+                </mat-autocomplete>
+                <button mat-icon-button color="primary" matSuffix (click)="findReceiptByName('')">
+                    <mat-icon>search</mat-icon>
+                </button>
+            </mat-form-field>
+        </div>
+    </div>
+
+    <!--  -->
+    <div class="receiptTable">
+        <table mat-table [dataSource]="dataSourceReceipt" matSort #matSortReceipt="matSort"
+            matSortActive="receiptNumber" matSortDirection="desc">
+
+            <!-- Receipt Number Column -->
+            <ng-container matColumnDef="receiptNumber">
+                <th class="p-2" mat-header-cell *matHeaderCellDef mat-sort-header> Receipt
+                    Number </th>
+                <td class="p-2" mat-cell *matCellDef="let element">
+                    {{element.receiptNumber}} </td>
+            </ng-container>
+
+            <!-- Date Column -->
+            <ng-container matColumnDef="date">
+                <th class="p-2" mat-header-cell *matHeaderCellDef mat-sort-header> Date
+                </th>
+                <td class="p-2" mat-cell *matCellDef="let element">
+                    {{element.date}}
+                </td>
+            </ng-container>
+
+            <!-- Payment Method Column -->
+            <ng-container matColumnDef="paymentMeth">
+                <th class="p-2" mat-header-cell *matHeaderCellDef mat-sort-header> Payment
+                    Method </th>
+                <td class="p-2" mat-cell *matCellDef="let element">
+                    {{element.paymentMeth}}
+                </td>
+            </ng-container>
+
+            <!-- Amount Column -->
+            <ng-container matColumnDef="total">
+                <th class="p-2" mat-header-cell *matHeaderCellDef mat-sort-header> Amount
+                </th>
+                <td class="p-2" mat-cell *matCellDef="let element">
+                    ${{element.total.toFixed(2)}}
+                </td>
+            </ng-container>
+
+            <!-- Receipt Menu Column -->
+            <ng-container matColumnDef="menu">
+                <th mat-header-cell *matHeaderCellDef></th>
+                <td mat-cell *matCellDef="let element">
+                    <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Receipt Menu Button">
+                        <mat-icon>more_vert</mat-icon>
+                    </button>
+                    <mat-menu #menu="matMenu">
+                        <button mat-menu-item (click)="viewReceipt(element)">
+                            <mat-icon>visibility</mat-icon>
+                            <span>View Receipt</span>
+                        </button>
+                    </mat-menu>
+                </td>
+            </ng-container>
+
+            <!-- Sets Table Column Names and Positions -->
+            <tr mat-header-row *matHeaderRowDef="displayedColumnsReceipt"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumnsReceipt;">
+            </tr>
+        </table>
+    </div>
+
+</mat-dialog-content>
+
+<!-- Cancel and Save Updated Item Buttons -->
+<mat-dialog-actions class="py-4 d-flex justify-content-end">
+    <button mat-raised-button (click)="close()" class="m-2">Close</button>
+</mat-dialog-actions>

@@ -67,6 +67,7 @@ import { EditAccountDialogComponent } from './Component/edit-account-dialog/edit
 import { ReceivePaymentDialogComponent } from './Component/receive-payment-dialog/receive-payment-dialog.component';
 import { PrintPaymentDialogComponent } from './Component/print-payment-dialog/print-payment-dialog.component';
 import { CompanySettingDialogComponent } from './Component/company-setting-dialog/company-setting-dialog.component';
+import { FindReceiptDialogComponent } from './Component/find-receipt-dialog/find-receipt-dialog.component';
 
 @NgModule({
   declarations: [
@@ -94,6 +95,7 @@ import { CompanySettingDialogComponent } from './Component/company-setting-dialo
     ReceivePaymentDialogComponent,
     PrintPaymentDialogComponent,
     CompanySettingDialogComponent,
+    FindReceiptDialogComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,11 +1,11 @@
 <!-- Company Settings Dialog Component -->
 
-<h1 mat-dialog-title class="d-flex justify-content-center pt-4">Company Information</h1>
+<h1 mat-dialog-title class="d-flex justify-content-center pt-4 mb-0">Company Information</h1>
 
 <mat-dialog-content [formGroup]="companyInfoForm">
     <!-- If any error is thrown then the error is shown here -->
     <div class="d-flex justify-content-center">
-        <div *ngIf="error" class="row error pb-2 justify-content-center">
+        <div *ngIf="error" class="row error mb-2 justify-content-center">
             {{ error }}
         </div>
     </div>
@@ -49,11 +49,11 @@
     <div class="row py-2">
         <!-- Phone Number Input Field -->
         <div class="col d-flex justify-content-end">
-            <mat-form-field hintLabel="Max 12 Numbers" appearance="fill">
+            <mat-form-field hintLabel="Max 7 Numbers" appearance="fill">
                 <mat-icon class="pt-1 mx-1" matPrefix>phone</mat-icon>
                 <mat-label>Phone #</mat-label>
-                <input mat-icon-store type="text" matInput #phoneInput maxlength="12" formControlName="phoneNumber">
-                <mat-hint align="end">{{phoneInput.value.length || 0}}/12</mat-hint>
+                <input mat-icon-store type="tel" matInput #phoneInput maxlength="7" formControlName="phoneNumber">
+                <mat-hint align="end">{{phoneInput.value.length || 0}}/7</mat-hint>
             </mat-form-field>
         </div>
         <!-- TIN Input Field -->

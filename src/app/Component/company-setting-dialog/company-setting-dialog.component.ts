@@ -7,27 +7,38 @@ import { UserService } from 'src/app/Services/user.service';
 @Component({
   selector: 'app-company-setting-dialog',
   templateUrl: './company-setting-dialog.component.html',
-  styleUrls: ['./company-setting-dialog.component.css']
+  styleUrls: ['./company-setting-dialog.component.css'],
 })
 export class CompanySettingDialogComponent implements OnInit {
-
   companyInfoForm!: FormGroup;
   error: string = '';
 
-  constructor(private dialogRef: MatDialogRef<CompanySettingDialogComponent>, private formB: FormBuilder, private userService: UserService) { 
+  constructor(
+    private dialogRef: MatDialogRef<CompanySettingDialogComponent>,
+    private formB: FormBuilder,
+    private userService: UserService
+  ) {
     this.companyInfoForm = this.formB.group({
       name: [GlobalComponent.companyName, Validators.required],
       street: [GlobalComponent.companyStreet, Validators.required],
-      city_town_village: [GlobalComponent.companyCityTownVillage, Validators.required],
+      city_town_village: [
+        GlobalComponent.companyCityTownVillage,
+        Validators.required,
+      ],
       country: [GlobalComponent.companyCountry, Validators.required],
-      phoneNumber: [GlobalComponent.companyPhoneNumber, Validators.required],
-      TIN: [GlobalComponent.companyTIN, Validators.required],
-    })
+      phoneNumber: [
+        GlobalComponent.companyPhoneNumber,
+        [Validators.required, Validators.pattern('[0-9 ]{7}')],
+      ],
+      TIN: [
+        GlobalComponent.companyTIN,
+        [Validators.required, Validators.pattern('^[0-9]*$')],
+      ],
+    });
   }
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
-    // -----------------------------------------------------------------------------------------------------------
+  // -----------------------------------------------------------------------------------------------------------
   // Closes the Dialog
   close() {
     this.dialogRef.close();
@@ -43,19 +54,16 @@ export class CompanySettingDialogComponent implements OnInit {
       this.userService.updateCompanyInfo(companyInfo).subscribe(() => {
         GlobalComponent.companyName = companyInfo.name;
         GlobalComponent.companyStreet = companyInfo.street;
-        GlobalComponent.companyCityTownVillage = companyInfo.city_town_village
+        GlobalComponent.companyCityTownVillage = companyInfo.city_town_village;
         GlobalComponent.companyCountry = companyInfo.country;
         GlobalComponent.companyPhoneNumber = companyInfo.phoneNumber;
         GlobalComponent.companyTIN = companyInfo.TIN;
 
         this.dialogRef.close(companyInfo);
-      })
-      
-    }
-    else {
-      this.error = "Empty Field"
+      });
+    } else {
+      this.error = 'Invalid Input*';
     }
   }
   // -----------------------------------------------------------------------------------------------------------
-
 }

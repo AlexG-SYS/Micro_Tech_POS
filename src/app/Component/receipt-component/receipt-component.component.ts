@@ -20,11 +20,9 @@ import { AccountService } from 'src/app/Services/account.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { PrintReceiptDialogComponent } from '../print-receipt-dialog/print-receipt-dialog.component';
-import { END } from '@angular/cdk/keycodes';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FindReceiptDialogComponent } from '../find-receipt-dialog/find-receipt-dialog.component';
 import { Account } from 'src/app/Data-Model/account';
-import { ThisReceiver } from '@angular/compiler';
-import { Item } from 'firebase/analytics';
 
 @Component({
   selector: 'app-receipt-component',
@@ -66,6 +64,7 @@ export class ReceiptComponentComponent implements OnInit {
   editReceiptID: string = '';
   editReceiptItems: Items[] = [];
   receiptNumber!: number;
+  accountsDataArray: Account[] = [];
 
   constructor(
     private itemService: ItemService,
@@ -87,6 +86,7 @@ export class ReceiptComponentComponent implements OnInit {
     ) {
       this.accountID = '';
       this.accountName = '';
+      this.setReceiptNumberValue();
     } else if (this.activatedRoute.snapshot.paramMap.get('accountID') != '0') {
       this.accountID = this.activatedRoute.snapshot.paramMap.get('accountID');
       this.accountName =
@@ -246,6 +246,7 @@ export class ReceiptComponentComponent implements OnInit {
   refreshActiveAccountList() {
     this.accountServicce.getAccountList('active').subscribe((accountData) => {
       accountData.forEach((account) => {
+        this.accountsDataArray.push(account);
         this.autoCompleteDataAccount.push(account.fullName);
         this.autoCompleteDataAccount = this.autoCompleteDataAccount.sort(
           (n1, n2) => {
@@ -321,17 +322,16 @@ export class ReceiptComponentComponent implements OnInit {
       accountName = account.source.value;
     }
 
-    this.accountServicce
-      .getAccountWithName(accountName)
-      .subscribe((accountData) => {
-        const customerInfo = accountData[0];
-        this.accountID = customerInfo.id;
-        this.accountName = customerInfo.fullName;
-        this.accountPhone = customerInfo.phone;
-        this.accountStreet = customerInfo.street;
-        this.accountCity_town_village = customerInfo.city_town_village;
-        this.accountCountry = customerInfo.country;
-      });
+    this.accountsDataArray.forEach((account) => {
+      if (account.fullName == accountName) {
+        this.accountID = account.id;
+        this.accountName = account.fullName;
+        this.accountPhone = account.phone;
+        this.accountStreet = account.street;
+        this.accountCity_town_village = account.city_town_village;
+        this.accountCountry = account.country;
+      }
+    });
 
     this.accountSearchField.reset();
   }
@@ -487,7 +487,7 @@ export class ReceiptComponentComponent implements OnInit {
     this.discountField.reset();
     this.tenderedField.reset();
     this.referenceField.reset();
-
+    this.setReceiptNumberValue();
     this.rounter.navigate(['/dashboard/receipt/0/new/0']);
   }
   // -------------------------------------------------------------------------------------------------------------
@@ -674,5 +674,28 @@ export class ReceiptComponentComponent implements OnInit {
     });
 
     return result;
+  }
+
+  setReceiptNumberValue() {
+    this.receiptService.lastReceiptNum().subscribe((lastRecID) => {
+      this.receiptNumber = lastRecID + 1;
+    });
+  }
+
+  findReceipt() {
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.minWidth = '350px';
+
+    this.dialog
+      .open(FindReceiptDialogComponent, dialogConfig)
+      .afterClosed()
+      .subscribe((val) => {
+        if (val) {
+          console.log('Say Somthing', val);
+        }
+      });
   }
 }

@@ -109,4 +109,20 @@ export class ReceiptService {
       .get()
       .pipe(map((snaps) => convertSnaps<Receipt>(snaps)));
   }
+
+  lastReceiptNum() {
+    return this.db
+      .collection(
+        '/' + GlobalComponent.companyNameDB + '/data/receipts',
+        (ref) => ref.orderBy('receiptNumber', 'desc').limit(1)
+      )
+      .get()
+      .pipe(
+        map((result) => {
+          const lastReceipt = convertSnaps<Receipt>(result);
+          const lastReceiptNumber = lastReceipt[0]?.receiptNumber ?? 0;
+          return lastReceiptNumber;
+        })
+      );
+  }
 }

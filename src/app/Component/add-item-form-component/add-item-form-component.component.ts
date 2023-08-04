@@ -126,7 +126,8 @@ export class AddItemFormComponentComponent {
       this.resetInput();
       this.clicked = false;
     } else {
-      this.error = 'Empty Fields*';
+      this.error = 'Invalid Input*';
+
       this.clicked = false;
     }
   }

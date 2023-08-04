@@ -1,8 +1,8 @@
 .error {
-    padding: .4rem;
-    color: white;
-    text-align: center;
-    background-color: red;
-    border-radius: 1rem;
-    width: 70%;
-  }
+  padding: 0.4rem;
+  color: white;
+  text-align: center;
+  background-color: red;
+  border-radius: 1rem;
+  width: 70%;
+}

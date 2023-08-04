@@ -35,10 +35,11 @@
         <!-- Phone input field and Email input field -->
         <div class="row py-2">
             <div class="col d-flex justify-content-center p-0 m-0">
-                <mat-form-field appearance="fill" class="phone">
+                <mat-form-field hintLabel="Max 7 Numbers" appearance="fill" class="phone">
                     <mat-icon class="pt-1 mx-1" matPrefix>call</mat-icon>
                     <mat-label>Phone #</mat-label>
-                    <input type="tel" matInput name="phone" required ngModel>
+                    <input type="tel" matInput #phoneInput name="phone" maxlength="7" pattern="[0-9]+" required ngModel>
+                    <mat-hint align="end">{{phoneInput.value.length || 0}}/7</mat-hint>
                 </mat-form-field>
             </div>
             <div class="col d-flex justify-content-center p-0 m-0">
@@ -73,11 +74,11 @@
                 <mat-form-field appearance="fill" class="country">
                     <mat-icon class="pt-1 mx-1" matPrefix>public</mat-icon>
                     <mat-label>Country</mat-label>
-                    <input type="text" matInput name="country" required ngModel>
+                    <input type="text" matInput name="country" value="Belize" disabled ngModel>
                 </mat-form-field>
             </div>
         </div>
-        
+
         <!-- Clear and Save Buttons -->
         <div class="row py-4">
             <div class="col d-flex justify-content-center">

@@ -1,6 +1,6 @@
 <!-- Receipt Dialog which contains the HTML for the Printable Receipt and displayes the Tenered Change -->
 <mat-dialog-content>
-    <div class="p-2" id="printable-section" hidden>
+    <div id="printable-section" hidden>
         <!-- Receipt Heading -->
         <div class="row justify-content-center">
             <h4 class="text-center">TAX RECEIPT</h4>
@@ -19,12 +19,12 @@
             <div class="col-2">{{receiptData.receiptNumber}}</div>
         </div>
         <!-- Sold to: section -->
-        <div class="row  py-2">
+        <div class="row">
             Sold To:<br>
             {{receiptData.customerName}}
         </div>
         <!-- Payment method, Date and Sales Rep section -->
-        <div class="row py-2">
+        <div class="row pt-4">
             <div class="col">
                 Pay't Method<br>
                 {{receiptData.paymentMeth}}
@@ -33,13 +33,13 @@
                 Date<br>
                 {{receiptData.date}}
             </div>
-            <div class="col text-capitalize">
+            <div class="col">
                 Sales Rep<br>
                 {{username}}
             </div>
         </div>
         <!-- Item List Table -->
-        <div class="row py-4">
+        <div class="row pt-4">
             <table>
                 <tr class="py-2">
                     <th class="px-4">Description</th>
@@ -71,22 +71,12 @@
             <div class="col-2">${{tax | number : '1.2-2'}}</div>
         </div>
         <!-- Total Section -->
-        <div class="row justify-content-end pt-1 pb-4">
+        <div class="row justify-content-end pt-1">
             <div class="col-2 bold totalBigger">Total</div>
             <div class="col-2 totalBigger">${{total | number : '1.2-2'}}</div>
         </div>
-        <!-- Tendered Section -->
-        <div class="row justify-content-end pt-4">
-            <div class="col-2 bold totalBigger">Tendered</div>
-            <div class="col-2 totalBigger">${{total + change | number : '1.2-2'}}</div>
-        </div>
-        <!-- Change Section -->
-        <div class="row justify-content-end ">
-            <div class="col-2 bold totalBigger">Change</div>
-            <div class="col-2 totalBigger">${{change | number : '1.2-2'}}</div>
-        </div>
         <!-- Memo Section -->
-        <div class="row justify-content-center py-6">
+        <div class="row justify-content-center pt-4">
             {{receiptData.memo}}
         </div>
     </div>
@@ -161,6 +151,6 @@
 <mat-dialog-actions class="py-2 pb-4 d-flex justify-content-center">
     <button mat-raised-button (click)="close()" class="m-2">Close</button>
     <!-- Print Button uses ngx Print Function to print only the selected HTML called "printable-section" -->
-    <button mat-raised-button color="primary" class="m-2" [useExistingCss]="true" printSectionId="printable-section"
-        ngxPrint>Print Receipt</button>
+    <button mat-raised-button color="primary" class="m-2" [useExistingCss]="true" [previewOnly]="true"
+        printSectionId="printable-section" ngxPrint>Print Receipt</button>
 </mat-dialog-actions>
