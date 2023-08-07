@@ -1,47 +1,67 @@
 <!-- SideNav Component -->
 
-<div class="container-fluid p-0">
+<div class="p-0">
     <!-- Displays Company Logo -->
     <div class="logo-div py-4">
         <img class="logo logo-image img-fluid rounded" src="../../../assets/images/logo.png" alt="logo">
     </div>
     <!-- Displays Navigation Buttons -->
-    <div class="mainBtn-div">
-        <!-- Home Button and Router Link -->
-        <button routerLink="home" routerLinkActive="active" mat-stroked-button class="my-1">
-            <mat-icon>home</mat-icon>
-            <span class="d-none d-sm-none d-md-block">Home</span>
-        </button>
-        <!-- Customer Button and Router Link -->
-        <button routerLink="account" routerLinkActive="active" mat-stroked-button class="my-1">
-            <mat-icon>manage_accounts</mat-icon>
-            <span class="d-none d-sm-none d-md-block">Account</span>
-        </button>
-        <!-- Inventory Button and Router Link -->
-        <button routerLink="inventory" routerLinkActive="active" mat-stroked-button class="my-1">
-            <mat-icon>inventory</mat-icon>
-            <span class="d-none d-sm-none d-md-block">Inventory</span>
-        </button>
-        <!-- Receipt Button and Router Link -->
-        <button routerLink="receipt/0/new/0" routerLinkActive="active" mat-stroked-button class="my-1">
-            <mat-icon>receipt</mat-icon>
-            <span class="d-none d-sm-none d-md-block">Receipt</span>
-        </button>
-        <!-- Invoice Button and Router Link -->
-        <button routerLink="invoice/0/new/0" routerLinkActive="active" mat-stroked-button class="my-1">
-            <mat-icon>receipt_long</mat-icon>
-            <span class="d-none d-sm-none d-md-block">Invoice</span>
-        </button>
-        <!-- History Button and Router Link -->
-        <button routerLink="history" routerLinkActive="active" mat-stroked-button class="my-1">
-            <mat-icon>history</mat-icon>
-            <span class="d-none d-sm-none d-md-block">History</span>
-        </button>
-        <!-- Report Button and Router Link -->
-        <button routerLink="report" routerLinkActive="active" mat-stroked-button class="my-1">
-            <mat-icon>summarize</mat-icon>
-            <span class="d-none d-sm-none d-md-block">Report</span>
-        </button>
+    <div class="d-flex align-items-start flex-column" style="height: 85vh;">
+        <div class="mx-auto">
+            <!-- Home Button and Router Link -->
+            <button routerLink="home" routerLinkActive="active" mat-stroked-button class="my-1">
+                <mat-icon>home</mat-icon>
+                <span class="d-none d-sm-none d-md-block">Home</span>
+            </button>
+        </div>
+        <div class="mx-auto">
+            <!-- Customer Button and Router Link -->
+            <button routerLink="account" routerLinkActive="active" mat-stroked-button class="my-1">
+                <mat-icon>manage_accounts</mat-icon>
+                <span class="d-none d-sm-none d-md-block">Account</span>
+            </button>
+        </div>
+        <div class="mx-auto">
+            <!-- Inventory Button and Router Link -->
+            <button routerLink="inventory" routerLinkActive="active" mat-stroked-button class="my-1">
+                <mat-icon>inventory</mat-icon>
+                <span class="d-none d-sm-none d-md-block">Inventory</span>
+            </button>
+        </div>
+        <div class="mx-auto">
+            <!-- Receipt Button and Router Link -->
+            <button routerLink="receipt/0/new/0" routerLinkActive="active" mat-stroked-button class="my-1">
+                <mat-icon>receipt</mat-icon>
+                <span class="d-none d-sm-none d-md-block">Receipt</span>
+            </button>
+        </div>
+        <div class="mx-auto">
+            <!-- Invoice Button and Router Link -->
+            <button routerLink="invoice/0/new/0" routerLinkActive="active" mat-stroked-button class="my-1">
+                <mat-icon>receipt_long</mat-icon>
+                <span class="d-none d-sm-none d-md-block">Invoice</span>
+            </button>
+        </div>
+        <div class="mx-auto">
+            <!-- History Button and Router Link -->
+            <button routerLink="history" routerLinkActive="active" mat-stroked-button class="my-1">
+                <mat-icon>history</mat-icon>
+                <span class="d-none d-sm-none d-md-block">History</span>
+            </button>
+        </div>
+        <div class="mx-auto">
+            <!-- Report Button and Router Link -->
+            <button routerLink="report" routerLinkActive="active" mat-stroked-button class="my-1">
+                <mat-icon>summarize</mat-icon>
+                <span class="d-none d-sm-none d-md-block">Report</span>
+            </button>
+        </div>
+        <div class="mt-auto mx-auto">
+            <button routerLink="/login" mat-stroked-button color="warn" style="background-color: red;" class="mt-auto">
+                <mat-icon>logout</mat-icon>
+                <span class="d-none d-sm-none d-md-block">Sign Out</span>
+            </button>
+        </div>
     </div>
 
 </div>

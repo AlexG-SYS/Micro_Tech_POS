@@ -30,7 +30,7 @@
 }
 
 @media (max-width: 768px) {
-  button {
+  .mdc-button {
     width: 0;
     height: 3rem;
     border-radius: 1rem;

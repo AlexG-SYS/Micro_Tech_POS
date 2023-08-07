@@ -79,6 +79,7 @@ export class ReceiptComponentComponent implements OnInit {
 
   // When the component is loaded ngOnInit is executed
   ngOnInit() {
+    this.refreshActiveAccountList();
     if (
       this.activatedRoute.snapshot.paramMap.get('accountID') == '0' &&
       this.activatedRoute.snapshot.paramMap.get('accountName') == 'new' &&
@@ -147,8 +148,10 @@ export class ReceiptComponentComponent implements OnInit {
           this.referenceField.setValue(tempRecData.reference);
           this.receiptNumber = tempRecData.receiptNumber;
 
+          // Before adding items to this.editReceiptItems, create a deep copy of each item
           tempRecData.items.forEach((item: any) => {
-            this.editReceiptItems.push(item);
+            const deepCopiedItem = JSON.parse(JSON.stringify(item));
+            this.editReceiptItems.push(deepCopiedItem);
           });
         });
     }
@@ -160,7 +163,6 @@ export class ReceiptComponentComponent implements OnInit {
       map((value) => this._filter(value || ''))
     );
 
-    this.refreshActiveAccountList();
     this.filteredOptionsAccount = this.accountSearchField.valueChanges.pipe(
       startWith(''),
       map((value) => this._filterAccount(value || ''))
@@ -169,7 +171,12 @@ export class ReceiptComponentComponent implements OnInit {
 
   // When the component view has been shown ngAfterViewInit is executed
   ngAfterViewInit(): void {
-    this.searchFieldAccount.nativeElement.focus();
+    console.log(this.editReceiptID);
+    if (this.editReceiptID != '') {
+      this.searchFieldAccount.nativeElement.blur();
+    } else {
+      this.searchFieldAccount.nativeElement.focus();
+    }
     this.changeDet.detectChanges();
   }
 
@@ -529,7 +536,6 @@ export class ReceiptComponentComponent implements OnInit {
       this.change = parseFloat(this.change.toFixed(2));
       this.receipt.customerID = this.accountID?.toString();
       this.receipt.customerName = this.accountName?.toString();
-      this.receipt.date = new Date().toLocaleDateString();
       this.receipt.items = this.receiptItems;
       this.receipt.subtotal = this.subTotal;
       this.receipt.discountPercentage = this.discountPercentage;
@@ -551,19 +557,20 @@ export class ReceiptComponentComponent implements OnInit {
           .editReceipt(this.editReceiptID, this.receipt)
           .subscribe(() => {
             this.itemList.forEach((item) => {
-              this.receipt.items?.forEach((recItem) => {
-                this.editReceiptItems.forEach((oldRecItem) => {
-                  if (
-                    recItem.id == item.id &&
-                    recItem.id == oldRecItem.id &&
-                    recItem.quantity != undefined
-                  ) {
-                    console.log(recItem.quantity);
-                    console.log(oldRecItem.quantity);
-                    // this.itemService.updateItem(recItem.id, item);
-                  }
-                });
-              });
+              const recItem = this.receipt.items?.find(
+                (item) => item.id === item.id
+              );
+              const oldRecItem = this.editReceiptItems.find(
+                (item) => item.id === item.id
+              );
+
+              if (recItem && oldRecItem && recItem.quantity !== undefined) {
+                // Calculate updated item quantity
+                item.quantity =
+                  oldRecItem.quantity + item.quantity - recItem.quantity;
+
+                this.itemService.updateItem(item.id, item);
+              }
             });
 
             console.log(
@@ -584,6 +591,7 @@ export class ReceiptComponentComponent implements OnInit {
             this.clicked = false;
           });
       } else {
+        this.receipt.date = new Date().toLocaleDateString();
         this.receiptService
           .addReceipt(this.receipt)
           .pipe(
