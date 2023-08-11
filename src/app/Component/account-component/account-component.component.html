@@ -4,7 +4,6 @@
         <div class="container col m-4 mt-0 mb-0 pt-2 ">
             <div class="row">
                 <div class="col-3 mt-4">
-
                     <h1>Account List</h1>
                     <!-- Account List Filter -->
                     <mat-form-field class="m-2" appearance="outline" subscriptSizing='dynamic'>
@@ -88,7 +87,7 @@
                         <h2 class="col">Customer Information</h2>
                         <div class="col d-flex justify-content-end">
                             <!-- Add New Account Button -->
-                            <button mat-mini-fab color="accent" aria-label="New Account" (click)="addAccountBtn()"
+                            <button mat-mini-fab color="accent" aria-label="New Account" (click)="toggleAddForm()"
                                 id="addAccountBtn">
                                 <mat-icon>{{icon}}</mat-icon>
                             </button>
@@ -306,7 +305,7 @@
         </div>
 
         <!-- Add or Edit Account Form -->
-        <div *ngIf="show" class="addAccountForm col-4 pb-4">
+        <div *ngIf="showAddForm" class="addAccountForm col-4 pb-4">
             <app-add-account-form-component (refreshActiveAccountListEvent)="refreshTable($event)">
             </app-add-account-form-component>
         </div>

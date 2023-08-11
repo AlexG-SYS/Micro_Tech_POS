@@ -33,6 +33,12 @@
   border-radius: 1rem;
   width: 50%;
 }
+
+.container {
+  max-width: 100%;
+  overflow: auto;
+}
+
 @media (max-width: 1800px) {
   .upc,
   .online,
@@ -44,12 +50,32 @@
   .tax,
   .size,
   .cost {
+    width: 14rem;
+  }
+
+  .description,
+  .category {
+    width: 30rem;
+  }
+}
+
+@media (max-width: 1600px) {
+  .upc,
+  .online,
+  .quantity,
+  .price,
+  .mpn,
+  .status,
+  .category,
+  .tax,
+  .size,
+  .cost {
     width: 12rem;
   }
 
   .description,
   .category {
-    width: 25rem;
+    width: 26rem;
   }
 }
 
@@ -58,26 +84,6 @@
   .online,
   .quantity,
   .price,
-  .mpn,
-  .status,
-  .category,
-  .tax,
-  .size,
-  .cost {
-    width: 10rem;
-  }
-
-  .description,
-  .category {
-    width: 22rem;
-  }
-}
-
-@media (max-width: 1200px) {
-  .upc,
-  .online,
-  .quantity,
-  .price,
   .category,
   .description,
   .mpn,
@@ -86,51 +92,6 @@
   .tax,
   .size,
   .cost {
-    width: 15rem;
-  }
-}
-
-@media (max-width: 768px) {
-  .newItemForm {
-    width: fit-content;
-  }
-
-  .upc,
-  .online,
-  .quantity,
-  .price,
-  .mpn,
-  .status,
-  .category,
-  .tax,
-  .size,
-  .cost {
-    width: 10rem;
-  }
-
-  .description,
-  .category {
-    width: 22rem;
-  }
-}
-
-@media (max-width: 360px) {
-  .newItemForm {
-    width: fit-content;
-  }
-
-  .upc,
-  .online,
-  .quantity,
-  .price,
-  .category,
-  .description,
-  .mpn,
-  .status,
-  .category,
-  .tax,
-  .size,
-  .cost {
-    width: 12rem;
+    width: 14rem;
   }
 }

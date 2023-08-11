@@ -10,14 +10,17 @@ import { UserService } from 'src/app/Services/user.service';
   styleUrls: ['./company-setting-dialog.component.css'],
 })
 export class CompanySettingDialogComponent implements OnInit {
+  // Form group to hold company information
   companyInfoForm!: FormGroup;
   error: string = '';
 
+  // -------------------------------------------------------------------------------------------------------------
   constructor(
     private dialogRef: MatDialogRef<CompanySettingDialogComponent>,
     private formB: FormBuilder,
     private userService: UserService
   ) {
+    // Initialize the companyInfoForm with default values and validation rules
     this.companyInfoForm = this.formB.group({
       name: [GlobalComponent.companyName, Validators.required],
       street: [GlobalComponent.companyStreet, Validators.required],
@@ -36,34 +39,45 @@ export class CompanySettingDialogComponent implements OnInit {
       ],
     });
   }
-  ngOnInit(): void {}
+  // -------------------------------------------------------------------------------------------------------------
 
-  // -----------------------------------------------------------------------------------------------------------
+  // -------------------------------------------------------------------------------------------------------------
+  ngOnInit(): void {}
+  // -------------------------------------------------------------------------------------------------------------
+
+  // -------------------------------------------------------------------------------------------------------------
   // Closes the Dialog
   close() {
     this.dialogRef.close();
   }
-  // -----------------------------------------------------------------------------------------------------------
+  // -------------------------------------------------------------------------------------------------------------
 
-  // -----------------------------------------------------------------------------------------------------------
-  // Validates user input, then updates the user on the databse and closes the dialog
+  // -------------------------------------------------------------------------------------------------------------
+  // Validates user input, updates company information, and closes the dialog
   save() {
     if (this.companyInfoForm.valid) {
       const companyInfo = this.companyInfoForm.value;
 
+      // Update company information through the UserService
       this.userService.updateCompanyInfo(companyInfo).subscribe(() => {
-        GlobalComponent.companyName = companyInfo.name;
-        GlobalComponent.companyStreet = companyInfo.street;
-        GlobalComponent.companyCityTownVillage = companyInfo.city_town_village;
-        GlobalComponent.companyCountry = companyInfo.country;
-        GlobalComponent.companyPhoneNumber = companyInfo.phoneNumber;
-        GlobalComponent.companyTIN = companyInfo.TIN;
-
+        this.updateGlobalCompanyInfo(companyInfo);
         this.dialogRef.close(companyInfo);
       });
     } else {
       this.error = 'Invalid Input*';
     }
   }
-  // -----------------------------------------------------------------------------------------------------------
+  // -------------------------------------------------------------------------------------------------------------
+
+  // -------------------------------------------------------------------------------------------------------------
+  // Helper function to update global company information
+  private updateGlobalCompanyInfo(companyInfo: any) {
+    GlobalComponent.companyName = companyInfo.name;
+    GlobalComponent.companyStreet = companyInfo.street;
+    GlobalComponent.companyCityTownVillage = companyInfo.city_town_village;
+    GlobalComponent.companyCountry = companyInfo.country;
+    GlobalComponent.companyPhoneNumber = companyInfo.phoneNumber;
+    GlobalComponent.companyTIN = companyInfo.TIN;
+  }
+  // -------------------------------------------------------------------------------------------------------------
 }

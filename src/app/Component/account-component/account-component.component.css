@@ -68,3 +68,12 @@ table {
 .semibold {
   font-weight: 550;
 }
+
+@media (max-width: 1180px) {
+  .accountListTable {
+    height: 73vh;
+    max-width: 100%;
+    overflow-y: visible;
+    overflow-x: hidden;
+  }
+}

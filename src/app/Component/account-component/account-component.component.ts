@@ -27,30 +27,73 @@ import { ReceivePaymentDialogComponent } from '../receive-payment-dialog/receive
   styleUrls: ['./account-component.component.css'],
 })
 export class AccountComponentComponent implements OnInit {
+  // Privilege data from global component
   privilege = GlobalComponent.privilege;
+
+  // Data sources for tables
   dataSource = new MatTableDataSource<Account>();
   dataSourceReceipt = new MatTableDataSource<Receipt>();
   dataSourcePayments = new MatTableDataSource<payments>();
+
+  // ViewChild elements for sorting and searching
   @ViewChild('matSortAccounts') sortAccounts!: MatSort;
   @ViewChild('matSortReceipt') sortReceipt!: MatSort;
   @ViewChild('matSortPayments') sortPayments!: MatSort;
   @ViewChild('accountSearch') searchField!: ElementRef;
 
+  // Properties for holding account details
+  id!: string;
+  fullName!: string;
+  phone!: string;
+  email!: string;
+  street!: string;
+  city_town_village!: string;
+  country!: string;
+  balance!: number;
+  status!: string;
+  date!: string;
+
+  // Columns displayed in receipt table
+  displayedColumnsReceipt: string[] = [
+    'receiptNumber',
+    'date',
+    'paymentMeth',
+    'total',
+    'menu',
+  ];
+
+  // Columns displayed in Payments table
+  displayedColumnsPayment: string[] = [
+    'paymentMethod',
+    'reference',
+    'date',
+    'paymentAmount',
+    'unappliedAmount',
+    'memo',
+    'menu',
+  ];
+
+  // -------------------------------------------------------------------------------------------------------------
+  // Constructor for injecting required services
   constructor(
     private accountService: AccountService,
     private receiptService: ReceiptService,
     private snackBar: MatSnackBar,
     private dialog: MatDialog,
     private changeDet: ChangeDetectorRef,
-    public rounter: Router
+    public router: Router
   ) {}
+  // -------------------------------------------------------------------------------------------------------------
 
-  // When the component is loaded ngOnInit is executed
+  // -------------------------------------------------------------------------------------------------------------
+  // Initialization code when the component is loaded
   ngOnInit(): void {
     this.refreshActiveAccountList();
   }
+  // -------------------------------------------------------------------------------------------------------------
 
-  // When the component view has been shown ngAfterViewInit is executed
+  // -------------------------------------------------------------------------------------------------------------
+  // Code executed after the view is initialized
   ngAfterViewInit() {
     this.dataSource.sort = this.sortAccounts;
     this.dataSourceReceipt.sort = this.sortReceipt;
@@ -58,9 +101,10 @@ export class AccountComponentComponent implements OnInit {
     this.searchField.nativeElement.focus();
     this.changeDet.detectChanges();
   }
+  // -------------------------------------------------------------------------------------------------------------
 
   // -------------------------------------------------------------------------------------------------------------
-  // Toggles function that shows inactive accounts or hides them
+  // Toggle function for showing or hiding inactive accounts
   showHide_Value = 'Show Inactive';
   showHideInactive() {
     if (this.showHide_Value == 'Show Inactive') {
@@ -74,23 +118,23 @@ export class AccountComponentComponent implements OnInit {
   // -------------------------------------------------------------------------------------------------------------
 
   // -------------------------------------------------------------------------------------------------------------
-  // Gets List of Active Accounts from the Database
+  // Method for getting list of active accounts from the database
   refreshActiveAccountList() {
     this.accountService.getAccountList('active').subscribe((accountData) => {
       this.dataSource.data = accountData;
     });
   }
+  // -------------------------------------------------------------------------------------------------------------
 
-  // Gets List of in-active Accounts from the Database
+  // -------------------------------------------------------------------------------------------------------------
+  // Method for getting list of inactive accounts from the database
   refreshInActiveAccountList() {
     this.accountService.getAccountList('inactive').subscribe((accountData) => {
-      accountData.forEach((data) => {
-        this.dataSource.data.push(data);
-        this.dataSource.data = this.dataSource.data;
-      });
+      this.dataSource.data.push(...accountData);
+      this.dataSource.data = this.dataSource.data;
     });
   }
-
+  // Columns displayed in account table
   displayedColumnsAccount: string[] = ['fullName', 'balance', 'menu'];
   // -------------------------------------------------------------------------------------------------------------
 
@@ -103,30 +147,32 @@ export class AccountComponentComponent implements OnInit {
         this.dataSourceReceipt.data = receiptList;
       });
   }
-  displayedColumnsReceipt: string[] = [
-    'receiptNumber',
-    'date',
-    'paymentMeth',
-    'total',
-    'menu',
-  ];
+  // -------------------------------------------------------------------------------------------------------------
 
+  // -------------------------------------------------------------------------------------------------------------
+  // Using account name a receipt is intialized
   createReceipt() {
-    this.rounter.navigate([
+    this.router.navigate([
       '/dashboard/receipt/' + this.id + '/' + this.fullName + '/0',
     ]);
   }
-
+  // Using account name an invoice is intialized
   createInvoice() {
-    this.rounter.navigate([
+    this.router.navigate([
       '/dashboard/invoice/' + this.id + '/' + this.fullName + '/0',
     ]);
   }
+  // -------------------------------------------------------------------------------------------------------------
 
+  // -------------------------------------------------------------------------------------------------------------
+  // Using receipt data, the receipt is pushed to Receipt Component so it can be edited
   editReceiptBtn(data: Partial<Receipt>) {
-    this.rounter.navigate(['/dashboard/receipt/0/new/' + data.id]);
+    this.router.navigate(['/dashboard/receipt/0/new/' + data.id]);
   }
+  // -------------------------------------------------------------------------------------------------------------
 
+  // -------------------------------------------------------------------------------------------------------------
+  // Opens dialog so user can see the receipt details
   viewReceipt(recData: Array<any>) {
     let printData = [recData];
 
@@ -146,7 +192,9 @@ export class AccountComponentComponent implements OnInit {
         }
       });
   }
+  // -------------------------------------------------------------------------------------------------------------
 
+  // -------------------------------------------------------------------------------------------------------------
   // Gets list of payments based on the Account ID
   refreshAccountPaymentHistory(customerID: string) {
     this.accountService
@@ -155,16 +203,10 @@ export class AccountComponentComponent implements OnInit {
         this.dataSourcePayments.data = paymentList;
       });
   }
-  displayedColumnsPayment: string[] = [
-    'paymentMethod',
-    'reference',
-    'date',
-    'paymentAmount',
-    'unappliedAmount',
-    'memo',
-    'menu',
-  ];
+  // -------------------------------------------------------------------------------------------------------------
 
+  // -------------------------------------------------------------------------------------------------------------
+  // Opens dialog so user can edit the payment details
   editPaymentBtn(data: Partial<payments>) {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
@@ -186,7 +228,10 @@ export class AccountComponentComponent implements OnInit {
         }
       });
   }
+  // -------------------------------------------------------------------------------------------------------------
 
+  // -------------------------------------------------------------------------------------------------------------
+  // Opens Dialog and shows the details of the selected payment
   viewPayment(paymentData: Partial<payments>) {
     const dialogConfig = new MatDialogConfig();
 
@@ -210,25 +255,19 @@ export class AccountComponentComponent implements OnInit {
   // -------------------------------------------------------------------------------------------------------------
   // Filters the data in the Accounts Table
   applyFilter(filterValue: any) {
-    filterValue = filterValue.target.value;
-    filterValue = filterValue.trim(); // Remove whitespace
-    filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
-    this.dataSource.filter = filterValue;
+    const value = filterValue.target.value.trim().toLowerCase();
+    this.dataSource.filter = value;
   }
   // -------------------------------------------------------------------------------------------------------------
 
   // -------------------------------------------------------------------------------------------------------------
   // Shows or Hides the Add Account Form
-  show: boolean = false;
+  showAddForm: boolean = false;
   icon: string = 'add';
 
-  addAccountBtn() {
-    this.show = !this.show;
-    if (this.icon == 'add') {
-      this.icon = 'close';
-    } else {
-      this.icon = 'add';
-    }
+  toggleAddForm() {
+    this.showAddForm = !this.showAddForm;
+    this.icon = this.showAddForm ? 'close' : 'add';
   }
   // -----------------------------------------------------------------------------------------------------------
 
@@ -243,7 +282,36 @@ export class AccountComponentComponent implements OnInit {
   // -----------------------------------------------------------------------------------------------------------
 
   // -------------------------------------------------------------------------------------------------------------
-  // edits the account information and updates it in the database
+  // FIlls customer infromation so it's visible to user
+  fillAccountInfo(customerData: Account) {
+    this.id = customerData.id;
+    this.fullName = customerData.fullName;
+    this.phone = customerData.phone;
+    this.email = customerData.email;
+    this.street = customerData.street;
+    this.city_town_village = customerData.city_town_village;
+    this.country = customerData.country;
+    this.balance = customerData.balance;
+    this.status = customerData.status;
+    this.date = customerData.date;
+
+    this.refreshAccountReceiptHistory(this.id);
+    this.refreshAccountPaymentHistory(this.id);
+  }
+  // -------------------------------------------------------------------------------------------------------------
+
+  // -----------------------------------------------------------------------------------------------------------
+  // Method for displaying a snack bar message to the user
+  openSnackBar(message: string, cssStyle: string) {
+    this.snackBar.open(message, '', {
+      duration: 2000,
+      panelClass: [cssStyle],
+    });
+  }
+  // -----------------------------------------------------------------------------------------------------------
+
+  // -------------------------------------------------------------------------------------------------------------
+  // Edits the account information and updates it in the database
   editAccountBtn(accountData: Account) {
     const dialogConfig = new MatDialogConfig();
 
@@ -292,44 +360,4 @@ export class AccountComponentComponent implements OnInit {
       });
   }
   // -------------------------------------------------------------------------------------------------------------
-
-  // -------------------------------------------------------------------------------------------------------------
-  id!: string;
-  fullName!: string;
-  phone!: string;
-  email!: string;
-  street!: string;
-  city_town_village!: string;
-  country!: string;
-  balance!: number;
-  status!: string;
-  date!: string;
-
-  // FIlls customer infromation so it's visible to user
-  fillAccountInfo(customerData: Account) {
-    this.id = customerData.id;
-    this.fullName = customerData.fullName;
-    this.phone = customerData.phone;
-    this.email = customerData.email;
-    this.street = customerData.street;
-    this.city_town_village = customerData.city_town_village;
-    this.country = customerData.country;
-    this.balance = customerData.balance;
-    this.status = customerData.status;
-    this.date = customerData.date;
-
-    this.refreshAccountReceiptHistory(this.id);
-    this.refreshAccountPaymentHistory(this.id);
-  }
-  // -------------------------------------------------------------------------------------------------------------
-
-  // -----------------------------------------------------------------------------------------------------------
-  //Displays message to the user
-  openSnackBar(message: string, cssStyle: string) {
-    this.snackBar.open(message, '', {
-      duration: 2000,
-      panelClass: [cssStyle],
-    });
-  }
-  // -----------------------------------------------------------------------------------------------------------
 }

@@ -7,15 +7,20 @@ import { AccountService } from 'src/app/Services/account.service';
 @Component({
   selector: 'app-edit-account-dialog',
   templateUrl: './edit-account-dialog.component.html',
-  styleUrls: ['./edit-account-dialog.component.css']
+  styleUrls: ['./edit-account-dialog.component.css'],
 })
 export class EditAccountDialogComponent implements OnInit {
-
+  // Form group to hold user credentials
   accountForm!: FormGroup;
   account!: Account;
 
-  constructor(private dialogRef: MatDialogRef<EditAccountDialogComponent>, private formB: FormBuilder,
-    @Inject(MAT_DIALOG_DATA) account: Account, private accountService: AccountService) {
+  // -----------------------------------------------------------------------------------------------------------
+  constructor(
+    private dialogRef: MatDialogRef<EditAccountDialogComponent>,
+    private formB: FormBuilder,
+    @Inject(MAT_DIALOG_DATA) account: Account,
+    private accountService: AccountService
+  ) {
     this.account = account;
     this.accountForm = this.formB.group({
       fullName: [account.fullName, Validators.required],
@@ -25,11 +30,13 @@ export class EditAccountDialogComponent implements OnInit {
       street: [account.street, Validators.required],
       city_town_village: [account.city_town_village, Validators.required],
       country: [account.country],
-    })
+    });
   }
+  // -----------------------------------------------------------------------------------------------------------
 
-  ngOnInit(): void {
-  }
+  // -----------------------------------------------------------------------------------------------------------
+  ngOnInit(): void {}
+  // -----------------------------------------------------------------------------------------------------------
 
   // -----------------------------------------------------------------------------------------------------------
   // Closes the Dialog
@@ -43,13 +50,13 @@ export class EditAccountDialogComponent implements OnInit {
   save() {
     if (this.accountForm.valid) {
       const accountChanges = this.accountForm.value;
-    
-      this.accountService.updateAccount(this.account.id, accountChanges).subscribe(() => {
-        this.dialogRef.close(accountChanges);
-      });
+
+      this.accountService
+        .updateAccount(this.account.id, accountChanges)
+        .subscribe(() => {
+          this.dialogRef.close(accountChanges);
+        });
     }
   }
   // -----------------------------------------------------------------------------------------------------------
-
-
 }

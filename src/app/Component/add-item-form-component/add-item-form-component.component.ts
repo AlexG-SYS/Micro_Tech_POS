@@ -11,7 +11,7 @@ import { Items } from 'src/app/Data-Model/item';
 import { ItemService } from '../../Services/item.service';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { NgForm } from '@angular/forms';
-import { catchError, tap } from 'rxjs';
+import { catchError, tap, throwError } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 export interface Category {
@@ -24,35 +24,54 @@ export interface Category {
   styleUrls: ['./add-item-form-component.component.css'],
 })
 export class AddItemFormComponentComponent {
+  // Event emitter to signal item list refresh to parent component
   @Output() refreshActiveItemListEvent: EventEmitter<boolean> =
     new EventEmitter();
+
+  // Reference to the UPC input field
   @ViewChild('upcInput') searchField!: ElementRef;
 
+  // Properties for error handling, file upload, chip functionality, and button click state
   error = '';
   selectedFile: any = null;
   clicked = false;
+  category: Category[] = [];
+  tempArray: string[] = [];
 
+  // Separator keys for chip input field
+  readonly separatorKeysCodes = [ENTER, COMMA] as const;
+
+  // -------------------------------------------------------------------------------------------------------------
   constructor(
     private itemService: ItemService,
     private snackBar: MatSnackBar,
     private changeDet: ChangeDetectorRef
   ) {}
+  // -------------------------------------------------------------------------------------------------------------
 
+  // -------------------------------------------------------------------------------------------------------------
+  // After the view initialization, focus on the UPC input field
   ngAfterViewInit() {
+    this.focusSearchField();
+  }
+  // -------------------------------------------------------------------------------------------------------------
+
+  // -------------------------------------------------------------------------------------------------------------
+  // Focuses on the UPC input field
+  private focusSearchField() {
     this.searchField.nativeElement.focus();
     this.changeDet.detectChanges();
   }
+  // -------------------------------------------------------------------------------------------------------------
 
-  // -----------------------------------------------------------------------------------------------------------
-  // Adds Chip functionality to Category Input Field
+  // -------------------------------------------------------------------------------------------------------------
+  // Adds a chip when input loses focus
   addOnBlur = true;
-  readonly separatorKeysCodes = [ENTER, COMMA] as const;
-  category: Category[] = [];
 
   addMatChip(event: MatChipInputEvent): void {
     const value = (event.value || '').trim();
 
-    // Add our category
+    // Add a category
     if (value) {
       this.category.push({ name: value });
     }
@@ -60,7 +79,10 @@ export class AddItemFormComponentComponent {
     // Clear the input value
     event.chipInput!.clear();
   }
+  // -------------------------------------------------------------------------------------------------------------
 
+  // -------------------------------------------------------------------------------------------------------------
+  // Removes a chip
   removeMatChip(category: Category): void {
     const index = this.category.indexOf(category);
 
@@ -68,27 +90,30 @@ export class AddItemFormComponentComponent {
       this.category.splice(index, 1);
     }
   }
-  // -----------------------------------------------------------------------------------------------------------
+  // -------------------------------------------------------------------------------------------------------------
 
-  // -----------------------------------------------------------------------------------------------------------
-  // Controls image input field
+  // -------------------------------------------------------------------------------------------------------------
+  // Handles file selection
   onFileSelected(event: any): void {
     this.selectedFile = event.target.files[0] ?? null;
   }
-  // -----------------------------------------------------------------------------------------------------------
+  // -------------------------------------------------------------------------------------------------------------
 
-  // -----------------------------------------------------------------------------------------------------------
-  // Submit and Reset Form Functions
-  tempArray: string[] = [];
+  // -------------------------------------------------------------------------------------------------------------
+  // Handles form submission for adding a new item
   onNewItemSubmit(formData: NgForm) {
     this.clicked = true;
+
     if (formData.valid) {
-      const date = new Date().toLocaleDateString();
+      // Clone the form data to preserve original values
       const newItem = { ...formData.value } as Items;
 
+      // Convert category names to lowercase
       this.category.forEach((element) => {
         this.tempArray.push(element.name.toLowerCase());
       });
+
+      // Update item with categories and calculated tax/subtotal
       newItem.categories = this.tempArray;
 
       if (newItem.tax) {
@@ -100,53 +125,74 @@ export class AddItemFormComponentComponent {
       }
 
       newItem.price = Number(newItem.price.toFixed(2));
-      newItem.date = date;
+      newItem.date = new Date().toLocaleDateString();
 
+      // Use the item service to add the new item
       this.itemService
         .addItem(newItem, this.selectedFile)
         .pipe(
+          // Handle success case
           tap((item) => {
-            console.log('Item Successfully Added! ID:', item.id);
-            this.resetInput();
+            this.handleSuccess(item.id);
             formData.resetForm();
-            this.refreshActiveItemListEvent.emit(true);
-            this.openSnackBar('Item Successfully Added!', 'success-snakBar');
+            this.resetInput();
+            this.clicked = false;
           }),
+          // Handle error case
           catchError((error) => {
-            this.openSnackBar(
-              'An Error Occured While Saving!',
-              'error-snakBar'
-            );
-            throw catchError(error);
+            this.handleError();
+            return throwError(error); // Rethrow the error
           })
         )
         .subscribe();
-
-      formData.resetForm();
-      this.resetInput();
-      this.clicked = false;
     } else {
-      this.error = 'Invalid Input*';
-
-      this.clicked = false;
+      // Handle invalid form input
+      this.handleInvalidInput();
     }
   }
+  // -------------------------------------------------------------------------------------------------------------
 
+  // -------------------------------------------------------------------------------------------------------------
+  // Resets the input fields
   resetInput() {
     this.selectedFile = null;
     this.category = [];
     this.error = '';
     this.tempArray = [];
   }
-  // -----------------------------------------------------------------------------------------------------------
+  // -------------------------------------------------------------------------------------------------------------
 
-  // -----------------------------------------------------------------------------------------------------------
-  //Displays message to the user
+  // -------------------------------------------------------------------------------------------------------------
+  // Displays a message to the user using a snackbar
   openSnackBar(message: string, cssStyle: string) {
     this.snackBar.open(message, '', {
       duration: 2000,
       panelClass: [cssStyle],
     });
   }
-  // -----------------------------------------------------------------------------------------------------------
+  // -------------------------------------------------------------------------------------------------------------
+
+  // -------------------------------------------------------------------------------------------------------------
+  // Handles success after adding an item
+  private handleSuccess(itemId: string) {
+    console.log('Item Successfully Added! ID:', itemId);
+    this.refreshActiveItemListEvent.emit(true);
+    this.openSnackBar('Item Successfully Added!', 'success-snakBar');
+  }
+  // -------------------------------------------------------------------------------------------------------------
+
+  // -------------------------------------------------------------------------------------------------------------
+  // Handles errors during form submission
+  private handleError() {
+    this.openSnackBar('An Error Occurred While Saving!', 'error-snakBar');
+  }
+  // -------------------------------------------------------------------------------------------------------------
+
+  // -------------------------------------------------------------------------------------------------------------
+  // Handles invalid input in the form
+  private handleInvalidInput() {
+    this.error = 'Invalid Input*';
+    this.clicked = false;
+  }
+  // -------------------------------------------------------------------------------------------------------------
 }

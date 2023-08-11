@@ -5,21 +5,15 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 @Component({
   selector: 'app-app-setting-dialog',
   templateUrl: './copyRight-dialog.component.html',
-  styleUrls: ['./copyRight-dialog.component.css']
+  styleUrls: ['./copyRight-dialog.component.css'],
 })
 export class CopyRightDialogComponent implements OnInit {
+  constructor(private dialogRef: MatDialogRef<CopyRightDialogComponent>) {}
 
-  constructor(private dialogRef: MatDialogRef<CopyRightDialogComponent>) { }
-
-  ngOnInit(): void {
-  }
-
-
-
+  ngOnInit(): void {}
 
   // Closes the Dialog
   close() {
     this.dialogRef.close();
   }
-
 }

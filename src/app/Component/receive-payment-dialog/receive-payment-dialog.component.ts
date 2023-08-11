@@ -25,11 +25,16 @@ import { PrintPaymentDialogComponent } from '../print-payment-dialog/print-payme
   styleUrls: ['./receive-payment-dialog.component.css'],
 })
 export class ReceivePaymentDialogComponent implements OnInit {
+  // Form group to handle payment input
   paymentForm!: FormGroup;
+
+  // Partial account data
   account!: Partial<Account>;
   accountID!: string;
   paymentID!: string;
   oldPayment!: number;
+
+  // User's username
   username: string = GlobalComponent.userName;
 
   constructor(
@@ -40,6 +45,22 @@ export class ReceivePaymentDialogComponent implements OnInit {
     private accountService: AccountService,
     private dialog: MatDialog
   ) {
+    // Initialize the payment form
+    this.initializePaymentForm(data);
+  }
+  // -----------------------------------------------------------------------------------------------------------
+
+  // -----------------------------------------------------------------------------------------------------------
+  // Initialize the component
+  ngOnInit(): void {
+    this.initPaymentMethod();
+  }
+  // -----------------------------------------------------------------------------------------------------------
+
+  // -----------------------------------------------------------------------------------------------------------
+  // Initialize the payment form based on provided data
+  private initializePaymentForm(data: any): void {
+    // If data has an accountID, it's an existing payment
     if (data.accountID) {
       this.paymentID = data.id;
       this.accountID = data.accountID;
@@ -49,10 +70,11 @@ export class ReceivePaymentDialogComponent implements OnInit {
 
       this.paymentForm = this.formB.group({
         paymentAmount: [data.paymentAmount, Validators.required],
-        reference: [data.reference],
-        memo: [data.memo],
+        reference: [data.reference || ''],
+        memo: [data.memo || ''],
       });
     } else {
+      // It's a new payment
       this.accountID = data.id;
       this.account = data;
 
@@ -63,8 +85,11 @@ export class ReceivePaymentDialogComponent implements OnInit {
       });
     }
   }
+  // -----------------------------------------------------------------------------------------------------------
 
-  ngOnInit(): void {
+  // -----------------------------------------------------------------------------------------------------------
+  // Initialize the payment method UI based on the selected method
+  private initPaymentMethod(): void {
     switch (this.pymMethod) {
       case 'Cash':
         this.paymentMethod(0);
@@ -89,9 +114,10 @@ export class ReceivePaymentDialogComponent implements OnInit {
         break;
     }
   }
+  // -----------------------------------------------------------------------------------------------------------
 
   // -------------------------------------------------------------------------------------------------------------
-  // Selects the Payment Method
+  // Selects the Payment Method and updates UI accordingly
   pymMethod: string = '';
   paymentMethod(index: number) {
     const pmtMethod = document.querySelectorAll('.payment-method-Btn');
@@ -111,76 +137,94 @@ export class ReceivePaymentDialogComponent implements OnInit {
   // -----------------------------------------------------------------------------------------------------------
 
   // -----------------------------------------------------------------------------------------------------------
-  // Executes when the save button is clicked. Adds the payment to the database and updates customer balance information
-  save() {
+  // Handles saving payment data
+  save(): void {
     if (this.paymentForm.valid) {
-      const paymentData: payments = this.paymentForm.value;
+      const paymentData: payments = { ...this.paymentForm.value };
       paymentData.accountID = this.accountID;
       paymentData.fullName = this.account.fullName as string;
-      paymentData.date = new Date().toLocaleDateString();
       paymentData.paymentMethod = this.pymMethod;
       paymentData.salesRep = this.username;
 
       paymentData.unappliedAmount = paymentData.paymentAmount;
 
+      // Check if it's an update or a new payment
       if (this.paymentID) {
-        this.accountService
-          .updatePaymentForAccount(this.paymentID, paymentData)
-          .subscribe(() => {
-            console.log('Payment Successfully Updated! ID:', this.paymentID);
-
-            this.accountService
-              .getAccount(this.accountID)
-              .subscribe((accountData) => {
-                const customerInfo: any = accountData.data();
-                delete customerInfo.id;
-                customerInfo.balance =
-                  customerInfo.balance +
-                  this.oldPayment -
-                  paymentData.paymentAmount;
-                this.accountService.updateAccount(this.accountID, customerInfo);
-              });
-
-            this.dialogRef.close(this.paymentID);
-          });
+        this.updatePayment(paymentData);
       } else {
-        this.accountService
-          .receivePaymentForAccount(paymentData)
-          .pipe(
-            tap((payment) => {
-              console.log('Payment Successfully Added! ID:', payment.id);
-
-              this.account.balance =
-                this.account.balance! - paymentData.paymentAmount;
-              delete this.account.id;
-              this.accountService.updateAccount(this.accountID, this.account);
-
-              this.dialogRef.close(payment.id);
-
-              const dialogConfig = new MatDialogConfig();
-
-              dialogConfig.disableClose = true;
-              dialogConfig.autoFocus = true;
-              dialogConfig.minWidth = '450px';
-              dialogConfig.data = paymentData;
-
-              this.dialog
-                .open(PrintPaymentDialogComponent, dialogConfig)
-                .afterClosed()
-                .subscribe((val) => {
-                  if (val) {
-                    console.log('Payment Printed', val);
-                  }
-                });
-            }),
-            catchError((error) => {
-              this.dialogRef.close();
-              throw catchError(error);
-            })
-          )
-          .subscribe();
+        this.receivePayment(paymentData);
       }
     }
+  }
+  // -----------------------------------------------------------------------------------------------------------
+
+  // -----------------------------------------------------------------------------------------------------------
+  // Update an existing payment
+  private updatePayment(paymentData: payments): void {
+    this.accountService
+      .updatePaymentForAccount(this.paymentID, paymentData)
+      .subscribe(() => {
+        this.updateAccountBalance(paymentData);
+        this.dialogRef.close(this.paymentID);
+      });
+  }
+  // -----------------------------------------------------------------------------------------------------------
+
+  // -----------------------------------------------------------------------------------------------------------
+  // Update account balance after a payment
+  private updateAccountBalance(paymentData: payments): void {
+    this.accountService.getAccount(this.accountID).subscribe((accountData) => {
+      const customerInfo: any = accountData.data();
+      delete customerInfo.id;
+      customerInfo.balance =
+        customerInfo.balance + this.oldPayment - paymentData.paymentAmount;
+      this.accountService.updateAccount(this.accountID, customerInfo);
+    });
+  }
+  // -----------------------------------------------------------------------------------------------------------
+
+  // -----------------------------------------------------------------------------------------------------------
+  // Receive a new payment
+  private receivePayment(paymentData: payments): void {
+    paymentData.date = new Date().toLocaleDateString();
+    this.accountService
+      .receivePaymentForAccount(paymentData)
+      .pipe(
+        tap((payment) => {
+          this.account.balance =
+            this.account.balance! - paymentData.paymentAmount;
+          delete this.account.id;
+          this.accountService.updateAccount(this.accountID, this.account);
+
+          this.dialogRef.close(payment.id);
+          this.openPrintDialog(paymentData);
+        }),
+        catchError((error) => {
+          this.dialogRef.close();
+          throw catchError(error);
+        })
+      )
+      .subscribe();
+  }
+  // -----------------------------------------------------------------------------------------------------------
+
+  // -----------------------------------------------------------------------------------------------------------
+  // Open the print dialog after payment
+  private openPrintDialog(paymentData: payments): void {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.minWidth = '450px';
+    dialogConfig.data = paymentData;
+
+    this.dialog
+      .open(PrintPaymentDialogComponent, dialogConfig)
+      .afterClosed()
+      .subscribe((val) => {
+        if (val) {
+          console.log('Payment Printed');
+        }
+      });
   }
   // -----------------------------------------------------------------------------------------------------------
 }

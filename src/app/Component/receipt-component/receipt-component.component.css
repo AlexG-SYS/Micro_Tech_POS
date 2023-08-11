@@ -14,6 +14,11 @@ table {
   overflow: auto;
 }
 
+.container-Receipt {
+  overflow: auto;
+  overflow-x: hidden;
+}
+
 .mat-mdc-table button:hover {
   background-color: #d7d7d7;
 }
@@ -63,4 +68,10 @@ table {
 .icon-display {
   margin: 0.5rem;
   transform: scale(1.5);
+}
+
+@media (max-width: 1800px) {
+  .table-container {
+    height: 74vh;
+  }
 }

@@ -8,34 +8,46 @@ import { AccountService } from 'src/app/Services/account.service';
 @Component({
   selector: 'app-print-payment-dialog',
   templateUrl: './print-payment-dialog.component.html',
-  styleUrls: ['./print-payment-dialog.component.css']
+  styleUrls: ['./print-payment-dialog.component.css'],
 })
-export class PrintPaymentDialogComponent implements OnInit {
-
+export class PrintPaymentDialogComponent {
   // Variables used in the Payment Receipt Dialog
   paymentData: any;
   account: any;
-  companyName = GlobalComponent.companyName
-  companyStreet = GlobalComponent.companyStreet
-  companyCityTownVillage = GlobalComponent.companyCityTownVillage
-  companyCountry = GlobalComponent.companyCountry
-  companyTIN = GlobalComponent.companyTIN
-  companyPhoneNumber = GlobalComponent.companyPhoneNumber
+  companyName = GlobalComponent.companyName;
+  companyStreet = GlobalComponent.companyStreet;
+  companyCityTownVillage = GlobalComponent.companyCityTownVillage;
+  companyCountry = GlobalComponent.companyCountry;
+  companyTIN = GlobalComponent.companyTIN;
+  companyPhoneNumber = GlobalComponent.companyPhoneNumber;
 
-  constructor(private dialogRef: MatDialogRef<PrintPaymentDialogComponent>, @Inject(MAT_DIALOG_DATA) printData: Array<any>,
-    private paymentService: AccountService) {
-      this.paymentData = printData;
-
-      paymentService.getAccount(this.paymentData.accountID).subscribe( accountInfo => {
-        this.account = accountInfo.data();
-      })
+  // -------------------------------------------------------------------------------------------------------------
+  constructor(
+    private dialogRef: MatDialogRef<PrintPaymentDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) printData: Array<any>,
+    private paymentService: AccountService
+  ) {
+    // Initialize paymentData with the data passed to the dialog
+    this.paymentData = printData;
+    // Fetch account information based on the accountID from paymentData
+    this.getAccountInfo(this.paymentData.accountID);
   }
+  // -------------------------------------------------------------------------------------------------------------
 
-  ngOnInit(): void {
+  // -------------------------------------------------------------------------------------------------------------
+  // Fetches account information from the account service
+  private getAccountInfo(accountID: string): void {
+    this.paymentService.getAccount(accountID).subscribe((accountInfo) => {
+      // Store the fetched account information in the account variable
+      this.account = accountInfo.data();
+    });
   }
+  // -------------------------------------------------------------------------------------------------------------
 
+  // -------------------------------------------------------------------------------------------------------------
   // Closes the Dialog
-  close() {
+  close(): void {
     this.dialogRef.close();
   }
+  // -------------------------------------------------------------------------------------------------------------
 }

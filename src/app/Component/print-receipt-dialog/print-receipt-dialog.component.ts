@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, Output } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Receipt } from 'src/app/Data-Model/receipt';
 import { GlobalComponent } from 'src/app/global-component';
@@ -9,7 +9,8 @@ import { ReceiptService } from 'src/app/Services/receipt.service';
   templateUrl: './print-receipt-dialog.component.html',
   styleUrls: ['./print-receipt-dialog.component.css'],
 })
-export class PrintReceiptDialogComponent implements OnInit {
+export class PrintReceiptDialogComponent {
+  // Company information
   companyName = GlobalComponent.companyName;
   companyStreet = GlobalComponent.companyStreet;
   companyCityTownVillage = GlobalComponent.companyCityTownVillage;
@@ -26,24 +27,28 @@ export class PrintReceiptDialogComponent implements OnInit {
   total: number = 0;
   username: string = GlobalComponent.userName;
 
-  // Constructor Initiallizing the receipt data
+  // -------------------------------------------------------------------------------------------------------------
+  // Constructor initializes the receipt data
   constructor(
     private dialogRef: MatDialogRef<PrintReceiptDialogComponent>,
     @Inject(MAT_DIALOG_DATA) printData: any,
     private recService: ReceiptService
   ) {
+    // Extract receipt data from the passed array
     this.receiptData = printData[0];
+    // Populate other variables with relevant receipt data
     this.subTotal = this.receiptData.subtotal;
     this.discount = this.receiptData.discount;
     this.tax = this.receiptData.TAX;
     this.total = this.receiptData.total;
     this.change = this.receiptData.change;
   }
+  // -------------------------------------------------------------------------------------------------------------
 
-  ngOnInit(): void {}
-
+  // -------------------------------------------------------------------------------------------------------------
   // Closes the Dialog
-  close() {
+  close(): void {
     this.dialogRef.close();
   }
+  // -------------------------------------------------------------------------------------------------------------
 }

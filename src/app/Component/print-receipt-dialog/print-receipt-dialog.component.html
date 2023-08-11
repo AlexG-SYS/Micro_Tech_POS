@@ -15,7 +15,7 @@
         </div>
         <!-- Rceipt Number -->
         <div class="row justify-content-end">
-            <div class="col-2">Receipt No:</div>
+            <div class="col-2 bold">Receipt No:</div>
             <div class="col-2">{{receiptData.receiptNumber}}</div>
         </div>
         <!-- Sold to: section -->
@@ -76,7 +76,7 @@
             <div class="col-2 totalBigger">${{total | number : '1.2-2'}}</div>
         </div>
         <!-- Memo Section -->
-        <div class="row justify-content-center pt-4">
+        <div class="row justify-content-center py-4">
             {{receiptData.memo}}
         </div>
     </div>

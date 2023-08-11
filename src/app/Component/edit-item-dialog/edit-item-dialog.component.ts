@@ -13,7 +13,7 @@ export interface Category {
 @Component({
   selector: 'app-edit-item-dialog',
   templateUrl: './edit-item-dialog.component.html',
-  styleUrls: ['./edit-item-dialog.component.css']
+  styleUrls: ['./edit-item-dialog.component.css'],
 })
 export class EditItemDialogComponent {
   itemForm!: FormGroup;
@@ -22,10 +22,14 @@ export class EditItemDialogComponent {
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
   categories: Category[] = [];
 
-  // Constructor Initialize FOrm Data
-  constructor(private dialogRef: MatDialogRef<EditItemDialogComponent>, private formB: FormBuilder,
-    @Inject(MAT_DIALOG_DATA) item: Items, private itemService: ItemService) {
-
+  // -----------------------------------------------------------------------------------------------------------
+  constructor(
+    private dialogRef: MatDialogRef<EditItemDialogComponent>,
+    private formB: FormBuilder,
+    @Inject(MAT_DIALOG_DATA) item: Items,
+    private itemService: ItemService
+  ) {
+    // Initialize the form with item data
     this.item = item;
     this.itemForm = this.formB.group({
       upc: [item.upc, Validators.required],
@@ -37,13 +41,15 @@ export class EditItemDialogComponent {
       cost: [item.cost, Validators.required],
       price: [item.price, Validators.required],
       tax: [item.tax, Validators.required],
-      online: [item.online, Validators.required]
-    })
+      online: [item.online, Validators.required],
+    });
 
-    item.categories.forEach(catergory => {
-      this.categories.push({ name: catergory })
-    })
+    // Populate categories
+    item.categories.forEach((catergory) => {
+      this.categories.push({ name: catergory });
+    });
   }
+  // -----------------------------------------------------------------------------------------------------------
 
   // -----------------------------------------------------------------------------------------------------------
   // Closes the Dialog
@@ -53,26 +59,28 @@ export class EditItemDialogComponent {
   // -----------------------------------------------------------------------------------------------------------
 
   // -----------------------------------------------------------------------------------------------------------
-  // Executes when the save button is clicked. Calles the Item Update Funciton
+  // Saves the changes
   tempArray: string[] = [];
   save() {
     if (this.itemForm.valid) {
       const itemChanges = this.itemForm.value;
 
-      this.categories.forEach(element => {
+      // Prepare categories
+      this.categories.forEach((element) => {
         this.tempArray.push(element.name.toLowerCase());
       });
       itemChanges.categories = this.tempArray;
 
+      // Calculate item tax and subtotal
       if (itemChanges.tax) {
         itemChanges.itemTax = itemChanges.price * 0.125;
         itemChanges.itemSubTotal = itemChanges.price - itemChanges.itemTax;
-      }
-      else {
+      } else {
         itemChanges.itemTax = 0;
         itemChanges.itemSubTotal = itemChanges.price;
       }
 
+      // Update item through ItemService
       this.itemService.updateItem(this.item.id, itemChanges).subscribe(() => {
         this.dialogRef.close(itemChanges);
       });
@@ -80,14 +88,12 @@ export class EditItemDialogComponent {
   }
   // -----------------------------------------------------------------------------------------------------------
 
-
   // -----------------------------------------------------------------------------------------------------------
-  // Adds Chip functionality to Category Input Field
-
+  // Adds a category chip
   addMatChip(event: MatChipInputEvent): void {
     const value = (event.value || '').trim();
 
-    // Add our category
+    // Add category if value is provided
     if (value) {
       this.categories.push({ name: value });
     }
@@ -95,7 +101,10 @@ export class EditItemDialogComponent {
     // Clear the input value
     event.chipInput!.clear();
   }
+  // -----------------------------------------------------------------------------------------------------------
 
+  // -----------------------------------------------------------------------------------------------------------
+  // Removes a category chip
   removeMatChip(category: Category): void {
     const index = this.categories.indexOf(category);
 
@@ -104,5 +113,4 @@ export class EditItemDialogComponent {
     }
   }
   // -----------------------------------------------------------------------------------------------------------
-
 }

@@ -42,8 +42,7 @@
 
     <!--  -->
     <div class="receiptTable">
-        <table mat-table [dataSource]="dataSourceReceipt" matSort #matSortReceipt="matSort"
-            matSortActive="receiptNumber" matSortDirection="desc">
+        <table mat-table [dataSource]="dataSourceReceipt" matSort matSortActive="receiptNumber" matSortDirection="desc">
 
             <!-- Receipt Number Column -->
             <ng-container matColumnDef="receiptNumber">

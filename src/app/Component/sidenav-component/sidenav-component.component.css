@@ -5,6 +5,10 @@
   width: auto;
 }
 
+.sideNav {
+  height: 85vh;
+}
+
 .name {
   margin: 0;
   margin-top: 8px;
@@ -29,10 +33,21 @@
   background-color: white;
 }
 
+.logOut {
+  background-color: rgb(223, 5, 5);
+  height: 2.5rem;
+}
+
 @media (max-width: 768px) {
   .mdc-button {
     width: 0;
     height: 3rem;
     border-radius: 1rem;
+  }
+}
+
+@media (max-width: 1180px) {
+  .sideNav {
+    height: 82vh;
   }
 }

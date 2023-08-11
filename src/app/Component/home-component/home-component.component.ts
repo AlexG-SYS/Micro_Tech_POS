@@ -1,15 +1,16 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { GlobalComponent } from 'src/app/global-component';
-import { ReceiptService } from 'src/app/Services/receipt.service';
 import { Chart, registerables } from 'chart.js/auto';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { UserSettingDialogComponent } from '../user-setting-dialog/user-setting-dialog.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
+
+import { GlobalComponent } from 'src/app/global-component';
+import { ReceiptService } from 'src/app/Services/receipt.service';
+import { UserService } from 'src/app/Services/user.service';
+import { UserSettingDialogComponent } from '../user-setting-dialog/user-setting-dialog.component';
 import { CopyRightDialogComponent } from '../copyRight-dialog/copyRight-dialog.component';
 import { CompanyUserSettingDialogComponent } from '../company-user-setting-dialog/company-user-setting-dialog.component';
 import { CompanySettingDialogComponent } from '../company-setting-dialog/company-setting-dialog.component';
-import { UserService } from 'src/app/Services/user.service';
 
 @Component({
   selector: 'app-home-component',
@@ -17,13 +18,21 @@ import { UserService } from 'src/app/Services/user.service';
   styleUrls: ['./home-component.component.css'],
 })
 export class HomeComponentComponent implements OnInit {
+  // Variables for displaying company name and current date
   companyName: string = '';
   currentDate = new Date();
+
+  // Global privileges and current time
   privilege = GlobalComponent.privilege;
   time = this.currentDate.getHours();
-  chart!: any;
+
+  // Chart instance for daily customer statistics
+  chart!: Chart; // Using the Chart class from Chart.js
+
+  // Greeting message based on time of day
   greetingMessage: string = '';
 
+  // -----------------------------------------------------------------------------------------------------------
   constructor(
     private db: AngularFirestore,
     private receiptService: ReceiptService,
@@ -31,22 +40,53 @@ export class HomeComponentComponent implements OnInit {
     private snackBar: MatSnackBar,
     private userService: UserService
   ) {
-    Chart.register(...registerables);
+    Chart.register(...registerables); // Register the chart types and plugins
   }
+  // -----------------------------------------------------------------------------------------------------------
 
+  // -----------------------------------------------------------------------------------------------------------
   ngOnInit(): void {
+    // Get company information
+    this.getCompanyInfo();
+
+    // Set greeting message based on time of day
+    this.setGreetingMessage();
+
+    // Create and configure the chart
+    this.createChart();
+
+    // Fetch and display graph data
+    this.fetchGraphData();
+  }
+  // -----------------------------------------------------------------------------------------------------------
+
+  // -----------------------------------------------------------------------------------------------------------
+  // Fetch company information from service
+  getCompanyInfo() {
     this.userService.getCompanyInfo().subscribe((data) => {
       const companyInfo: any = data.data();
       this.companyName = companyInfo.name;
-      GlobalComponent.companyName = companyInfo.name;
-      GlobalComponent.companyStreet = companyInfo.street;
-      GlobalComponent.companyCityTownVillage = companyInfo.city_town_village;
-      GlobalComponent.companyCountry = companyInfo.country;
-      GlobalComponent.companyTIN = companyInfo.TIN;
-      GlobalComponent.companyPhoneNumber = companyInfo.phoneNumber;
-      GlobalComponent.companyEmail = companyInfo.email;
+      this.updateGlobalCompanyInfo(companyInfo);
     });
+  }
+  // -----------------------------------------------------------------------------------------------------------
 
+  // -----------------------------------------------------------------------------------------------------------
+  // Update global company info
+  updateGlobalCompanyInfo(companyInfo: any) {
+    GlobalComponent.companyName = companyInfo.name;
+    GlobalComponent.companyStreet = companyInfo.street;
+    GlobalComponent.companyCityTownVillage = companyInfo.city_town_village;
+    GlobalComponent.companyCountry = companyInfo.country;
+    GlobalComponent.companyTIN = companyInfo.TIN;
+    GlobalComponent.companyPhoneNumber = companyInfo.phoneNumber;
+    GlobalComponent.companyEmail = companyInfo.email;
+  }
+  // -----------------------------------------------------------------------------------------------------------
+
+  // -----------------------------------------------------------------------------------------------------------
+  // Set greeting message based on time of day
+  setGreetingMessage() {
     if (this.time < 12) {
       this.greetingMessage = 'Good Morning, ' + GlobalComponent.userName;
     } else if (this.time >= 12 && this.time < 15) {
@@ -56,8 +96,12 @@ export class HomeComponentComponent implements OnInit {
     } else if (this.time >= 18) {
       this.greetingMessage = 'Good Night, ' + GlobalComponent.userName;
     }
+  }
+  // -----------------------------------------------------------------------------------------------------------
 
-    // Firstly Draws the Graph
+  // -----------------------------------------------------------------------------------------------------------
+  // Create and configure the chart
+  createChart() {
     this.chart = new Chart('dailyCustomerStats', {
       type: 'line',
       data: {
@@ -79,22 +123,20 @@ export class HomeComponentComponent implements OnInit {
         },
       },
     });
-
-    // Gets the graph data from the database
-    this.getData();
   }
+  // -----------------------------------------------------------------------------------------------------------
 
   // -----------------------------------------------------------------------------------------------------------
-  // Gets the total number of customers who bought something for the current month
-  getData() {
-    var month = this.currentDate.getMonth() + 1;
-    let year = this.currentDate.getFullYear();
+  // Fetch graph data from the database
+  fetchGraphData() {
+    const month = this.currentDate.getMonth() + 1;
+    const year = this.currentDate.getFullYear();
 
     for (let day = 1; day <= this.currentDate.getDate(); day++) {
       this.receiptService
         .getReceiptList(month + '/' + day + '/' + year)
         .subscribe((receiptData) => {
-          var monthString = [
+          const monthString = [
             'Jan',
             'Feb',
             'Mar',
@@ -109,134 +151,122 @@ export class HomeComponentComponent implements OnInit {
             'Dec',
           ];
 
-          let xData = monthString[month - 1] + '-' + day;
-          let yData = receiptData.length;
-          this.addData(this.chart, xData, yData);
+          const xData = monthString[month - 1] + '-' + day;
+          const yData = receiptData.length;
+          this.addDataToChart(xData, yData);
         });
     }
   }
   // -----------------------------------------------------------------------------------------------------------
 
   // -----------------------------------------------------------------------------------------------------------
-  // Adds passed data to the graph and updates it
-  addData(
-    chart: { data: { labels: any[]; datasets: any[] }; update: () => void },
-    label: any,
-    data: any
-  ) {
-    chart.data.labels.push(label);
-    chart.data.datasets.forEach((dataset: { data: any[] }) => {
+  // Add data to the chart and update it
+  addDataToChart(label: any, data: any) {
+    this.chart.data.labels?.push(label);
+    this.chart.data.datasets.forEach((dataset: any) => {
       dataset.data.push(data);
     });
-    chart.update();
+    this.chart.update();
   }
   // -----------------------------------------------------------------------------------------------------------
 
   // -----------------------------------------------------------------------------------------------------------
-  // Copyright Dialog is shown with data
-  copyright() {
-    const dialogConfig = new MatDialogConfig();
-
-    dialogConfig.disableClose = true;
-    dialogConfig.autoFocus = true;
-    dialogConfig.minWidth = '300px';
-    dialogConfig.maxWidth = '700px';
-    dialogConfig.data = [];
-
+  // Open copyright dialog
+  openCopyrightDialog() {
+    const dialogConfig = this.getBaseDialogConfig();
     this.dialog.open(CopyRightDialogComponent, dialogConfig);
   }
   // -----------------------------------------------------------------------------------------------------------
 
   // -----------------------------------------------------------------------------------------------------------
-  // User settings dialog is shown
-  userSettings() {
-    const dialogConfig = new MatDialogConfig();
-
-    dialogConfig.disableClose = true;
-    dialogConfig.autoFocus = true;
-    dialogConfig.minWidth = '300px';
-    dialogConfig.maxWidth = '700px';
-    dialogConfig.data = [];
-
+  // Open user settings dialog
+  openUserSettingsDialog() {
+    const dialogConfig = this.getBaseDialogConfig();
     this.dialog
       .open(UserSettingDialogComponent, dialogConfig)
       .afterClosed()
       .subscribe((val) => {
-        if (val) {
-          console.log('User Settings Edited');
-          this.openSnackBar(
-            val.username.toUpperCase() + ' - Settings Updated!',
-            'success-snakBar'
-          );
-        } else {
-          this.openSnackBar('User Settings Was Not Updated!', 'error-snakBar');
-        }
+        this.handleDialogClose(
+          val,
+          'User Settings Edited',
+          'User Settings Was Not Updated!'
+        );
       });
   }
   // -----------------------------------------------------------------------------------------------------------
 
   // -----------------------------------------------------------------------------------------------------------
-  // Edit Company user dialog is shown
-  editCompanyUsers() {
-    const dialogConfig = new MatDialogConfig();
-
-    dialogConfig.disableClose = true;
-    dialogConfig.autoFocus = true;
-    dialogConfig.minWidth = '300px';
-    dialogConfig.maxWidth = '700px';
-    dialogConfig.data = [];
-
+  // Open company user settings dialog
+  openCompanyUserSettingsDialog() {
+    const dialogConfig = this.getBaseDialogConfig();
     this.dialog
       .open(CompanyUserSettingDialogComponent, dialogConfig)
       .afterClosed()
       .subscribe((val) => {
-        if (val) {
-          console.log('User Settings Edited');
-          this.openSnackBar(
-            val.username.toUpperCase() + ' - Settings Updated!',
-            'success-snakBar'
-          );
-        } else {
-          this.openSnackBar('User Setting Was Not Updated!', 'error-snakBar');
-        }
+        this.handleDialogClose(
+          val,
+          'User Settings Edited',
+          'User Setting Was Not Updated!'
+        );
       });
   }
   // -----------------------------------------------------------------------------------------------------------
 
   // -----------------------------------------------------------------------------------------------------------
-  editCompany() {
-    const dialogConfig = new MatDialogConfig();
-
-    dialogConfig.disableClose = true;
-    dialogConfig.autoFocus = true;
-    dialogConfig.minWidth = '300px';
-    dialogConfig.maxWidth = '700px';
-    dialogConfig.data = [];
-
+  // Open company settings dialog
+  openCompanySettingsDialog() {
+    const dialogConfig = this.getBaseDialogConfig();
     this.dialog
       .open(CompanySettingDialogComponent, dialogConfig)
       .afterClosed()
       .subscribe((val) => {
-        if (val) {
-          console.log('Company Settings Edited');
-          this.openSnackBar('Company Information Updated!', 'success-snakBar');
-        } else {
-          this.openSnackBar(
-            'Company Information Was Not Updated!',
-            'error-snakBar'
-          );
-        }
+        this.handleDialogClose(
+          val,
+          'Company Settings Edited',
+          'Company Information Was Not Updated!'
+        );
       });
   }
   // -----------------------------------------------------------------------------------------------------------
 
   // -----------------------------------------------------------------------------------------------------------
-  //Displays message to the user
+  // Handle dialog close and show snackbar message
+  handleDialogClose(val: any, successMessage: string, errorMessage: string) {
+    if (val) {
+      if (val.username) {
+        this.openSnackBar(
+          val.username.toUpperCase() + ' - Settings Updated!',
+          'success-snakBar'
+        );
+      } else {
+        this.openSnackBar(val.name + ' - Settings Updated!', 'success-snakBar');
+      }
+    } else {
+      this.openSnackBar(errorMessage, 'error-snakBar');
+    }
+  }
+  // -----------------------------------------------------------------------------------------------------------
+
+  // -----------------------------------------------------------------------------------------------------------
+  // Open snackbar
   openSnackBar(message: string, cssStyle: string) {
     this.snackBar.open(message, '', {
       duration: 2000,
       panelClass: [cssStyle],
     });
+  }
+  // -----------------------------------------------------------------------------------------------------------
+
+  // -----------------------------------------------------------------------------------------------------------
+  // Create a base dialog configuration
+  getBaseDialogConfig() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.minWidth = '300px';
+    dialogConfig.maxWidth = '700px';
+    dialogConfig.data = [];
+    return dialogConfig;
   }
   // -----------------------------------------------------------------------------------------------------------
 }

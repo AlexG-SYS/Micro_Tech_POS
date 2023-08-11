@@ -19,7 +19,12 @@
   width: 50%;
 }
 
-@media (max-width: 1400px) {
+.container {
+  max-width: 100%;
+  overflow: auto;
+}
+
+@media (max-width: 1800px) {
   .fullName,
   .status,
   .phone,
@@ -27,35 +32,11 @@
   .street,
   .city_town_village,
   .country {
-    width: 10rem;
+    width: 14rem;
   }
 }
 
-@media (max-width: 1200px) {
-  .fullName,
-  .status,
-  .phone,
-  .email,
-  .street,
-  .city_town_village,
-  .country {
-    width: 15rem;
-  }
-}
-
-@media (max-width: 768px) {
-  .fullName,
-  .status,
-  .phone,
-  .email,
-  .street,
-  .city_town_village,
-  .country {
-    width: 10rem;
-  }
-}
-
-@media (max-width: 360px) {
+@media (max-width: 1600px) {
   .fullName,
   .status,
   .phone,
@@ -64,5 +45,17 @@
   .city_town_village,
   .country {
     width: 12rem;
+  }
+}
+
+@media (max-width: 1400px) {
+  .fullName,
+  .status,
+  .phone,
+  .email,
+  .street,
+  .city_town_village,
+  .country {
+    width: 14rem;
   }
 }

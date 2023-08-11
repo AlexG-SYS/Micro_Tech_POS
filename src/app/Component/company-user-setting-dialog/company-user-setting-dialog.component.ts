@@ -10,17 +10,22 @@ import { UserService } from 'src/app/Services/user.service';
   styleUrls: ['./company-user-setting-dialog.component.css'],
 })
 export class CompanyUserSettingDialogComponent implements OnInit {
+  // Initial values from GlobalComponent
   companyname = GlobalComponent.companyName;
   username = GlobalComponent.userName;
+
+  // Form group to hold user credentials
   companyUserForm!: FormGroup;
   allUserCred: any[] = [];
   error = '';
 
+  // -------------------------------------------------------------------------------------------------------------
   constructor(
     private dialogRef: MatDialogRef<CompanyUserSettingDialogComponent>,
     private formB: FormBuilder,
     private userService: UserService
   ) {
+    // Initialize the companyUserForm with default values and validation rules
     this.companyUserForm = this.formB.group({
       userID: [, Validators.required],
       username: [, Validators.required],
@@ -37,24 +42,26 @@ export class CompanyUserSettingDialogComponent implements OnInit {
       ],
     });
   }
+  // -------------------------------------------------------------------------------------------------------------
 
+  // -------------------------------------------------------------------------------------------------------------
   ngOnInit(): void {
+    // Fetch all user credentials on initialization
     this.userService.getAllUserCredentials().subscribe((userData) => {
-      userData.forEach((user) => {
-        this.allUserCred.push(user);
-      });
+      this.allUserCred = userData;
     });
   }
+  // -------------------------------------------------------------------------------------------------------------
 
-  // -----------------------------------------------------------------------------------------------------------
+  // -------------------------------------------------------------------------------------------------------------
   // Closes the Dialog
   close() {
     this.dialogRef.close();
   }
-  // -----------------------------------------------------------------------------------------------------------
+  // -------------------------------------------------------------------------------------------------------------
 
-  // -----------------------------------------------------------------------------------------------------------
-  // Validates user input, then updates the user on the databse and closes the dialog
+  // -------------------------------------------------------------------------------------------------------------
+  // Validates user input, updates user credentials, and closes the dialog
   save() {
     if (this.companyUserForm.valid) {
       const userCredentials = this.companyUserForm.value;
@@ -63,6 +70,7 @@ export class CompanyUserSettingDialogComponent implements OnInit {
       userCredentials.username = userCredentials.username.toLowerCase();
       userCredentials.discountLimit = +userCredentials.discountLimit;
 
+      // Update user credentials through the UserService
       this.userService
         .updateUserCredentials(userID, userCredentials)
         .subscribe(() => {
@@ -72,5 +80,5 @@ export class CompanyUserSettingDialogComponent implements OnInit {
       this.error = 'Invalid Input*';
     }
   }
-  // -----------------------------------------------------------------------------------------------------------
+  // -------------------------------------------------------------------------------------------------------------
 }

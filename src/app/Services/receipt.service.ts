@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { from, Observable } from 'rxjs';
-import { concatMap, map } from 'rxjs/operators';
+import { from, Observable, of } from 'rxjs';
+import { concatMap, map, catchError } from 'rxjs/operators';
 import { convertSnaps } from './db-utilities';
 import { GlobalComponent } from '../global-component';
 import { Receipt } from '../Data-Model/receipt';
@@ -76,7 +76,13 @@ export class ReceiptService {
         (ref) => ref.where('date', '==', date)
       )
       .get()
-      .pipe(map((snaps) => convertSnaps<Receipt>(snaps)));
+      .pipe(
+        map((snaps) => convertSnaps<Receipt>(snaps)),
+        catchError((error) => {
+          console.error('Error fetching receipt data:', error);
+          return of([]); // Return an empty array in case of error
+        })
+      );
   }
 
   // Retrieves an array with all receipts based on the customer ID

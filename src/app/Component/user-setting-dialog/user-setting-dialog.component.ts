@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogRef } from '@angular/material/dialog';
 import { GlobalComponent } from 'src/app/global-component';
 import { UserService } from 'src/app/Services/user.service';
 
@@ -15,39 +15,51 @@ export class UserSettingDialogComponent implements OnInit {
   userForm!: FormGroup;
   error = '';
 
+  // -------------------------------------------------------------------------------------------------------------
   constructor(
     private dialogRef: MatDialogRef<UserSettingDialogComponent>,
-    private formB: FormBuilder,
+    private formBuilder: FormBuilder,
     private userService: UserService
   ) {
-    this.userForm = this.formB.group({
+    // Initialize the userForm with default values and validators
+    this.userForm = this.formBuilder.group({
       username: [this.username, Validators.required],
-      currentPass: [, Validators.required],
-      password: [, Validators.required],
+      currentPass: ['', Validators.required],
+      password: ['', Validators.required],
     });
   }
+  // -------------------------------------------------------------------------------------------------------------
 
+  // -------------------------------------------------------------------------------------------------------------
   ngOnInit(): void {}
+  // -------------------------------------------------------------------------------------------------------------
 
-  // -----------------------------------------------------------------------------------------------------------
+  // -------------------------------------------------------------------------------------------------------------
   // Closes the Dialog
   close() {
     this.dialogRef.close();
   }
-  // -----------------------------------------------------------------------------------------------------------
+  // -------------------------------------------------------------------------------------------------------------
 
-  // -----------------------------------------------------------------------------------------------------------
-  // Validates user input, then updates the user on the databse and closes the dialog
+  // -------------------------------------------------------------------------------------------------------------
+  // Validates user input, updates user credentials, and closes the dialog
   save() {
     if (this.userForm.valid) {
       const userCredentials = this.userForm.value;
+      const { currentPass } = userCredentials;
+
+      // Fetch user data to verify the current password
       this.userService
         .getUserCredentials(this.username)
         .subscribe((userData) => {
-          if (userData[0].password == userCredentials.currentPass) {
+          const storedPassword = userData[0].password;
+
+          if (storedPassword === currentPass) {
+            // Remove currentPass property before updating
             delete userCredentials.currentPass;
             userCredentials.username = userCredentials.username.toLowerCase();
 
+            // Update user credentials
             this.userService
               .updateUserCredentials(userData[0].id, userCredentials)
               .subscribe(() => {
@@ -61,5 +73,5 @@ export class UserSettingDialogComponent implements OnInit {
       this.error = 'Invalid Input*';
     }
   }
-  // -----------------------------------------------------------------------------------------------------------
+  // -------------------------------------------------------------------------------------------------------------
 }

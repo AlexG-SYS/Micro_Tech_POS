@@ -95,7 +95,7 @@
             <!-- Table Footer-->
             <div class="row">
                 <!-- Hide or Show Inactive Items Button -->
-                <div class="col">
+                <div class="col-2">
                     <button mat-stroked-button color="warn" class="my-3"
                         (click)="showHideInactive()">{{showHide_Value}}</button>
                 </div>
@@ -110,7 +110,7 @@
 
         <!-- Add or Edit Item Form -->
         <div *ngIf="show" class="addItemForm col-4 pb-4">
-            <app-add-item-form-component (refreshActiveItemListEvent)="refreshTable($event)">
+            <app-add-item-form-component (refreshActiveItemListEvent)="refreshTable()">
             </app-add-item-form-component>
         </div>
     </div>

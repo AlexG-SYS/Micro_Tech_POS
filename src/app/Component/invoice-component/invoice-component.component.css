@@ -1,0 +1,77 @@
+/* Invoice Component Styling */
+.content {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+table {
+  width: 100%;
+}
+
+.table-container {
+  height: 75vh;
+  max-width: 100%;
+  overflow: auto;
+}
+
+.container-Invoice {
+  overflow: auto;
+  overflow-x: hidden;
+}
+
+.mat-mdc-table button:hover {
+  background-color: #d7d7d7;
+}
+
+.mat-column-menu {
+  text-align: end;
+}
+
+.mat-mdc-row:nth-child(even) {
+  background-color: #f0f0f0;
+}
+
+.invoiceSideBar {
+  height: 100vh;
+  background-color: #f0f0f0;
+  border-top-left-radius: 2rem;
+  border-bottom-left-radius: 2rem;
+  border: solid;
+  border-width: 1px;
+  border-color: #d8d8d8;
+}
+
+.error {
+  padding: 0.5rem;
+  color: white;
+  text-align: center;
+  background-color: red;
+  border-radius: 1rem;
+  width: 70%;
+}
+
+.payment-method-Btn {
+  width: 5rem;
+  height: 5rem;
+  border-radius: 1rem;
+}
+
+.no-gutters {
+  margin-right: 0;
+  margin-left: 0;
+}
+
+.active {
+  background-color: rgb(224, 220, 220);
+}
+
+.icon-display {
+  margin: 0.5rem;
+  transform: scale(1.5);
+}
+
+@media (max-width: 1800px) {
+  .table-container {
+    height: 74vh;
+  }
+}

@@ -1,8 +1,14 @@
-import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { Items } from 'src/app/Data-Model/item';
 import { ItemService } from '../../Services/item.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatTable, MatTableDataSource } from '@angular/material/table';
+import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
@@ -12,134 +18,143 @@ import { GlobalComponent } from 'src/app/global-component';
 @Component({
   selector: 'app-inventory-component',
   templateUrl: './inventory-component.component.html',
-  styleUrls: ['./inventory-component.component.css']
+  styleUrls: ['./inventory-component.component.css'],
 })
 export class InventoryComponentComponent implements OnInit {
-
+  // Privilege and data source for items
   privilege = GlobalComponent.privilege;
-  dataSource = new MatTableDataSource<Items>;
+  dataSource = new MatTableDataSource<Items>();
+
+  // ViewChild for MatPaginator, MatSort, and searchField
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-  @ViewChild("itemSearch") searchField!: ElementRef;
+  @ViewChild('itemSearch') searchField!: ElementRef;
 
-  constructor(private itemService: ItemService, private snackBar: MatSnackBar, private dialog: MatDialog,
-    private changeDet: ChangeDetectorRef) {
-  }
+  // Displayed columns for the table
+  displayedColumns: string[] = [
+    'upc',
+    'description',
+    'price',
+    'quantity',
+    'size',
+    'online',
+    'menu',
+  ];
 
-  // When the component is loaded ngOnInit is executed
+  // -----------------------------------------------------------------------------------------------------------
+  // Constructor
+  constructor(
+    private itemService: ItemService,
+    private snackBar: MatSnackBar,
+    private dialog: MatDialog,
+    private changeDet: ChangeDetectorRef
+  ) {}
+  // -----------------------------------------------------------------------------------------------------------
+
+  // -----------------------------------------------------------------------------------------------------------
+  // When the component is loaded
   ngOnInit(): void {
     this.refreshActiveItemList();
   }
+  // -----------------------------------------------------------------------------------------------------------
 
-  // When the component view has been shown ngAfterViewInit is executed
+  // -----------------------------------------------------------------------------------------------------------
+  // When the component view has been shown
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
     this.searchField.nativeElement.focus();
     this.changeDet.detectChanges();
   }
+  // -----------------------------------------------------------------------------------------------------------
 
-  // -------------------------------------------------------------------------------------------------------------
-  // Toggles function that shows inactive items or hides them
-  showHide_Value = "Show Inactive";
+  // -----------------------------------------------------------------------------------------------------------
+  // Toggles function to show/hide inactive items
+  showHide_Value = 'Show Inactive';
   showHideInactive() {
-    if (this.showHide_Value == "Show Inactive") {
+    if (this.showHide_Value == 'Show Inactive') {
       this.refreshInActiveItemList();
-      this.showHide_Value = "Hide Inactive";
-    }
-    else {
+      this.showHide_Value = 'Hide Inactive';
+    } else {
       this.refreshActiveItemList();
-      this.showHide_Value = "Show Inactive";
+      this.showHide_Value = 'Show Inactive';
     }
   }
-  // -------------------------------------------------------------------------------------------------------------
+  // -----------------------------------------------------------------------------------------------------------
 
-
-  // -------------------------------------------------------------------------------------------------------------
-  // Gets List of Items from the Database
-  activeItemList!: any;
-  inactiveItemList!: any;
-
+  // -----------------------------------------------------------------------------------------------------------
+  // Refreshes the list of active items
   refreshActiveItemList() {
-    this.itemService.getItemList("active").subscribe(itemsData => {
+    this.itemService.getItemList('active').subscribe((itemsData) => {
       this.dataSource.data = itemsData;
     });
-    // this.itemService.getItem("active").subscribe(val => console.log(val));
   }
+  // -----------------------------------------------------------------------------------------------------------
 
+  // -----------------------------------------------------------------------------------------------------------
+  // Refreshes the list of inactive items
   refreshInActiveItemList() {
-    this.itemService.getItemList("inactive").subscribe(itemsData => {
-      itemsData.forEach(data => {
-        this.dataSource.data.push(data);
-        this.dataSource.data = this.dataSource.data;
-      });
+    this.itemService.getItemList('inactive').subscribe((itemsData) => {
+      this.dataSource.data = this.dataSource.data.concat(itemsData);
     });
   }
+  // -----------------------------------------------------------------------------------------------------------
 
-  displayedColumns: string[] = ['upc', 'description', 'price', 'quantity', 'size', 'online', 'menu'];
-  // -------------------------------------------------------------------------------------------------------------
-
-  // -------------------------------------------------------------------------------------------------------------
-  // Filters the data in the Item Table 
+  // -----------------------------------------------------------------------------------------------------------
+  // Applies a filter to the data in the Item Table
   applyFilter(filterValue: any) {
-    filterValue = filterValue.target.value;
-    filterValue = filterValue.trim(); // Remove whitespace
-    filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
-    this.dataSource.filter = filterValue;
+    const value = filterValue.target.value.trim().toLowerCase();
+    this.dataSource.filter = value;
   }
-  // -------------------------------------------------------------------------------------------------------------
+  // -----------------------------------------------------------------------------------------------------------
 
-  // -------------------------------------------------------------------------------------------------------------
+  // -----------------------------------------------------------------------------------------------------------
   // Shows or Hides the Add Item Form
   show: boolean = false;
   icon: string = 'add';
 
   addItemBtn() {
     this.show = !this.show;
-    if (this.icon == 'add') {
-      this.icon = 'close'
-    } else {
-      this.icon = 'add';
-    }
+    this.icon = this.show ? 'close' : 'add';
   }
   // -----------------------------------------------------------------------------------------------------------
 
   // -----------------------------------------------------------------------------------------------------------
-  // Refresh Item Table with new DataSource
-  refreshTable($event: any) {
-    if ($event) {
-      this.refreshActiveItemList();
-      this.showHide_Value = "Show Inactive";
-    }
+  // Refreshes the table after editing
+  refreshTable() {
+    this.refreshActiveItemList();
+    this.showHide_Value = 'Show Inactive';
   }
   // -----------------------------------------------------------------------------------------------------------
 
   // -----------------------------------------------------------------------------------------------------------
-  // Calls methods to edit selected Item
+  // Edit selected Item
   editItemBtn(itemData: Items) {
     const dialogConfig = new MatDialogConfig();
 
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
-    dialogConfig.minWidth = "300px";
+    dialogConfig.minWidth = '300px';
     dialogConfig.data = itemData;
 
-    this.dialog.open(EditItemDialogComponent, dialogConfig)
-      .afterClosed().subscribe(val => {
+    this.dialog
+      .open(EditItemDialogComponent, dialogConfig)
+      .afterClosed()
+      .subscribe((val) => {
         if (val) {
-          console.log("item Edited", val.id);
-          this.refreshTable(true);
-          this.showHide_Value = "Show Inactive";
+          console.log('Item Edited', val.id);
+          this.refreshTable();
+          this.showHide_Value = 'Show Inactive';
           this.openSnackBar('Item Successfully Updated!', 'success-snakBar');
-        }
-        else {
+        } else {
           this.openSnackBar('Item Was Not Updated!', 'error-snakBar');
         }
-      })
+      });
   }
+  // -----------------------------------------------------------------------------------------------------------
 
   // -----------------------------------------------------------------------------------------------------------
-  //Displays message to the user
+  // Displays a message to the user using MatSnackBar
   openSnackBar(message: string, cssStyle: string) {
     this.snackBar.open(message, '', {
       duration: 2000,
@@ -147,7 +162,4 @@ export class InventoryComponentComponent implements OnInit {
     });
   }
   // -----------------------------------------------------------------------------------------------------------
-
-
 }
-

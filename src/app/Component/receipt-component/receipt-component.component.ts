@@ -30,9 +30,12 @@ import { Account } from 'src/app/Data-Model/account';
   styleUrls: ['./receipt-component.component.css'],
 })
 export class ReceiptComponentComponent implements OnInit {
+  // ViewChild and ViewChildren decorators to access DOM elements
   @ViewChild('itemSearch') searchFieldItem!: ElementRef;
   @ViewChild('accountSearch') searchFieldAccount!: ElementRef;
   @ViewChildren(MatTable) tablesItems!: QueryList<Items>;
+
+  // Component properties
   accountID: string | null = '';
   accountName: string | null = '';
   accountPhone: string = '';
@@ -58,6 +61,7 @@ export class ReceiptComponentComponent implements OnInit {
   discountPercentage: number = 0;
   discount: number = 0;
   change: number = 0;
+  date: string = '';
   username: string = GlobalComponent.userName;
   itemList: Items[] = [];
   clicked = false;
@@ -66,6 +70,17 @@ export class ReceiptComponentComponent implements OnInit {
   receiptNumber!: number;
   accountsDataArray: Account[] = [];
 
+  displayedColumns: string[] = [
+    'UPC',
+    'Description',
+    'Size',
+    'Qty',
+    'Price',
+    'Remove',
+  ];
+
+  // -------------------------------------------------------------------------------------------------------------
+  // Constructor initializes services and dependencies
   constructor(
     private itemService: ItemService,
     private receiptService: ReceiptService,
@@ -76,10 +91,50 @@ export class ReceiptComponentComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     public rounter: Router
   ) {}
+  // -------------------------------------------------------------------------------------------------------------
 
-  // When the component is loaded ngOnInit is executed
+  // -------------------------------------------------------------------------------------------------------------
+  // Lifecycle hook called when the component is initialized
   ngOnInit() {
+    // Initialize component properties and load data
     this.refreshActiveAccountList();
+    this.initializeData();
+    this.refreshActiveItemList();
+    this.setupAutocompleteFields();
+    this.paymentMethod(0);
+  }
+  // -------------------------------------------------------------------------------------------------------------
+
+  // -------------------------------------------------------------------------------------------------------------
+  // Lifecycle hook called after the view is initialized
+  ngAfterViewInit(): void {
+    this.adjustFocusAndChangeDetection();
+  }
+  // -------------------------------------------------------------------------------------------------------------
+
+  // -------------------------------------------------------------------------------------------------------------
+  // Function to filter autocomplete data for items
+  private _filter(value: string): string[] {
+    const filterValue = value.toLowerCase();
+    return this.autoCompleteData.filter((autoCompleteData) =>
+      autoCompleteData.toLowerCase().includes(filterValue)
+    );
+  }
+  // -------------------------------------------------------------------------------------------------------------
+
+  // -------------------------------------------------------------------------------------------------------------
+  // Function to filter autocomplete data for accounts
+  private _filterAccount(value: string): string[] {
+    const filterValue = value.toLowerCase();
+    return this.autoCompleteDataAccount.filter((autoCompleteDataAccount) =>
+      autoCompleteDataAccount.toLowerCase().includes(filterValue)
+    );
+  }
+  // -------------------------------------------------------------------------------------------------------------
+
+  // -------------------------------------------------------------------------------------------------------------
+  private initializeData(): void {
+    // ... (logic to initialize data)
     if (
       this.activatedRoute.snapshot.paramMap.get('accountID') == '0' &&
       this.activatedRoute.snapshot.paramMap.get('accountName') == 'new' &&
@@ -147,6 +202,7 @@ export class ReceiptComponentComponent implements OnInit {
           this.tenderedField.setValue(tempRecData.total + tempRecData.change);
           this.referenceField.setValue(tempRecData.reference);
           this.receiptNumber = tempRecData.receiptNumber;
+          this.date = tempRecData.date;
 
           // Before adding items to this.editReceiptItems, create a deep copy of each item
           tempRecData.items.forEach((item: any) => {
@@ -155,55 +211,13 @@ export class ReceiptComponentComponent implements OnInit {
           });
         });
     }
-
-    this.paymentMethod(0);
-    this.refreshActiveItemList();
-    this.filteredOptions = this.itemSearchField.valueChanges.pipe(
-      startWith(''),
-      map((value) => this._filter(value || ''))
-    );
-
-    this.filteredOptionsAccount = this.accountSearchField.valueChanges.pipe(
-      startWith(''),
-      map((value) => this._filterAccount(value || ''))
-    );
-  }
-
-  // When the component view has been shown ngAfterViewInit is executed
-  ngAfterViewInit(): void {
-    console.log(this.editReceiptID);
-    if (this.editReceiptID != '') {
-      this.searchFieldAccount.nativeElement.blur();
-    } else {
-      this.searchFieldAccount.nativeElement.focus();
-    }
-    this.changeDet.detectChanges();
-  }
-
-  // -------------------------------------------------------------------------------------------------------------
-  // Function returns the value if the filtered value is true
-  private _filter(value: string): string[] {
-    const filterValue = value.toLowerCase();
-    return this.autoCompleteData.filter((autoCompleteData) =>
-      autoCompleteData.toLowerCase().includes(filterValue)
-    );
   }
   // -------------------------------------------------------------------------------------------------------------
 
   // -------------------------------------------------------------------------------------------------------------
-  private _filterAccount(value: string): string[] {
-    const filterValue = value.toLowerCase();
-    return this.autoCompleteDataAccount.filter((autoCompleteDataAccount) =>
-      autoCompleteDataAccount.toLowerCase().includes(filterValue)
-    );
-  }
-  // -------------------------------------------------------------------------------------------------------------
-
-  // -------------------------------------------------------------------------------------------------------------
-  // Gets List of Items from the Database
   activeItemList!: any;
-
-  refreshActiveItemList() {
+  // Load active items from the database
+  private refreshActiveItemList() {
     this.itemService.getItemList('active').subscribe((itemsData) => {
       this.itemList = itemsData;
     });
@@ -237,19 +251,37 @@ export class ReceiptComponentComponent implements OnInit {
     });
     // this.itemService.getItem("active").subscribe(val => console.log(val));
   }
-
-  displayedColumns: string[] = [
-    'UPC',
-    'Description',
-    'Size',
-    'Qty',
-    'Price',
-    'Remove',
-  ];
   // -------------------------------------------------------------------------------------------------------------
 
   // -------------------------------------------------------------------------------------------------------------
+  private setupAutocompleteFields(): void {
+    // Set up observables for autocomplete fields
+    this.filteredOptions = this.itemSearchField.valueChanges.pipe(
+      startWith(''),
+      map((value) => this._filter(value || ''))
+    );
 
+    this.filteredOptionsAccount = this.accountSearchField.valueChanges.pipe(
+      startWith(''),
+      map((value) => this._filterAccount(value || ''))
+    );
+  }
+  // -------------------------------------------------------------------------------------------------------------
+
+  // -------------------------------------------------------------------------------------------------------------
+  private adjustFocusAndChangeDetection(): void {
+    // Update focus and detect changes in the view
+    if (this.editReceiptID != '') {
+      this.searchFieldAccount.nativeElement.blur();
+    } else {
+      this.searchFieldAccount.nativeElement.focus();
+    }
+    this.changeDet.detectChanges();
+  }
+  // -------------------------------------------------------------------------------------------------------------
+
+  // -------------------------------------------------------------------------------------------------------------
+  // Load active accounts from the database
   refreshActiveAccountList() {
     this.accountServicce.getAccountList('active').subscribe((accountData) => {
       accountData.forEach((account) => {
@@ -271,11 +303,10 @@ export class ReceiptComponentComponent implements OnInit {
       });
     });
   }
-
   // -------------------------------------------------------------------------------------------------------------
 
   // -------------------------------------------------------------------------------------------------------------
-  // Adds item to the Receipt Object
+  // Add item to the receipt
   addToReceipt(item: any) {
     let itemQty = 0;
 
@@ -310,6 +341,7 @@ export class ReceiptComponentComponent implements OnInit {
   }
   // -------------------------------------------------------------------------------------------------------------
 
+  // -------------------------------------------------------------------------------------------------------------
   addToEditReceipt(item: Items) {
     this.receiptItems.push(item);
 
@@ -318,9 +350,9 @@ export class ReceiptComponentComponent implements OnInit {
     this.dataSource.data = this.receiptItems;
     this.discountChange(this.discountPercentage);
   }
-
   // -------------------------------------------------------------------------------------------------------------
 
+  // -------------------------------------------------------------------------------------------------------------
   addAccountToReceipt(account: any) {
     let accountName: string;
     if (typeof account === 'string') {
@@ -342,7 +374,6 @@ export class ReceiptComponentComponent implements OnInit {
 
     this.accountSearchField.reset();
   }
-
   // -------------------------------------------------------------------------------------------------------------
 
   // -------------------------------------------------------------------------------------------------------------
@@ -402,7 +433,7 @@ export class ReceiptComponentComponent implements OnInit {
   // -------------------------------------------------------------------------------------------------------------
 
   // -------------------------------------------------------------------------------------------------------------
-  // Calcualtes the Total, Subtoal and Tax
+  // Calculate and update total, subtotal, and tax
   updateTotal() {
     this.total = 0;
     this.subTotal = 0;
@@ -418,7 +449,7 @@ export class ReceiptComponentComponent implements OnInit {
   // -------------------------------------------------------------------------------------------------------------
 
   // -------------------------------------------------------------------------------------------------------------
-  //calculates disocunt and re-calculates total, subtotal and Tax
+  // Handle discount change
   discountChange(discountValue: number) {
     const discountLimit = GlobalComponent.discountLimit;
 
@@ -474,7 +505,7 @@ export class ReceiptComponentComponent implements OnInit {
   // -------------------------------------------------------------------------------------------------------------
 
   // -------------------------------------------------------------------------------------------------------------
-  // Resets the Entire Receipt component
+  // Reset the receipt
   resetReceipt() {
     this.dataSource.data = [];
     this.receiptItems = [];
@@ -482,7 +513,7 @@ export class ReceiptComponentComponent implements OnInit {
     this.error = '';
     this.paymentMethod(0);
     this.updateTotal();
-
+    this.editReceiptID = '';
     this.accountID = '';
     this.accountName = '';
     this.accountPhone = '';
@@ -500,7 +531,7 @@ export class ReceiptComponentComponent implements OnInit {
   // -------------------------------------------------------------------------------------------------------------
 
   // -------------------------------------------------------------------------------------------------------------
-  // Addes the Receipt Object to the Datbase
+  // Submit receipt data
   receipt: Partial<Receipt> = {};
   error = '';
 
@@ -552,35 +583,30 @@ export class ReceiptComponentComponent implements OnInit {
         '!';
 
       if (this.editReceiptID) {
+        this.receipt.date = this.date;
         this.receipt.receiptNumber = this.receiptNumber;
         this.receiptService
           .editReceipt(this.editReceiptID, this.receipt)
           .subscribe(() => {
-            this.itemList.forEach((item) => {
-              const recItem = this.receipt.items?.find(
-                (item) => item.id === item.id
+            // Iterate through receipt items and update corresponding database items
+            this.receipt.items?.forEach((recItem) => {
+              const itemToUpdate = this.itemList.find(
+                (item) => item.id === recItem.id
               );
-              const oldRecItem = this.editReceiptItems.find(
-                (item) => item.id === item.id
-              );
-
-              if (recItem && oldRecItem && recItem.quantity !== undefined) {
-                // Calculate updated item quantity
-                item.quantity =
-                  oldRecItem.quantity + item.quantity - recItem.quantity;
-
-                this.itemService.updateItem(item.id, item);
+              if (itemToUpdate && recItem.quantity !== undefined) {
+                itemToUpdate.quantity =
+                  itemToUpdate.quantity +
+                  this.getEditReceiptItemQuantity(recItem.id || '') -
+                  recItem.quantity;
+                this.itemService
+                  .updateItem(itemToUpdate.id, itemToUpdate)
+                  .subscribe();
               }
             });
 
             console.log(
               'Receipt Successfully Updated! ID:',
               this.editReceiptID
-            );
-
-            this.filteredOptions = this.itemSearchField.valueChanges.pipe(
-              startWith(''),
-              map((value) => this._filter(value || ''))
             );
 
             this.resetReceipt();
@@ -607,8 +633,6 @@ export class ReceiptComponentComponent implements OnInit {
                     }
                   });
                 });
-
-                console.log('Receipt Successfully Added! ID:', rec.id);
 
                 this.filteredOptions = this.itemSearchField.valueChanges.pipe(
                   startWith(''),
@@ -640,8 +664,14 @@ export class ReceiptComponentComponent implements OnInit {
   }
   // -------------------------------------------------------------------------------------------------------------
 
+  // Helper function to get the quantity of an item in the editReceiptItems array
+  getEditReceiptItemQuantity(itemId: string): number {
+    const item = this.editReceiptItems.find((item) => item.id === itemId);
+    return item ? item.quantity : 0;
+  }
+
   // -----------------------------------------------------------------------------------------------------------
-  //Displays message to the user
+  // Display snackbar message
   openSnackBar(message: string, cssStyle: string) {
     this.snackBar.open(message, '', {
       duration: 2000,
@@ -665,12 +695,14 @@ export class ReceiptComponentComponent implements OnInit {
       .afterClosed()
       .subscribe((val) => {
         if (val) {
-          console.log('Receipt Printed', val);
+          console.log('Receipt Printed');
         }
       });
   }
   // -------------------------------------------------------------------------------------------------------------
 
+  // -------------------------------------------------------------------------------------------------------------
+  // Check if an item is already in the receipt
   isItemInReceipt(upc: string): boolean {
     let result = false;
 
@@ -683,13 +715,19 @@ export class ReceiptComponentComponent implements OnInit {
 
     return result;
   }
+  // -------------------------------------------------------------------------------------------------------------
 
-  setReceiptNumberValue() {
+  // -------------------------------------------------------------------------------------------------------------
+  // Set receipt number value
+  private setReceiptNumberValue() {
     this.receiptService.lastReceiptNum().subscribe((lastRecID) => {
       this.receiptNumber = lastRecID + 1;
     });
   }
+  // -------------------------------------------------------------------------------------------------------------
 
+  // -------------------------------------------------------------------------------------------------------------
+  // Open find receipt dialog
   findReceipt() {
     const dialogConfig = new MatDialogConfig();
 
@@ -702,8 +740,9 @@ export class ReceiptComponentComponent implements OnInit {
       .afterClosed()
       .subscribe((val) => {
         if (val) {
-          console.log('Say Somthing', val);
+          console.log('Receipt Found');
         }
       });
   }
+  // -------------------------------------------------------------------------------------------------------------
 }
