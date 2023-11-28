@@ -9,7 +9,7 @@ table {
 }
 
 .accountListTable {
-  height: 74vh;
+  height: 76vh;
   max-width: 100%;
   overflow-y: visible;
   overflow-x: hidden;
@@ -69,11 +69,32 @@ table {
   font-weight: 550;
 }
 
-@media (max-width: 1180px) {
-  .accountListTable {
-    height: 73vh;
-    max-width: 100%;
-    overflow-y: visible;
-    overflow-x: hidden;
+@media (max-width: 1370px) {
+
+  .receiptTable,
+  .invoiceTable,
+  .paymentsTable {
+    height: 44vh;
+  }
+
+  .addAccountForm{
+    width: 26%;
+  }
+
+}
+
+@media (max-width: 1035px) {
+  .accountList{
+    width: 45%;
+    margin-right: 5px;
+  }
+
+  .custInfo{
+    margin: 0;
+    width: 54%;
+  }
+
+  .addAccountForm{
+    width: 100%;
   }
 }

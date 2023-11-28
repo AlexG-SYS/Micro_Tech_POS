@@ -3,17 +3,19 @@
     <div class="row">
         <div class="container col m-4 mt-0 mb-0 pt-2 ">
             <div class="row">
-                <div class="col-3 mt-4">
+                <div class="col-md-4 col-sm-auto mt-4 accountList">
                     <h1>Account List</h1>
-                    <!-- Account List Filter -->
-                    <mat-form-field class="m-2" appearance="outline" subscriptSizing='dynamic'>
-                        <mat-label>Search Account</mat-label>
-                        <mat-icon class="pt-1 mx-1" matPrefix>search</mat-icon>
-                        <input type="input" #accountSearch matInput name="search" (keyup)="applyFilter($event)"
-                            autocomplete="off">
-                    </mat-form-field>
+
                     <!-- Account List Table -->
                     <div class="accountListTable">
+                        <!-- Account List Filter -->
+                        <mat-form-field class="m-2" appearance="outline" subscriptSizing='dynamic'>
+                            <mat-label>Search Account</mat-label>
+                            <mat-icon class="pt-1 mx-1" matPrefix>search</mat-icon>
+                            <input type="input" #accountSearch matInput name="search" (keyup)="applyFilter($event)"
+                                autocomplete="off">
+                        </mat-form-field>
+
                         <table mat-table [dataSource]="dataSource" matSort #matSortAccounts="matSort"
                             matSortActive="fullName" matSortDirection="asc">
 
@@ -35,8 +37,8 @@
 
                             <!-- Item Menu Column -->
                             <ng-container matColumnDef="menu">
-                                <th mat-header-cell *matHeaderCellDef></th>
-                                <td mat-cell *matCellDef="let element">
+                                <th style="padding: 0" mat-header-cell *matHeaderCellDef></th>
+                                <td style="padding: 0;" mat-cell *matCellDef="let element">
                                     <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Account Menu Button">
                                         <mat-icon>more_vert</mat-icon>
                                     </button>
@@ -82,7 +84,7 @@
                     </div>
                 </div>
                 <!-- Customer Information with Transaction Table (Receipt/Invoice/Payments) -->
-                <div class="col card">
+                <div class="col-md col-sm-auto card custInfo">
                     <div class="row text-capitalize">
                         <h2 class="col">Customer Information</h2>
                         <div class="col d-flex justify-content-end">
@@ -305,7 +307,7 @@
         </div>
 
         <!-- Add or Edit Account Form -->
-        <div *ngIf="showAddForm" class="addAccountForm col-4 pb-4">
+        <div *ngIf="showAddForm" class="addAccountForm col-md-4 col-sm-auto pb-4">
             <app-add-account-form-component (refreshActiveAccountListEvent)="refreshTable($event)">
             </app-add-account-form-component>
         </div>

@@ -49,6 +49,12 @@ h2 {
   margin: 0;
 }
 
+@media (max-width: 1370px) {
+  .table-container {
+    height: 67vh;
+  }
+}
+
 @media print {
   @page {
     margin: 2rem;

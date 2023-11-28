@@ -75,3 +75,15 @@ table {
     height: 74vh;
   }
 }
+
+@media (max-width: 1370px) {
+
+  .table-container {
+    height: 68vh;
+  }
+
+  .buttonPadding{
+    padding: 1rem;
+  }
+
+}

@@ -2,7 +2,6 @@
 
 .card-holder {
     width: 100vw;
-    min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -12,7 +11,6 @@
     padding: 2rem;
     margin: 2rem;
     width: 66vw;
-    min-height: 75vh;
     background-color: #f6f6f6;
     border-radius: 3rem;
     display: flex;
@@ -28,3 +26,14 @@
     padding: 7rem;
 }
 
+@media only screen and (max-width: 1370px) {
+    .card {
+        width: 60vw;
+        height: 100vh;
+    }
+
+    .inner-card {
+        width: 55vw;
+        height: 90vh;
+    }
+}

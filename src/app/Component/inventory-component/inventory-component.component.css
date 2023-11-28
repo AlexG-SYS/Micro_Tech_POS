@@ -43,3 +43,23 @@ table {
 .mat-mdc-row:hover .mat-mdc-cell {
   font-weight: 500;
 }
+
+@media (max-width: 1370px) {
+
+  .table-container {
+    height: 72vh;
+  }
+
+  .addItemForm{
+    width: 27%;
+  }
+
+}
+
+@media (max-width: 1035px) {
+
+  .addItemForm{
+    width: 100%;
+  }
+
+}
