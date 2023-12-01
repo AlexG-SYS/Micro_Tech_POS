@@ -53,6 +53,7 @@ export class AccountComponentComponent implements OnInit {
   status!: string;
   date!: string;
   isLoading = false;
+  isLoadingAccountInfo = false;
 
   // Columns displayed in receipt table
   displayedColumnsReceipt: string[] = [
@@ -293,6 +294,8 @@ export class AccountComponentComponent implements OnInit {
   // -------------------------------------------------------------------------------------------------------------
   // FIlls customer infromation so it's visible to user
   fillAccountInfo(customerData: Account) {
+    this.isLoadingAccountInfo = true;
+
     this.id = customerData.id;
     this.fullName = customerData.fullName;
     this.phone = customerData.phone;
@@ -306,6 +309,8 @@ export class AccountComponentComponent implements OnInit {
 
     this.refreshAccountReceiptHistory(this.id);
     this.refreshAccountPaymentHistory(this.id);
+
+    this.delayProgressAccountInfo();
   }
   // -------------------------------------------------------------------------------------------------------------
 
@@ -373,6 +378,12 @@ export class AccountComponentComponent implements OnInit {
   delayProgress() {
     setTimeout(() => {
       this.isLoading = false;
+    },1000);
+  }
+
+  delayProgressAccountInfo() {
+    setTimeout(() => {
+      this.isLoadingAccountInfo = false;
     },1000);
   }
 }
