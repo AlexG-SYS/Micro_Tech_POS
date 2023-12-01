@@ -52,6 +52,7 @@ export class AccountComponentComponent implements OnInit {
   balance!: number;
   status!: string;
   date!: string;
+  isLoading = false;
 
   // Columns displayed in receipt table
   displayedColumnsReceipt: string[] = [
@@ -82,7 +83,7 @@ export class AccountComponentComponent implements OnInit {
     private dialog: MatDialog,
     private changeDet: ChangeDetectorRef,
     public router: Router
-  ) {}
+  ) { }
   // -------------------------------------------------------------------------------------------------------------
 
   // -------------------------------------------------------------------------------------------------------------
@@ -120,19 +121,27 @@ export class AccountComponentComponent implements OnInit {
   // -------------------------------------------------------------------------------------------------------------
   // Method for getting list of active accounts from the database
   refreshActiveAccountList() {
+    this.isLoading = true;
+
     this.accountService.getAccountList('active').subscribe((accountData) => {
       this.dataSource.data = accountData;
     });
+
+    this.delayProgress();
   }
   // -------------------------------------------------------------------------------------------------------------
 
   // -------------------------------------------------------------------------------------------------------------
   // Method for getting list of inactive accounts from the database
   refreshInActiveAccountList() {
+    this.isLoading = true;
+
     this.accountService.getAccountList('inactive').subscribe((accountData) => {
       this.dataSource.data.push(...accountData);
       this.dataSource.data = this.dataSource.data;
     });
+
+    this.delayProgress();
   }
   // Columns displayed in account table
   displayedColumnsAccount: string[] = ['fullName', 'balance', 'menu'];
@@ -360,4 +369,10 @@ export class AccountComponentComponent implements OnInit {
       });
   }
   // -------------------------------------------------------------------------------------------------------------
+
+  delayProgress() {
+    setTimeout(() => {
+      this.isLoading = false;
+    },1000);
+  }
 }

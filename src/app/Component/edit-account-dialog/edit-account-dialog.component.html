@@ -1,7 +1,15 @@
 <!-- Edit Account Dialog Component -->
 
-<h2 mat-dialog-title class="d-flex justify-content-center p-2">Edit Customer Account</h2>
+<h2 mat-dialog-title class="d-flex justify-content-center pt-4 mb-0">Edit Customer Account</h2>
+
 <mat-dialog-content [formGroup]="accountForm">
+    <!-- If any error is thrown then the error is shown here -->
+    <div class="d-flex justify-content-center">
+        <div *ngIf="error" class="row error mb-2 justify-content-center">
+            {{ error }}
+        </div>
+    </div>
+
     <!-- Full Name input field and status input field-->
     <div class="row py-2">
         <div class="col d-flex justify-content-center">
@@ -58,7 +66,7 @@
     </div>
 
     <!-- Country input field -->
-    <div class="row py-2">
+    <!-- <div class="row py-2">
         <div class="col d-flex justify-content-center">
             <mat-form-field appearance="fill" class="country">
                 <mat-icon class="pt-1 mx-1" matPrefix>public</mat-icon>
@@ -66,10 +74,13 @@
                 <input type="text" matInput name="country" formControlName="country">
             </mat-form-field>
         </div>
-    </div>
+    </div> -->
 </mat-dialog-content>
 <!-- Cancel and Save Buttons -->
 <mat-dialog-actions class="py-4 d-flex justify-content-end">
-    <button mat-raised-button (click)="close()" class="m-2">Close</button>
-    <button mat-raised-button color="primary" (click)="save()" class="m-2">Save</button>
+    <button mat-raised-button [disabled]="clicked" (click)="close()" class="m-2">Close</button>
+    <button mat-raised-button color="primary" [disabled]="clicked" (click)="save()" class="m-2">
+        <span *ngIf="!isLoading">Save</span>
+        <mat-progress-spinner *ngIf="isLoading" diameter="16" mode="indeterminate"></mat-progress-spinner>
+    </button>
 </mat-dialog-actions>

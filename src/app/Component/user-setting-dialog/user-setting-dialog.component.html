@@ -49,6 +49,9 @@
 
 <!-- Cancel and Save Updated Item Buttons -->
 <mat-dialog-actions class="py-4 d-flex justify-content-end">
-    <button mat-raised-button (click)="close()" class="m-2">Close</button>
-    <button mat-raised-button color="primary" (click)="save()" class="m-2">Save</button>
+    <button mat-raised-button [disabled]="clicked" (click)="close()" class="m-2">Close</button>
+    <button mat-raised-button color="primary" [disabled]="clicked" (click)="save()" class="m-2">
+        <span *ngIf="!isLoading">Save</span>
+        <mat-progress-spinner *ngIf="isLoading" diameter="16" mode="indeterminate"></mat-progress-spinner>
+    </button>
 </mat-dialog-actions>

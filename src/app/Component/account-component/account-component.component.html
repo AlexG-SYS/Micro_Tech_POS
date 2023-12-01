@@ -4,13 +4,13 @@
         <div class="container col m-4 mt-0 mb-0 pt-2 ">
             <div class="row">
                 <div class="col-md-4 col-sm-auto mt-4 accountList">
-                    <h1>Account List</h1>
+                    <h1>Account List </h1>
 
                     <!-- Account List Table -->
                     <div class="accountListTable">
                         <!-- Account List Filter -->
                         <mat-form-field class="m-2" appearance="outline" subscriptSizing='dynamic'>
-                            <mat-label>Search Account</mat-label>
+                            <mat-label>Search Account </mat-label>
                             <mat-icon class="pt-1 mx-1" matPrefix>search</mat-icon>
                             <input type="input" #accountSearch matInput name="search" (keyup)="applyFilter($event)"
                                 autocomplete="off">
@@ -37,7 +37,8 @@
 
                             <!-- Item Menu Column -->
                             <ng-container matColumnDef="menu">
-                                <th style="padding: 0" mat-header-cell *matHeaderCellDef></th>
+                                <th style="padding: 0" mat-header-cell *matHeaderCellDef><mat-progress-spinner *ngIf="isLoading" diameter="26"
+                                    mode="indeterminate"></mat-progress-spinner></th>
                                 <td style="padding: 0;" mat-cell *matCellDef="let element">
                                     <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Account Menu Button">
                                         <mat-icon>more_vert</mat-icon>

@@ -36,7 +36,8 @@
         <!-- Login Button -->
         <div class="button m-4">
             <button type="submit" [disabled]="clicked" mat-raised-button color="primary">
-                Login
+                <span *ngIf="!isLoading">Login</span>
+                <mat-progress-spinner *ngIf="isLoading" diameter="16" mode="indeterminate"></mat-progress-spinner>
             </button>
         </div>
     </form>

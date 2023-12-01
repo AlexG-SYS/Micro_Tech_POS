@@ -30,8 +30,13 @@ export class LoginComponentComponent {
 
   // -------------------------------------------------------------------------------------------------------------
   // Login form submission
+  isLoading = false;
   onLoginSubmit(loginData: NgForm) {
+
     this.clicked = true;
+    this.isLoading = true;
+
+
 
     // Checks for empty fields
     if (
@@ -43,6 +48,7 @@ export class LoginComponentComponent {
       this.error = 'Empty Field';
       loginData.resetForm();
       this.clicked = false;
+      this.isLoading = false;
       this.myInputField.nativeElement.focus();
     } else {
       // Normalize and set company name for database lookup
@@ -59,6 +65,7 @@ export class LoginComponentComponent {
             this.error = 'Company File Does Not Exist';
             loginData.resetForm();
             this.clicked = false;
+            this.isLoading = false;
             this.myInputField.nativeElement.focus();
           } else {
             // Check the database to verify username and password
@@ -68,7 +75,7 @@ export class LoginComponentComponent {
                 if (
                   userData.length != 0 &&
                   userData[0].username ==
-                    loginData.value.username.toLowerCase() &&
+                  loginData.value.username.toLowerCase() &&
                   userData[0].password == loginData.value.password
                 ) {
                   // Save user info to global variables
@@ -81,12 +88,14 @@ export class LoginComponentComponent {
                   this.error = 'Incorrect Username or Password';
                   loginData.resetForm();
                   this.clicked = false;
+                  this.isLoading = false;
                   this.myInputField.nativeElement.focus();
                 }
               });
           }
         });
     }
+
   }
   // -------------------------------------------------------------------------------------------------------------
 

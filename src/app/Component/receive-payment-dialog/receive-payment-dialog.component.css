@@ -28,3 +28,12 @@
   margin: 0.5rem;
   transform: scale(1.5);
 }
+
+.error {
+  padding: 0.4rem;
+  color: white;
+  text-align: center;
+  background-color: red;
+  border-radius: 1rem;
+  width: 70%;
+}

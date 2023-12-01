@@ -13,6 +13,8 @@ export class CompanySettingDialogComponent implements OnInit {
   // Form group to hold company information
   companyInfoForm!: FormGroup;
   error: string = '';
+  clicked = false;
+  isLoading = false;
 
   // -------------------------------------------------------------------------------------------------------------
   constructor(
@@ -42,7 +44,7 @@ export class CompanySettingDialogComponent implements OnInit {
   // -------------------------------------------------------------------------------------------------------------
 
   // -------------------------------------------------------------------------------------------------------------
-  ngOnInit(): void {}
+  ngOnInit(): void { }
   // -------------------------------------------------------------------------------------------------------------
 
   // -------------------------------------------------------------------------------------------------------------
@@ -55,6 +57,8 @@ export class CompanySettingDialogComponent implements OnInit {
   // -------------------------------------------------------------------------------------------------------------
   // Validates user input, updates company information, and closes the dialog
   save() {
+    this.clicked = true;
+    this.isLoading = true;
     if (this.companyInfoForm.valid) {
       const companyInfo = this.companyInfoForm.value;
 
@@ -65,6 +69,8 @@ export class CompanySettingDialogComponent implements OnInit {
       });
     } else {
       this.error = 'Invalid Input*';
+      this.clicked = false;
+      this.isLoading = false;
     }
   }
   // -------------------------------------------------------------------------------------------------------------

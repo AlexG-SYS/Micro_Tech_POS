@@ -3,8 +3,13 @@
         <div class="container mx-4 p-4 col">
             <div class="row">
                 <!-- Heading -->
-                <div class="col">
-                    <h1 class="my-2">Sales Report {{reportTitle}}</h1>
+                <div class="col spinner-wrapper">
+                    <span>
+                        <h1 class="my-2">
+                            Sales Report {{reportTitle}}
+                        </h1>
+                    </span>
+                    <mat-progress-spinner class="mx-2" *ngIf="isLoading" diameter="26" mode="indeterminate"></mat-progress-spinner>
                 </div>
                 <div class="col justify-content-end noPrint">
                     <button mat-raised-button color="primary" class="m-2" [useExistingCss]="true"
@@ -104,7 +109,8 @@
                 <div class="col-9 pt-4 noPrint">
                     <button mat-raised-button class="my-4 mx-2" (click)="refreshSalesListToday()">Today</button>
                     <button mat-raised-button class="my-4 mx-2" (click)="refreshSalesListYesterday()">Yesterday</button>
-                    <button mat-raised-button class="my-4 mx-2" (click)="refreshSalesListCurrentMonth()">Current Month {{month}}</button>
+                    <button mat-raised-button class="my-4 mx-2" (click)="refreshSalesListCurrentMonth()">Current Month
+                        {{month}}</button>
                     <mat-form-field appearance="fill" class="px-2">
                         <mat-label>Enter a date range</mat-label>
                         <mat-date-range-input [formGroup]="customDateSelection" [rangePicker]="picker">

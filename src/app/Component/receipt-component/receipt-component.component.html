@@ -272,10 +272,11 @@
                     <!-- Clear or Save Btn -->
                     <div class="row pt-4 buttonPadding">
                         <div class="col d-flex justify-content-center">
-                            <button class="m-2" mat-raised-button type="reset" (click)="resetReceipt()">Clear</button>
-                            <button class="m-2" mat-raised-button color="primary" type="submit"
-                                [disabled]="clicked">Save and
-                                New</button>
+                            <button class="m-2" mat-raised-button type="reset" [disabled]="clicked" (click)="resetReceipt()">Clear</button>
+                            <button class="m-2" mat-raised-button color="primary" type="submit" [disabled]="clicked">
+                                <span *ngIf="!isLoading">Save and New</span>
+                                <mat-progress-spinner *ngIf="isLoading" diameter="16" mode="indeterminate"></mat-progress-spinner>
+                            </button>
                         </div>
                     </div>
                 </form>

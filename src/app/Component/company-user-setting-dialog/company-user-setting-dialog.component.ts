@@ -18,6 +18,8 @@ export class CompanyUserSettingDialogComponent implements OnInit {
   companyUserForm!: FormGroup;
   allUserCred: any[] = [];
   error = '';
+  clicked = false;
+  isLoading = false;
 
   // -------------------------------------------------------------------------------------------------------------
   constructor(
@@ -63,6 +65,8 @@ export class CompanyUserSettingDialogComponent implements OnInit {
   // -------------------------------------------------------------------------------------------------------------
   // Validates user input, updates user credentials, and closes the dialog
   save() {
+    this.clicked = true;
+    this.isLoading = true;
     if (this.companyUserForm.valid) {
       const userCredentials = this.companyUserForm.value;
       const userID = userCredentials.userID;
@@ -78,6 +82,8 @@ export class CompanyUserSettingDialogComponent implements OnInit {
         });
     } else {
       this.error = 'Invalid Input*';
+      this.clicked = false;
+      this.isLoading = false;
     }
   }
   // -------------------------------------------------------------------------------------------------------------

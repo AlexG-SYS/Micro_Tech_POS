@@ -13,6 +13,9 @@ export class EditAccountDialogComponent implements OnInit {
   // Form group to hold user credentials
   accountForm!: FormGroup;
   account!: Account;
+  error = '';
+  clicked = false;
+  isLoading = false;
 
   // -----------------------------------------------------------------------------------------------------------
   constructor(
@@ -48,6 +51,8 @@ export class EditAccountDialogComponent implements OnInit {
   // -----------------------------------------------------------------------------------------------------------
   // Executes when the save button is clicked. Calles the Account Update Funciton
   save() {
+    this.clicked = true;
+    this.isLoading = true;
     if (this.accountForm.valid) {
       const accountChanges = this.accountForm.value;
 
@@ -56,6 +61,10 @@ export class EditAccountDialogComponent implements OnInit {
         .subscribe(() => {
           this.dialogRef.close(accountChanges);
         });
+    }else {
+      this.error = 'Invalid Input*';
+      this.clicked = false;
+      this.isLoading = false;
     }
   }
   // -----------------------------------------------------------------------------------------------------------

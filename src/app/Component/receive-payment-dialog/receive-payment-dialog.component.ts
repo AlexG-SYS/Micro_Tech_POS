@@ -36,6 +36,9 @@ export class ReceivePaymentDialogComponent implements OnInit {
 
   // User's username
   username: string = GlobalComponent.userName;
+  error = '';
+  clicked = false;
+  isLoading = false;
 
   constructor(
     private dialogRef: MatDialogRef<ReceivePaymentDialogComponent>,
@@ -139,6 +142,9 @@ export class ReceivePaymentDialogComponent implements OnInit {
   // -----------------------------------------------------------------------------------------------------------
   // Handles saving payment data
   save(): void {
+    this.clicked = true;
+    this.isLoading = true;
+
     if (this.paymentForm.valid) {
       const paymentData: payments = { ...this.paymentForm.value };
       paymentData.accountID = this.accountID;
@@ -154,6 +160,10 @@ export class ReceivePaymentDialogComponent implements OnInit {
       } else {
         this.receivePayment(paymentData);
       }
+    } else {
+      this.error = 'Invalid Input*';
+      this.clicked = false;
+      this.isLoading = false;
     }
   }
   // -----------------------------------------------------------------------------------------------------------

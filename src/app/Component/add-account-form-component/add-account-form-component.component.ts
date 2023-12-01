@@ -29,6 +29,7 @@ export class AddAccountFormComponentComponent {
   error = '';
   selectedFile: any = null;
   clicked = false;
+  isLoading = false;
   // -------------------------------------------------------------------------------------------------------------
   constructor(
     private accountService: AccountService,
@@ -48,6 +49,7 @@ export class AddAccountFormComponentComponent {
   // Handles form submission for adding a new account
   onNewAccountSubmit(formData: NgForm) {
     this.clicked = true;
+    this.isLoading = true;
 
     if (formData.valid) {
       const newAccount = { ...formData.value } as Account;
@@ -62,6 +64,7 @@ export class AddAccountFormComponentComponent {
             formData.resetForm();
             this.resetInput();
             this.clicked = false;
+            this.isLoading = false;
           }),
           catchError((error) => {
             this.handleError();
@@ -122,5 +125,6 @@ export class AddAccountFormComponentComponent {
   private handleInvalidInput() {
     this.error = 'Invalid Input*';
     this.clicked = false;
+    this.isLoading = false;
   }
 }

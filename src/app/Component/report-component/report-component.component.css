@@ -49,6 +49,12 @@ h2 {
   margin: 0;
 }
 
+.spinner-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
 @media (max-width: 1370px) {
   .table-container {
     height: 67vh;

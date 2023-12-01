@@ -22,6 +22,10 @@ export class EditItemDialogComponent {
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
   categories: Category[] = [];
 
+  error = '';
+  clicked = false;
+  isLoading = false;
+
   // -----------------------------------------------------------------------------------------------------------
   constructor(
     private dialogRef: MatDialogRef<EditItemDialogComponent>,
@@ -62,6 +66,9 @@ export class EditItemDialogComponent {
   // Saves the changes
   tempArray: string[] = [];
   save() {
+    this.clicked = true;
+    this.isLoading = true;
+
     if (this.itemForm.valid) {
       const itemChanges = this.itemForm.value;
 
@@ -84,6 +91,10 @@ export class EditItemDialogComponent {
       this.itemService.updateItem(this.item.id, itemChanges).subscribe(() => {
         this.dialogRef.close(itemChanges);
       });
+    } else {
+      this.error = 'Invalid Input*';
+      this.clicked = false;
+      this.isLoading = false;
     }
   }
   // -----------------------------------------------------------------------------------------------------------

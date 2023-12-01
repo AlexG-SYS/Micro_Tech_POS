@@ -27,7 +27,8 @@
         <div class="card">
             <div class="p-2">
                 <!-- Canvas that draws the Graph -->
-                <canvas id="dailyCustomerStats">{{ chart }}</canvas>
+                <mat-progress-spinner *ngIf="isLoading" diameter="26" mode="indeterminate"></mat-progress-spinner>
+                <canvas id="dailyCustomerStats"><span *ngIf="!isLoading">{{ chart }}</span></canvas>
             </div>
         </div>
     </div>

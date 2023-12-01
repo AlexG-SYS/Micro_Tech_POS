@@ -9,3 +9,13 @@
 .country {
   width: 12rem;
 }
+
+
+.error {
+  padding: 0.4rem;
+  color: white;
+  text-align: center;
+  background-color: red;
+  border-radius: 1rem;
+  width: 70%;
+}

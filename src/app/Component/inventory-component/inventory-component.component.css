@@ -18,6 +18,12 @@ table {
   text-align: end;
 }
 
+.spinner-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
 .mat-mdc-row:nth-child(even) {
   background-color: #f0f0f0;
 }
@@ -43,6 +49,8 @@ table {
 .mat-mdc-row:hover .mat-mdc-cell {
   font-weight: 500;
 }
+
+
 
 @media (max-width: 1370px) {
 

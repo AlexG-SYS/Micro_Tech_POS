@@ -64,11 +64,12 @@ export class ReceiptComponentComponent implements OnInit {
   date: string = '';
   username: string = GlobalComponent.userName;
   itemList: Items[] = [];
-  clicked = false;
   editReceiptID: string = '';
   editReceiptItems: Items[] = [];
   receiptNumber!: number;
   accountsDataArray: Account[] = [];
+  clicked = false;
+  isLoading = false;
 
   displayedColumns: string[] = [
     'UPC',
@@ -538,6 +539,7 @@ export class ReceiptComponentComponent implements OnInit {
   receiptItemSubmit() {
     let tendered = +this.tenderedField.value!;
     this.clicked = true;
+    this.isLoading = true;
     this.subTotal = parseFloat(this.subTotal.toFixed(2));
     this.discount = parseFloat(this.discount.toFixed(2));
     this.tax = parseFloat(this.tax.toFixed(2));
@@ -546,21 +548,25 @@ export class ReceiptComponentComponent implements OnInit {
     if (this.receiptItems.length < 1) {
       this.error = 'Receipt is Empty*';
       this.clicked = false;
+      this.isLoading = false;
       return;
     }
     if (this.pymMethod.length < 1) {
       this.error = 'Payment Method is Empty*';
       this.clicked = false;
+      this.isLoading = false;
       return;
     }
     if (this.accountID == undefined || this.accountID.length < 1) {
       this.error = 'No Customer Selected*';
       this.clicked = false;
+      this.isLoading = false;
       return;
     }
     if (!this.tenderedField.valid || tendered < this.total) {
       this.error = 'Tendered Amount is Insufficient*';
       this.clicked = false;
+      this.isLoading = false;
       return;
     } else {
       this.change = tendered - this.total;
@@ -615,6 +621,7 @@ export class ReceiptComponentComponent implements OnInit {
             let printData = [this.receipt];
             this.openPrintDialog(printData);
             this.clicked = false;
+            this.isLoading = false;
           });
       } else {
         this.receipt.date = new Date().toLocaleDateString();
@@ -648,6 +655,7 @@ export class ReceiptComponentComponent implements OnInit {
                 let printData = [rec];
                 this.openPrintDialog(printData);
                 this.clicked = false;
+                this.isLoading = false;
               });
             }),
             catchError((error) => {

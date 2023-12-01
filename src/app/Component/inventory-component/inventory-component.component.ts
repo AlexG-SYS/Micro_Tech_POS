@@ -24,6 +24,7 @@ export class InventoryComponentComponent implements OnInit {
   // Privilege and data source for items
   privilege = GlobalComponent.privilege;
   dataSource = new MatTableDataSource<Items>();
+  isLoading = false;
 
   // ViewChild for MatPaginator, MatSort, and searchField
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -85,18 +86,26 @@ export class InventoryComponentComponent implements OnInit {
   // -----------------------------------------------------------------------------------------------------------
   // Refreshes the list of active items
   refreshActiveItemList() {
+    this.isLoading = true;
+
     this.itemService.getItemList('active').subscribe((itemsData) => {
       this.dataSource.data = itemsData;
     });
+
+    this.delayProgress();
   }
   // -----------------------------------------------------------------------------------------------------------
 
   // -----------------------------------------------------------------------------------------------------------
   // Refreshes the list of inactive items
   refreshInActiveItemList() {
+    this.isLoading = true;
+
     this.itemService.getItemList('inactive').subscribe((itemsData) => {
       this.dataSource.data = this.dataSource.data.concat(itemsData);
     });
+
+    this.delayProgress();
   }
   // -----------------------------------------------------------------------------------------------------------
 
@@ -162,4 +171,10 @@ export class InventoryComponentComponent implements OnInit {
     });
   }
   // -----------------------------------------------------------------------------------------------------------
+
+  delayProgress() {
+    setTimeout(() => {
+      this.isLoading = false;
+    },1000);
+  }
 }

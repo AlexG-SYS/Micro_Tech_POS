@@ -24,6 +24,8 @@ export class ReportComponentComponent implements OnInit {
   tax = 0;
   salesTotal = 0;
 
+  isLoading = true;
+
   customDateSelection = new FormGroup({
     startDate: new FormControl(),
     endDate: new FormControl(),
@@ -78,6 +80,8 @@ export class ReportComponentComponent implements OnInit {
   // -------------------------------------------------------------------------------------------------------------
   // Refresh sales list for today
   refreshSalesListToday() {
+    this.isLoading = true;
+
     const date = new Date();
     const formattedDate = date.toLocaleDateString();
 
@@ -90,12 +94,16 @@ export class ReportComponentComponent implements OnInit {
       .subscribe((receiptData) => {
         this.refreshSalesList(receiptData);
       });
+
+    this.delayProgress();
   }
   // -------------------------------------------------------------------------------------------------------------
 
   // -------------------------------------------------------------------------------------------------------------
   // Refresh sales list for yesterday
   refreshSalesListYesterday() {
+    this.isLoading = true;
+
     const date = new Date();
     date.setDate(date.getDate() - 1);
     const formattedDate = date.toLocaleDateString();
@@ -109,12 +117,16 @@ export class ReportComponentComponent implements OnInit {
       .subscribe((receiptData) => {
         this.refreshSalesList(receiptData);
       });
+
+    this.delayProgress();
   }
   // -------------------------------------------------------------------------------------------------------------
 
   // -------------------------------------------------------------------------------------------------------------
   // Refresh sales list for the current month
   refreshSalesListCurrentMonth() {
+    this.isLoading = true;
+
     // Get the current year and month
     const currentDate = new Date();
     const year = currentDate.getFullYear();
@@ -153,12 +165,15 @@ export class ReportComponentComponent implements OnInit {
         console.error('Error fetching receipt data:', error);
       }
     );
+    this.delayProgress();
   }
   // -------------------------------------------------------------------------------------------------------------
 
   // -------------------------------------------------------------------------------------------------------------
   // Refresh sales list for custom date selection
   refreshSalesListCustomSelection() {
+    this.isLoading = true;
+
     // Get the selected start and end dates from the form
     const startDate = this.customDateSelection.value.startDate;
     const endDate = this.customDateSelection.value.endDate;
@@ -202,6 +217,7 @@ export class ReportComponentComponent implements OnInit {
         console.error('Error fetching receipt data:', error);
       }
     );
+    this.delayProgress();
   }
   // -------------------------------------------------------------------------------------------------------------
 
@@ -226,4 +242,10 @@ export class ReportComponentComponent implements OnInit {
     return monthString[date.getMonth()];
   }
   // -------------------------------------------------------------------------------------------------------------
+
+  delayProgress() {
+    setTimeout(() => {
+      this.isLoading = false;
+    },1000);
+  }
 }

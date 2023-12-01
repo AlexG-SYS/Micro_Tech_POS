@@ -34,9 +34,10 @@ export class AddItemFormComponentComponent {
   // Properties for error handling, file upload, chip functionality, and button click state
   error = '';
   selectedFile: any = null;
-  clicked = false;
   category: Category[] = [];
   tempArray: string[] = [];
+  clicked = false;
+  isLoading = false;
 
   // Separator keys for chip input field
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
@@ -103,6 +104,7 @@ export class AddItemFormComponentComponent {
   // Handles form submission for adding a new item
   onNewItemSubmit(formData: NgForm) {
     this.clicked = true;
+    this.isLoading = true;
 
     if (formData.valid) {
       // Clone the form data to preserve original values
@@ -137,6 +139,7 @@ export class AddItemFormComponentComponent {
             formData.resetForm();
             this.resetInput();
             this.clicked = false;
+            this.isLoading = false;
           }),
           // Handle error case
           catchError((error) => {
@@ -193,6 +196,7 @@ export class AddItemFormComponentComponent {
   private handleInvalidInput() {
     this.error = 'Invalid Input*';
     this.clicked = false;
+    this.isLoading = false;
   }
   // -------------------------------------------------------------------------------------------------------------
 }

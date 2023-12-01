@@ -21,6 +21,7 @@ export class HomeComponentComponent implements OnInit {
   // Variables for displaying company name and current date
   companyName: string = '';
   currentDate = new Date();
+  isLoading = false;
 
   // Global privileges and current time
   privilege = GlobalComponent.privilege;
@@ -52,11 +53,15 @@ export class HomeComponentComponent implements OnInit {
     // Set greeting message based on time of day
     this.setGreetingMessage();
 
-    // Create and configure the chart
-    this.createChart();
+    this.isLoading = true;
+    setTimeout(() => {
+      // Create and configure the chart
+      this.createChart();
 
-    // Fetch and display graph data
-    this.fetchGraphData();
+
+      // Fetch and display graph data
+      this.fetchGraphData();
+    }, 1000);
   }
   // -----------------------------------------------------------------------------------------------------------
 
@@ -156,6 +161,7 @@ export class HomeComponentComponent implements OnInit {
           this.addDataToChart(xData, yData);
         });
     }
+    this.isLoading = false;
   }
   // -----------------------------------------------------------------------------------------------------------
 

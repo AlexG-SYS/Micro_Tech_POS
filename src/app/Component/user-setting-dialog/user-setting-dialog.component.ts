@@ -14,6 +14,8 @@ export class UserSettingDialogComponent implements OnInit {
   username = GlobalComponent.userName;
   userForm!: FormGroup;
   error = '';
+  clicked = false;
+  isLoading = false;
 
   // -------------------------------------------------------------------------------------------------------------
   constructor(
@@ -31,7 +33,7 @@ export class UserSettingDialogComponent implements OnInit {
   // -------------------------------------------------------------------------------------------------------------
 
   // -------------------------------------------------------------------------------------------------------------
-  ngOnInit(): void {}
+  ngOnInit(): void { }
   // -------------------------------------------------------------------------------------------------------------
 
   // -------------------------------------------------------------------------------------------------------------
@@ -44,6 +46,8 @@ export class UserSettingDialogComponent implements OnInit {
   // -------------------------------------------------------------------------------------------------------------
   // Validates user input, updates user credentials, and closes the dialog
   save() {
+    this.clicked = true;
+    this.isLoading = true;
     if (this.userForm.valid) {
       const userCredentials = this.userForm.value;
       const { currentPass } = userCredentials;
@@ -67,10 +71,14 @@ export class UserSettingDialogComponent implements OnInit {
               });
           } else {
             this.error = 'Current password mismatch';
+            this.clicked = false;
+            this.isLoading = false;
           }
         });
     } else {
       this.error = 'Invalid Input*';
+      this.clicked = false;
+      this.isLoading = false;
     }
   }
   // -------------------------------------------------------------------------------------------------------------

@@ -1,7 +1,13 @@
 <!-- Receive Account Payment Dialog Component -->
 
-<h2 mat-dialog-title class="d-flex justify-content-center p-2">Customer Payment</h2>
+<h2 mat-dialog-title class="d-flex justify-content-center pt-4 mb-0">Customer Payment</h2>
 <mat-dialog-content [formGroup]="paymentForm">
+    <!-- If any error is thrown then the error is shown here -->
+    <div class="d-flex justify-content-center">
+        <div *ngIf="error" class="row error mb-2 justify-content-center">
+            {{ error }}
+        </div>
+    </div>
 
     <!-- Full Name input field and status input field-->
     <div class="row">
@@ -90,6 +96,9 @@
 </mat-dialog-content>
 <!-- Cancel and Save Buttons -->
 <mat-dialog-actions class="py-4 d-flex justify-content-end">
-    <button mat-raised-button (click)="close()" class="m-2">Close</button>
-    <button mat-raised-button color="primary" (click)="save()" class="m-2">Save</button>
+    <button mat-raised-button [disabled]="clicked" (click)="close()" class="m-2">Close</button>
+    <button mat-raised-button color="primary" [disabled]="clicked" (click)="save()" class="m-2">
+        <span *ngIf="!isLoading">Save</span>
+        <mat-progress-spinner *ngIf="isLoading" diameter="16" mode="indeterminate"></mat-progress-spinner>
+    </button>
 </mat-dialog-actions>
