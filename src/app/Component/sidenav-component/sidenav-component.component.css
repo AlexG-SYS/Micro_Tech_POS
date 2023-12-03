@@ -55,9 +55,10 @@
   }
 }
 
-@media (max-width: 1180px) {
+
+@media (max-width: 1550px) {
   .sideNav {
-    height: 82vh;
+    height: 80vh;
   }
 }
 
@@ -67,8 +68,8 @@
   }
 }
 
-@media (max-width: 1550px) {
+@media (max-width: 1180px) {
   .sideNav {
-    height: 80vh;
+    height: 82vh;
   }
 }

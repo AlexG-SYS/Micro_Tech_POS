@@ -71,18 +71,6 @@ table {
 }
 
 
-@media (max-width: 1370px) {
-
-  .table-container {
-    height: 68vh;
-  }
-
-  .buttonPadding{
-    padding: 1rem;
-  }
-
-}
-
 @media (max-width: 1800px) {
   .table-container {
     height: 74vh;
@@ -95,3 +83,14 @@ table {
   }
 }
 
+@media (max-width: 1370px) {
+
+  .table-container {
+    height: 68vh;
+  }
+
+  .buttonPadding{
+    padding: 1rem;
+  }
+
+}

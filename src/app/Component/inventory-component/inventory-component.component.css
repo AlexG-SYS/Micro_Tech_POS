@@ -50,7 +50,11 @@ table {
   font-weight: 500;
 }
 
-
+@media (max-width: 1550px) {
+  .table-container {
+    height: 74.5vh;
+  }
+}
 
 @media (max-width: 1370px) {
 
@@ -72,8 +76,3 @@ table {
 
 }
 
-@media (max-width: 1550px) {
-  .table-container {
-    height: 74.5vh;
-  }
-}

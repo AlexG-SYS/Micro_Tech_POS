@@ -78,6 +78,28 @@ mat-progress-spinner{
   font-weight: 550;
 }
 
+@media (max-width: 1550px) {
+  .accountListTable {
+    height: 78vh;
+  }
+}
+
+@media (max-width: 1370px) {
+
+  .receiptTable,
+  .invoiceTable,
+  .paymentsTable {
+    height: 44vh;
+  }
+
+  .addAccountForm{
+    width: 26%;
+  }
+  .accountListTable {
+    height: 77vh;
+  }
+}
+
 @media (max-width: 1035px) {
   .accountList{
     width: 45%;
@@ -94,23 +116,5 @@ mat-progress-spinner{
   }
 }
 
-@media (max-width: 1370px) {
-
-  .receiptTable,
-  .invoiceTable,
-  .paymentsTable {
-    height: 44vh;
-  }
-
-  .addAccountForm{
-    width: 26%;
-  }
-
-}
 
 
-@media (max-width: 1550px) {
-  .accountListTable {
-    height: 78vh;
-  }
-}

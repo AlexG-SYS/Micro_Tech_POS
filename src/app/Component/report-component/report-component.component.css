@@ -55,17 +55,19 @@ h2 {
   justify-content: flex-start;
 }
 
+@media (max-width: 1550px) {
+  .table-container {
+    height: 70vh;
+  }
+}
+
 @media (max-width: 1370px) {
   .table-container {
     height: 67vh;
   }
 }
 
-@media (max-width: 1550px) {
-  .table-container {
-    height: 70vh;
-  }
-}
+
 
 @media print {
   @page {
