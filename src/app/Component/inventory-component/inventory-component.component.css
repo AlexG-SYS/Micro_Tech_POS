@@ -71,3 +71,9 @@ table {
   }
 
 }
+
+@media (max-width: 1550px) {
+  .table-container {
+    height: 74.5vh;
+  }
+}

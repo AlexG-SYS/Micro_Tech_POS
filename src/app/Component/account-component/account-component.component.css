@@ -78,6 +78,22 @@ mat-progress-spinner{
   font-weight: 550;
 }
 
+@media (max-width: 1035px) {
+  .accountList{
+    width: 45%;
+    margin-right: 5px;
+  }
+
+  .custInfo{
+    margin: 0;
+    width: 54%;
+  }
+
+  .addAccountForm{
+    width: 100%;
+  }
+}
+
 @media (max-width: 1370px) {
 
   .receiptTable,
@@ -92,18 +108,9 @@ mat-progress-spinner{
 
 }
 
-@media (max-width: 1035px) {
-  .accountList{
-    width: 45%;
-    margin-right: 5px;
-  }
 
-  .custInfo{
-    margin: 0;
-    width: 54%;
-  }
-
-  .addAccountForm{
-    width: 100%;
+@media (max-width: 1550px) {
+  .accountListTable {
+    height: 78vh;
   }
 }

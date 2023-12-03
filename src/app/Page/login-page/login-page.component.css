@@ -26,7 +26,11 @@
     padding: 7rem;
 }
 
-@media only screen and (max-width: 1370px) {
+.mdc-card--outlined{
+    padding: 4rem;
+}
+
+@media (max-width: 1370px) {
     .card {
         width: 60vw;
         height: 100vh;
@@ -35,5 +39,18 @@
     .inner-card {
         width: 55vw;
         height: 90vh;
+    }
+}
+
+@media (max-width: 1550px) {
+
+    .card {
+        width: 60vw;
+        height: 90vh;
+    }
+
+    .inner-card {
+        width: 55vw;
+        height: 80vh;
     }
 }

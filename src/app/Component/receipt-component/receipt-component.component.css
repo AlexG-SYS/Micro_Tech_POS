@@ -70,11 +70,6 @@ table {
   transform: scale(1.5);
 }
 
-@media (max-width: 1800px) {
-  .table-container {
-    height: 74vh;
-  }
-}
 
 @media (max-width: 1370px) {
 
@@ -87,3 +82,16 @@ table {
   }
 
 }
+
+@media (max-width: 1800px) {
+  .table-container {
+    height: 74vh;
+  }
+}
+
+@media (max-width: 1550px) {
+  .table-container {
+    height: 70vh;
+  }
+}
+

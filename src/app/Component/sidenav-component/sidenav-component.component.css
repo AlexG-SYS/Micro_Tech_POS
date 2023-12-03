@@ -61,8 +61,14 @@
   }
 }
 
-@media only screen and (max-width: 1370px) {
+@media (max-width: 1370px) {
   .sideNav {
     height: 78vh;
+  }
+}
+
+@media (max-width: 1550px) {
+  .sideNav {
+    height: 80vh;
   }
 }

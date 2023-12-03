@@ -61,6 +61,12 @@ h2 {
   }
 }
 
+@media (max-width: 1550px) {
+  .table-container {
+    height: 70vh;
+  }
+}
+
 @media print {
   @page {
     margin: 2rem;
