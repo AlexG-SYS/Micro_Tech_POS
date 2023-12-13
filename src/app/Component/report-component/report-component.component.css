@@ -13,6 +13,12 @@ table {
   overflow: auto;
 }
 
+.salesReportTable, .profitReportTable{
+  max-width: 100%;
+  overflow-y: visible;
+  overflow-x: hidden;
+}
+
 .mat-column-menu {
   text-align: end;
 }
@@ -63,7 +69,7 @@ h2 {
 
 @media (max-width: 1370px) {
   .table-container {
-    height: 67vh;
+    height: 60vh;
   }
 }
 
@@ -77,6 +83,7 @@ h2 {
 
   .noPrint {
     visibility: hidden;
+    display: none;
   }
 
   h1 {
@@ -102,5 +109,8 @@ h2 {
   .table-container {
     height: auto;
     max-width: auto;
+  }
+  .pt-4{
+    padding-top: 10px;
   }
 }

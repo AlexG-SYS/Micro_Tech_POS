@@ -22,7 +22,9 @@ export class ReportComponentComponent implements OnInit {
   reportTitle = '';
   subTotal = 0;
   tax = 0;
+  totalCost = 0;
   salesTotal = 0;
+  profitTotal = 0;
 
   isLoading = true;
 
@@ -31,7 +33,7 @@ export class ReportComponentComponent implements OnInit {
     endDate: new FormControl(),
   });
 
-  displayedColumns: string[] = [
+  displayedColumnsSalesReport: string[] = [
     'receiptNumber',
     'date',
     'customerName',
@@ -41,8 +43,18 @@ export class ReportComponentComponent implements OnInit {
     'salesRep',
   ];
 
+  displayedColumnsProfitReport: string[] = [
+    'receiptNumber',
+    'date',
+    'customerName',
+    'cost',
+    'total',
+    'profit',
+    'paymentMeth',
+  ];
+
   // -------------------------------------------------------------------------------------------------------------
-  constructor(private receiptService: ReceiptService) {}
+  constructor(private receiptService: ReceiptService) { }
   // -------------------------------------------------------------------------------------------------------------
 
   // -------------------------------------------------------------------------------------------------------------
@@ -66,15 +78,33 @@ export class ReportComponentComponent implements OnInit {
     this.subTotal = 0;
     this.tax = 0;
     this.salesTotal = 0;
-
+    this.profitTotal = 0;
+    this.totalCost = 0; 
+    
     receiptData.forEach((receipt) => {
+      let receiptProfit = 0;
+      let receiptCost = 0;
+
+      for (const item of receipt.items) {
+        if (item.quantity !== undefined) {
+          receiptProfit += item.quantity * (item.cost || 0);
+          receiptCost += item.quantity * (item.cost || 0);
+        }
+      }
+
+      receiptProfit = receipt.total - receiptProfit;
+
       this.subTotal += receipt.subtotal;
       this.tax += receipt.TAX;
       this.salesTotal += receipt.total;
+      this.profitTotal += receiptProfit;
+      this.totalCost += receiptCost;
     });
 
     this.dataSource.data = receiptData;
   }
+
+
   // -------------------------------------------------------------------------------------------------------------
 
   // -------------------------------------------------------------------------------------------------------------
@@ -246,6 +276,27 @@ export class ReportComponentComponent implements OnInit {
   delayProgress() {
     setTimeout(() => {
       this.isLoading = false;
-    },1000);
+    }, 1000);
   }
+
+  // Function to calculate receipt Cost
+  receiptCost(items: any[]): number {
+    let total = 0;
+    for (const item of items) {
+      total += item.cost * item.quantity;
+    }
+    return total;
+  }
+
+  // Function to calculate total profit
+  receiptProfit(element: any): number {
+    let total = 0;
+    for (const item of element.items) {
+      total += item.quantity * item.cost;
+    }
+    total = element.total - total;
+
+    return total;
+  }
+
 }
