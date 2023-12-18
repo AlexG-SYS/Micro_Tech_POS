@@ -70,7 +70,6 @@ table {
   transform: scale(1.5);
 }
 
-
 @media (max-width: 1800px) {
   .table-container {
     height: 74vh;

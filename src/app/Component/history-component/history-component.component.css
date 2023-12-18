@@ -1,0 +1,117 @@
+.content {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+  
+  table {
+    width: 100%;
+  }
+  
+  .table-container {
+    height: 71vh;
+    max-width: 100%;
+    overflow: auto;
+  }
+  
+  .salesReportTable{
+    max-width: 100%;
+    overflow-y: visible;
+    overflow-x: hidden;
+  }
+  
+  .mat-column-menu {
+    text-align: end;
+  }
+  
+  .px-2 {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+  
+  .mat-mdc-row .mat-mdc-cell {
+    cursor: pointer;
+  }
+  
+  .mat-mdc-row:hover .mat-mdc-cell {
+    font-weight: 500;
+  }
+  
+  .padTop-4 {
+    padding-top: 1rem;
+  }
+  
+  .justify-content-end {
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  ul {
+    padding: 0;
+  }
+  
+  h3,
+  h2 {
+    padding: 0;
+    margin: 0;
+  }
+  
+  .spinner-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+  }
+  
+  @media (max-width: 1550px) {
+    .table-container {
+      height: 70vh;
+    }
+  }
+  
+  @media (max-width: 1370px) {
+    .table-container {
+      height: 68vh;
+    }
+  }
+  
+  
+  
+  @media print {
+    @page {
+      margin: 2rem;
+      size: portrait;
+    }
+  
+    .noPrint {
+      visibility: hidden;
+      display: none;
+    }
+  
+    h1 {
+      font-size: x-large;
+    }
+  
+    h3 {
+      padding: 3px;
+      font-size: medium;
+      font-weight: 400;
+    }
+  
+    h2 {
+      padding: 4px;
+      font-size: larger;
+    }
+  
+    th,
+    td {
+      font-size: small;
+    }
+  
+    .table-container {
+      height: auto;
+      max-width: auto;
+    }
+    .pt-4{
+      padding-top: 10px;
+    }
+  }
+  

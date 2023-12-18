@@ -33,13 +33,17 @@
 
 @media (max-width: 1550px) {
 
+    .mdc-card--outlined{
+        padding: 3rem;
+    }
+
     .card {
-        width: 60vw;
-        height: 90vh;
+        width: 59vw;
+        height: 89vh;
     }
 
     .inner-card {
-        width: 55vw;
-        height: 80vh;
+        width: 54vw;
+        height: 79vh;
     }
 }

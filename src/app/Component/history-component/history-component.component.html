@@ -1,1 +1,172 @@
-<p>history-component works!</p>
+<div class="content">
+    <div class="row">
+        <div class="container mx-4 px-2 py-2 col">
+            <div class="row">
+                  <!-- Sales Report -->
+
+                        <ng-template mat-tab-label>
+                            <mat-icon class="">receipt_long</mat-icon>
+                            Sales Report
+                        </ng-template>
+                        <div class="salesReportTable" id="printable-section">
+                            <div class="row mt-3">
+                                <!-- Heading -->
+                                <div class="col spinner-wrapper">
+                                    <span>
+                                        <h1 class="my-2">
+                                            Sales Report {{reportTitle}}
+                                        </h1>
+                                    </span>
+                                    <mat-progress-spinner class="mx-2" *ngIf="isLoading" diameter="26"
+                                        mode="indeterminate"></mat-progress-spinner>
+                                </div>
+                                <div class="col justify-content-end noPrint">
+                                    <button mat-raised-button color="primary" class="m-2" [useExistingCss]="true"
+                                        printSectionId="printable-section" ngxPrint>Print Report</button>
+                                </div>
+                            </div>
+
+                            <div class="table-container">
+                                <table mat-table [dataSource]="dataSource" matSort matSortActive="receiptNumber"
+                                    matSortDirection="desc">
+
+                                    <!-- Receipt Number Column -->
+                                    <ng-container matColumnDef="receiptNumber">
+                                        <th class="p-2 px-2" mat-header-cell *matHeaderCellDef mat-sort-header> Rec #
+                                        </th>
+                                        <td class="p-2 px-2" mat-cell *matCellDef="let element">
+                                            {{element.receiptNumber}} </td>
+                                    </ng-container>
+
+                                    <!-- Date Column -->
+                                    <ng-container matColumnDef="date">
+                                        <th class="p-2 px-2" mat-header-cell *matHeaderCellDef mat-sort-header> Date
+                                        </th>
+                                        <td class="p-2 px-2" mat-cell *matCellDef="let element"> {{element.date}} </td>
+                                    </ng-container>
+
+                                    <!-- Customer Name Column -->
+                                    <ng-container matColumnDef="customerName">
+                                        <th class="p-2 px-2" mat-header-cell *matHeaderCellDef mat-sort-header> Customer
+                                            Name </th>
+                                        <td class="p-2 px-2" mat-cell *matCellDef="let element">
+                                            {{element.customerName}} </td>
+                                    </ng-container>
+
+                                    <!-- Items Column -->
+                                    <!-- <ng-container matColumnDef="items">
+                                            <th class="p-2 px-2" mat-header-cell *matHeaderCellDef mat-sort-header> Items </th>
+                                            <td class="p-2 px-2" mat-cell *matCellDef="let element">
+                                                <ul class="p-0 m-0 padTop-4">
+                                                    <ng-container *ngFor="let item of element.items">
+                                                        <li>({{item.quantity}}) {{item.description | json}}</li>
+                                                    </ng-container>
+                                                </ul>
+                                            </td>
+                                        </ng-container> -->
+
+                                    <!-- Sub Total Column -->
+                                    <!-- <ng-container matColumnDef="subTotal">
+                                            <th class="p-2 px-2" mat-header-cell *matHeaderCellDef mat-sort-header> Sub Total </th>
+                                            <td class="p-2 px-2" mat-cell *matCellDef="let element">
+                                                <ul class="p-0 m-0 padTop-4">
+                                                    <ng-container *ngFor="let item of element.items">
+                                                        <li>${{item.itemSubTotal*item.quantity | number : '1.2-2'}}</li>
+                                                    </ng-container>
+                                                </ul>
+                                            </td>
+                                        </ng-container> -->
+
+                                    <!-- TAX Column -->
+                                    <!-- <ng-container matColumnDef="TAX">
+                                            <th class="p-2 px-2" mat-header-cell *matHeaderCellDef mat-sort-header> TAX </th>
+                                            <td class="p-2 px-2" mat-cell *matCellDef="let element">
+                                                <ul class="p-0 m-0 padTop-4">
+                                                    <ng-container *ngFor="let item of element.items">
+                                                        <li>${{item.itemTax*item.quantity | number : '1.2-2'}}</li>
+                                                    </ng-container>
+                                                </ul>
+                                            </td>
+                                        </ng-container> -->
+
+                                    <!-- Total Column -->
+                                    <ng-container matColumnDef="total">
+                                        <th class="p-2 px-2" mat-header-cell *matHeaderCellDef mat-sort-header> Total
+                                        </th>
+                                        <td class="p-2 px-2" mat-cell *matCellDef="let element">${{element.total |
+                                            number : '1.2-2'}}
+                                        </td>
+                                    </ng-container>
+
+                                    <!-- Payment Method Column -->
+                                    <ng-container matColumnDef="paymentMeth">
+                                        <th class="p-2 px-2" mat-header-cell *matHeaderCellDef mat-sort-header> Pymt
+                                            Method </th>
+                                        <td class="p-2 px-2" mat-cell *matCellDef="let element"> {{element.paymentMeth}}
+                                        </td>
+                                    </ng-container>
+
+                                    <!-- Reference Column -->
+                                    <ng-container matColumnDef="reference">
+                                        <th class="p-2 px-2" mat-header-cell *matHeaderCellDef mat-sort-header>
+                                            Reference </th>
+                                        <td class="p-2 px-2" mat-cell *matCellDef="let element"> {{element.reference}}
+                                        </td>
+                                    </ng-container>
+
+                                    <!-- salesRep Method Column -->
+                                    <ng-container matColumnDef="salesRep">
+                                        <th class="p-2 px-2" mat-header-cell *matHeaderCellDef mat-sort-header> Sales
+                                            Rep </th>
+                                        <td class="p-2 px-2" mat-cell *matCellDef="let element"> {{element.salesRep}}
+                                        </td>
+                                    </ng-container>
+
+                                    <!-- Sets Table Column Names and Positions -->
+                                    <tr mat-header-row *matHeaderRowDef="displayedColumnsSalesReport"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: displayedColumnsSalesReport;"></tr>
+                                </table>
+                            </div>
+                            <div class="row">
+                                <div class="col-9 pt-4 noPrint">
+                                    <button mat-raised-button class="my-4 mx-2"
+                                        (click)="refreshSalesListToday()">Today</button>
+                                    <button mat-raised-button class="my-4 mx-2"
+                                        (click)="refreshSalesListYesterday()">Yesterday</button>
+                                    <button mat-raised-button class="my-4 mx-2"
+                                        (click)="refreshSalesListCurrentMonth()">Current Month
+                                        {{month}}</button>
+                                    <mat-form-field appearance="fill" class="px-2">
+                                        <mat-label>Enter a date range</mat-label>
+                                        <mat-date-range-input [formGroup]="customDateSelection" [rangePicker]="picker">
+                                            <input matStartDate formControlName="startDate" placeholder="Start date">
+                                            <input matEndDate formControlName="endDate" placeholder="End date">
+                                        </mat-date-range-input>
+                                        <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+                                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                        <mat-date-range-picker #picker>
+                                            <mat-date-range-picker-actions>
+                                                <button mat-button matDateRangePickerCancel>Cancel</button>
+                                                <button mat-raised-button color="primary" matDateRangePickerApply
+                                                    (click)="refreshSalesListCustomSelection()">Apply</button>
+                                            </mat-date-range-picker-actions>
+                                        </mat-date-range-picker>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-3 pt-4">
+                                    <div class="d-flex justify-content-end">
+                                        <h3>Sub Total:&emsp;$ {{subTotal | number : '1.2-2'}}</h3>
+                                    </div>
+                                    <div class="d-flex justify-content-end">
+                                        <h3>Tax (12.5%):&emsp;$ {{tax | number : '1.2-2'}}</h3>
+                                    </div>
+                                    <div class="d-flex justify-content-end">
+                                        <h2>Total:&emsp;$ {{salesTotal | number : '1.2-2'}}</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+            </div>
+        </div>
+    </div>
+</div>
