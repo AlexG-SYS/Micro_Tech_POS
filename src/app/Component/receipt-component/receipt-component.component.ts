@@ -70,6 +70,7 @@ export class ReceiptComponentComponent implements OnInit {
   accountsDataArray: Account[] = [];
   clicked = false;
   isLoading = false;
+  recEdit = false;
 
   displayedColumns: string[] = [
     'UPC',
@@ -161,7 +162,9 @@ export class ReceiptComponentComponent implements OnInit {
     } else if (this.activatedRoute.snapshot.paramMap.get('receiptID') != '0') {
       this.editReceiptID =
         this.activatedRoute.snapshot.paramMap.get('receiptID')!;
-      this.refreshActiveItemList();
+
+        this.recEdit = true;
+      
       this.receiptService
         .findReceipt(this.editReceiptID)
         .subscribe((recData) => {
@@ -614,6 +617,8 @@ export class ReceiptComponentComponent implements OnInit {
               'Receipt Successfully Updated! ID:',
               this.editReceiptID
             );
+
+            this.recEdit = false;
 
             this.resetReceipt();
             this.openSnackBar('Receipt Updated!', 'success-snakBar');

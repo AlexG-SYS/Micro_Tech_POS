@@ -49,9 +49,9 @@
                 <span class="d-none d-sm-none d-md-block">History</span>
             </button>
         </div>
-        <div class="mx-auto">
+        <div class="mx-auto" *ngIf="privilege == 'admin'">
             <!-- Report Button and Router Link -->
-            <button routerLink="report" routerLinkActive="active" mat-stroked-button class="my-1">
+            <button routerLink="report" routerLinkActive="active" mat-stroked-button class="my-1" >
                 <mat-icon>summarize</mat-icon>
                 <span class="d-none d-sm-none d-md-block">Report</span>
             </button>

@@ -100,7 +100,8 @@
                     <ng-container matColumnDef="Remove">
                         <th class="p-2 text-center" mat-header-cell *matHeaderCellDef></th>
                         <td class="p-2 text-center" mat-cell *matCellDef="let element = index">
-                            <button mat-icon-button color="warn" aria-label="Addition" (click)="removeItem(element)">
+                            <button mat-icon-button color="warn" aria-label="Addition" (click)="removeItem(element)"
+                                *ngIf="!recEdit">
                                 <mat-icon>close</mat-icon>
                             </button>
                     </ng-container>
@@ -175,20 +176,6 @@
 
                 <mat-divider class="mb-2"></mat-divider>
 
-                <div class="row pt-2">
-                    <div class="col d-flex justify-content-center p-0 m-0">
-                        <!-- Discount Input Field -->
-                        <mat-form-field appearance="fill" class="discount">
-                            <mat-icon class="pt-1 mx-1" matSuffix>percent</mat-icon>
-                            <mat-label>Discount</mat-label>
-                            <input mat-icon-store type="text" matInput name="discount" maxlength="3"
-                                [formControl]="discountField" (ngModelChange)="discountChange($event)">
-                        </mat-form-field>
-                    </div>
-                </div>
-
-                <mat-divider class="mb-2"></mat-divider>
-
                 <!-- Payment Method Titel -->
                 <div class="row">
                     <h2 class="mx-2 fw-normal">Payment Method</h2>
@@ -249,17 +236,31 @@
                 <mat-divider class="my-2"></mat-divider>
 
                 <form (ngSubmit)="receiptItemSubmit()">
+
                     <div class="row pt-2">
-                        <div class="col d-flex justify-content-center p-0 m-0">
+                        <div class="col-5 d-flex justify-content-center p-0 m-1">
+                            <!-- Discount Input Field -->
+                            <mat-form-field appearance="fill" class="discount">
+                                <mat-icon class="pt-1 mx-1" matSuffix>percent</mat-icon>
+                                <mat-label>Discount</mat-label>
+                                <input mat-icon-store type="text" matInput name="discount" maxlength="3"
+                                    [formControl]="discountField" (ngModelChange)="discountChange($event)">
+                            </mat-form-field>
+                        </div>
+
+                        <div class="col-6 d-flex justify-content-center p-0 m-1">
                             <!-- Tendered Amount Input Field -->
                             <mat-form-field appearance="fill" class="tendered">
                                 <mat-icon class="pt-1 mx-1" matPrefix>attach_money</mat-icon>
-                                <mat-label>Tendered Amount</mat-label>
+                                <mat-label>Tender Amount</mat-label>
                                 <input type="number" matInput name="tendered" min="0" step=".01"
                                     [formControl]="tenderedField">
                             </mat-form-field>
                         </div>
-                        <div class="col d-flex justify-content-center p-0 m-0">
+
+                    </div>
+                    <div class="row">
+                        <div class="col d-flex justify-content-center p-0 m-1">
                             <!-- Reference Input Field -->
                             <mat-form-field appearance="fill" class="reference">
                                 <mat-icon class="pt-1 mx-1" matPrefix>tag</mat-icon>
@@ -272,10 +273,12 @@
                     <!-- Clear or Save Btn -->
                     <div class="row pt-4 buttonPadding">
                         <div class="col d-flex justify-content-center">
-                            <button class="m-2" mat-raised-button type="reset" [disabled]="clicked" (click)="resetReceipt()">Clear</button>
+                            <button class="m-2" mat-raised-button type="reset" [disabled]="clicked"
+                                (click)="resetReceipt()">Clear</button>
                             <button class="m-2" mat-raised-button color="primary" type="submit" [disabled]="clicked">
                                 <span *ngIf="!isLoading">Save and New</span>
-                                <mat-progress-spinner *ngIf="isLoading" diameter="16" mode="indeterminate"></mat-progress-spinner>
+                                <mat-progress-spinner *ngIf="isLoading" diameter="16"
+                                    mode="indeterminate"></mat-progress-spinner>
                             </button>
                         </div>
                     </div>
