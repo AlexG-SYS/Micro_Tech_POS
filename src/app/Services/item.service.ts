@@ -38,6 +38,25 @@ export class ItemService {
     );
   }
 
+  // Retrieves existing UPCs from the database
+  getExistingUpcs(): Observable<string[]> {
+    return this.db
+      .collection('/' + GlobalComponent.companyNameDB + '/data/items')
+      .get()
+      .pipe(
+        map((snaps) => {
+          const upcs: string[] = [];
+          snaps.forEach((snap) => {
+            const item = snap.data() as Items;
+            if (item && item.upc) {
+              upcs.push(item.upc.trim());
+            }
+          });
+          return upcs;
+        })
+      );
+  }
+
   // Updates an items on databse
   updateItem(itemID: string, changes: Partial<Items>): Observable<any> {
     return from(

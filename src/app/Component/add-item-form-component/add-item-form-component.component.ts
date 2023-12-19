@@ -10,8 +10,8 @@ import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Items } from 'src/app/Data-Model/item';
 import { ItemService } from '../../Services/item.service';
 import { MatChipInputEvent } from '@angular/material/chips';
-import { NgForm } from '@angular/forms';
-import { catchError, tap, throwError } from 'rxjs';
+import { AbstractControl, NgForm, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { Observable, catchError, tap, throwError } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 export interface Category {
@@ -47,7 +47,7 @@ export class AddItemFormComponentComponent {
     private itemService: ItemService,
     private snackBar: MatSnackBar,
     private changeDet: ChangeDetectorRef
-  ) {}
+  ) { }
   // -------------------------------------------------------------------------------------------------------------
 
   // -------------------------------------------------------------------------------------------------------------
@@ -105,53 +105,64 @@ export class AddItemFormComponentComponent {
   onNewItemSubmit(formData: NgForm) {
     this.clicked = true;
     this.isLoading = true;
+    let UPC_Validator;
 
-    if (formData.valid) {
-      // Clone the form data to preserve original values
-      const newItem = { ...formData.value } as Items;
+    // Clone the form data to preserve original values
+    const newItem = { ...formData.value } as Items;
 
-      // Convert category names to lowercase
-      this.category.forEach((element) => {
-        this.tempArray.push(element.name.toLowerCase());
-      });
+    this.duplicateUpcValidator(newItem.upc, formData).subscribe(result => {
 
-      // Update item with categories and calculated tax/subtotal
-      newItem.categories = this.tempArray;
+      if (formData.valid && result == 'false') {
 
-      if (newItem.tax) {
-        newItem.itemTax = newItem.price * 0.125;
-        newItem.itemSubTotal = newItem.price - newItem.itemTax;
-      } else {
-        newItem.itemTax = 0;
-        newItem.itemSubTotal = newItem.price;
+        // Convert category names to lowercase
+        this.category.forEach((element) => {
+          this.tempArray.push(element.name.toLowerCase());
+        });
+
+        // Update item with categories and calculated tax/subtotal
+        newItem.categories = this.tempArray;
+
+        if (newItem.tax) {
+          newItem.itemTax = newItem.price * 0.125;
+          newItem.itemSubTotal = newItem.price - newItem.itemTax;
+        } else {
+          newItem.itemTax = 0;
+          newItem.itemSubTotal = newItem.price;
+        }
+
+        newItem.price = Number(newItem.price.toFixed(2));
+        newItem.date = new Date().toLocaleDateString();
+
+        // Use the item service to add the new item
+        this.itemService
+          .addItem(newItem, this.selectedFile)
+          .pipe(
+            // Handle success case
+            tap((item) => {
+              this.handleSuccess(item.id);
+              formData.resetForm();
+              this.resetInput();
+              this.clicked = false;
+              this.isLoading = false;
+            }),
+            // Handle error case
+            catchError((error) => {
+              this.handleError();
+              return throwError(error); // Rethrow the error
+            })
+          )
+          .subscribe();
+      } else if (result == 'true') {
+        this.error = "UPC already exists. Please enter a unique UPC. *";
+        this.clicked = false;
+        this.isLoading = false;
       }
+      else {
+        // Handle invalid form input
+        this.handleInvalidInput();
+      }
+    });
 
-      newItem.price = Number(newItem.price.toFixed(2));
-      newItem.date = new Date().toLocaleDateString();
-
-      // Use the item service to add the new item
-      this.itemService
-        .addItem(newItem, this.selectedFile)
-        .pipe(
-          // Handle success case
-          tap((item) => {
-            this.handleSuccess(item.id);
-            formData.resetForm();
-            this.resetInput();
-            this.clicked = false;
-            this.isLoading = false;
-          }),
-          // Handle error case
-          catchError((error) => {
-            this.handleError();
-            return throwError(error); // Rethrow the error
-          })
-        )
-        .subscribe();
-    } else {
-      // Handle invalid form input
-      this.handleInvalidInput();
-    }
   }
   // -------------------------------------------------------------------------------------------------------------
 
@@ -199,4 +210,20 @@ export class AddItemFormComponentComponent {
     this.isLoading = false;
   }
   // -------------------------------------------------------------------------------------------------------------
+
+
+  // Function to create a UPC validator
+  private duplicateUpcValidator(formUPC: string, formData: NgForm): Observable<string> {
+    return new Observable(observer => {
+      this.itemService.getExistingUpcs().subscribe(existingUpcs => {
+        if (existingUpcs.includes(formUPC)) {
+          observer.next('true');
+        } else {
+          observer.next('false');
+        }
+        observer.complete();
+      });
+    });
+  }
+
 }
