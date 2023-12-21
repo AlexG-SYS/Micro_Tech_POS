@@ -25,6 +25,7 @@ export class ReportComponentComponent implements OnInit {
   totalCost = 0;
   salesTotal = 0;
   profitTotal = 0;
+  totalProfitPercentage = 0;
 
   isLoading = true;
 
@@ -50,6 +51,7 @@ export class ReportComponentComponent implements OnInit {
     'cost',
     'total',
     'profit',
+    'profitPercentage',
     'paymentMeth',
   ];
 
@@ -79,8 +81,9 @@ export class ReportComponentComponent implements OnInit {
     this.tax = 0;
     this.salesTotal = 0;
     this.profitTotal = 0;
-    this.totalCost = 0; 
-    
+    this.totalCost = 0;
+    let totalProfit = 0;
+
     receiptData.forEach((receipt) => {
       let receiptProfit = 0;
       let receiptCost = 0;
@@ -99,7 +102,11 @@ export class ReportComponentComponent implements OnInit {
       this.salesTotal += receipt.total;
       this.profitTotal += receiptProfit;
       this.totalCost += receiptCost;
+      totalProfit += receiptProfit;
     });
+
+    // Calculate total profit percentage
+    this.totalProfitPercentage = (totalProfit / this.totalCost) * 100;
 
     this.dataSource.data = receiptData;
   }
@@ -288,15 +295,17 @@ export class ReportComponentComponent implements OnInit {
     return total;
   }
 
-  // Function to calculate total profit
-  receiptProfit(element: any): number {
+  /// Function to calculate total profit and profit percentage
+  receiptProfit(element: any): { profit: number, profitPercentage: number } {
     let total = 0;
     for (const item of element.items) {
       total += item.quantity * item.cost;
     }
-    total = element.total - total;
+    const profit = element.total - total;
+    const profitPercentage = (profit / total) * 100;
 
-    return total;
+    return { profit, profitPercentage };
   }
+
 
 }

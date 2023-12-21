@@ -242,7 +242,18 @@
                                         </th>
                                         <td class="p-2 px-2" mat-cell *matCellDef="let element">
                                             <ul class="p-0 m-0 padTop-4">
-                                                ${{ receiptProfit(element) | number : '1.2-2'}}
+                                                ${{ receiptProfit(element).profit | number : '1.2-2'}}
+                                            </ul>
+                                        </td>
+                                    </ng-container>
+
+                                    <!-- Profit Percentage Column -->
+                                    <ng-container matColumnDef="profitPercentage">
+                                        <th class="p-2 px-2" mat-header-cell *matHeaderCellDef mat-sort-header> Profit %
+                                        </th>
+                                        <td class="p-2 px-2" mat-cell *matCellDef="let element">
+                                            <ul class="p-0 m-0 padTop-4">
+                                                {{ receiptProfit(element).profitPercentage | number : '1.2-2'}}%
                                             </ul>
                                         </td>
                                     </ng-container>
@@ -294,9 +305,9 @@
                                         <h3>Total:&emsp;$ {{salesTotal | number : '1.2-2'}}</h3>
                                     </div>
                                     <div class="d-flex justify-content-end">
-                                        <h2>Profit:&emsp;$ {{profitTotal | number : '1.2-2'}}</h2>
+                                        <h2>Profit:&emsp;$ {{profitTotal | number : '1.2-2'}}
+                                            &emsp;<span style="font-size: medium; font-weight: 500;">- {{totalProfitPercentage | number : '1.2-2'}}%</span></h2>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
