@@ -58,7 +58,6 @@ export class HomeComponentComponent implements OnInit {
       // Create and configure the chart
       this.createChart();
 
-
       // Fetch and display graph data
       this.fetchGraphData();
     }, 1000);
@@ -136,10 +135,13 @@ export class HomeComponentComponent implements OnInit {
   fetchGraphData() {
     const month = this.currentDate.getMonth() + 1;
     const year = this.currentDate.getFullYear();
+    const daysInMonth = new Date(year, month, 0).getDate(); // Get the total number of days in the current month
 
-    for (let day = 1; day <= this.currentDate.getDate(); day++) {
+    for (let day = 1; day <= daysInMonth; day++) {
+      const dateString = month + '/' + day + '/' + year;
+
       this.receiptService
-        .getReceiptList(month + '/' + day + '/' + year)
+        .getReceiptList(dateString)
         .subscribe((receiptData) => {
           const monthString = [
             'Jan',

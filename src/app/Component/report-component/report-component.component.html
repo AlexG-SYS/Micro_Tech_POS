@@ -306,8 +306,121 @@
                                     </div>
                                     <div class="d-flex justify-content-end">
                                         <h2>Profit:&emsp;$ {{profitTotal | number : '1.2-2'}}
-                                            &emsp;<span style="font-size: medium; font-weight: 500;">- {{totalProfitPercentage | number : '1.2-2'}}%</span></h2>
+                                            &emsp;<span style="font-size: medium; font-weight: 500;">-
+                                                {{totalProfitPercentage | number : '1.2-2'}}%</span></h2>
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                    </mat-tab>
+
+                    <mat-tab>
+                        <ng-template mat-tab-label>
+                            <mat-icon class="">inventory</mat-icon>
+                            Inventory Report
+                        </ng-template>
+
+                        <div class="inventoryReportTable" id="printable-section">
+                            <div class="row mt-3">
+                                <!-- Heading -->
+                                <div class="col spinner-wrapper">
+                                    <span>
+                                        <h1 class="my-2">
+                                            Inventory Report {{reportTitle}}
+                                        </h1>
+                                    </span>
+                                    <mat-progress-spinner class="mx-2" *ngIf="isLoading" diameter="26"
+                                        mode="indeterminate"></mat-progress-spinner>
+                                </div>
+                                <div class="col justify-content-end noPrint">
+                                    <button mat-raised-button color="primary" class="m-2" [useExistingCss]="true"
+                                        printSectionId="printable-section" ngxPrint>Print Report</button>
+                                </div>
+                                <div class="table-container">
+                                    <table mat-table [dataSource]="dataSource" matSort matSortActive="upc"
+                                        matSortDirection="desc">
+
+                                        <!-- UPC Column -->
+                                        <ng-container matColumnDef="upc">
+                                            <th class="p-2 px-2" mat-header-cell *matHeaderCellDef mat-sort-header> UPC
+                                            </th>
+                                            <td class="p-2 px-2" mat-cell *matCellDef="let element">
+                                                 </td>
+                                        </ng-container>
+
+                                        <!-- Description Column -->
+                                        <ng-container matColumnDef="description">
+                                            <th class="p-2 px-2" mat-header-cell *matHeaderCellDef mat-sort-header> Description
+                                            </th>
+                                            <td class="p-2 px-2" mat-cell *matCellDef="let element">
+                                            </td>
+                                        </ng-container>
+
+                                        <!-- Qty Name Column -->
+                                        <ng-container matColumnDef="qty">
+                                            <th class="p-2 px-2" mat-header-cell *matHeaderCellDef mat-sort-header>
+                                                Qty</th>
+                                            <td class="p-2 px-2" mat-cell *matCellDef="let element">
+                                                 </td>
+                                        </ng-container>
+
+                                        <!-- Cost Column -->
+                                        <ng-container matColumnDef="cost">
+                                            <th class="p-2 px-2" mat-header-cell *matHeaderCellDef mat-sort-header>Cost
+                                            </th>
+                                            <td class="p-2 px-2" mat-cell *matCellDef="let element">
+                                                ${{ 0 | number : '1.2-2' }}
+                                            </td>
+                                        </ng-container>
+
+                                        <!-- Price Column -->
+                                        <ng-container matColumnDef="price">
+                                            <th class="p-2 px-2" mat-header-cell *matHeaderCellDef mat-sort-header>Price
+                                            </th>
+                                            <td class="p-2 px-2" mat-cell *matCellDef="let element">
+                                                ${{ 0 | number : '1.2-2' }}
+                                            </td>
+                                        </ng-container>
+
+                                        <!-- Total Column -->
+                                        <ng-container matColumnDef="total">
+                                            <th class="p-2 px-2" mat-header-cell *matHeaderCellDef mat-sort-header>
+                                                Total
+                                            </th>
+                                            <td class="p-2 px-2" mat-cell *matCellDef="let element">${{0 |
+                                                number : '1.2-2'}}
+                                            </td>
+                                        </ng-container>
+
+                                        <!-- Profit Column -->
+                                        <ng-container matColumnDef="profit">
+                                            <th class="p-2 px-2" mat-header-cell *matHeaderCellDef mat-sort-header>
+                                                Profit
+                                            </th>
+                                            <td class="p-2 px-2" mat-cell *matCellDef="let element">
+                                                <ul class="p-0 m-0 padTop-4">
+                                                    ${{ 0 | number : '1.2-2'}}
+                                                </ul>
+                                            </td>
+                                        </ng-container>
+
+                                        <!-- Profit Percentage Column -->
+                                        <ng-container matColumnDef="profitPercentage">
+                                            <th class="p-2 px-2" mat-header-cell *matHeaderCellDef mat-sort-header>
+                                                Profit %
+                                            </th>
+                                            <td class="p-2 px-2" mat-cell *matCellDef="let element">
+                                                <ul class="p-0 m-0 padTop-4">
+                                                    {{ 0 | number : '1.2-2'}}%
+                                                </ul>
+                                            </td>
+                                        </ng-container>
+
+
+                                        <!-- Sets Table Column Names and Positions -->
+                                        <tr mat-header-row *matHeaderRowDef="displayedColumnsInventoryReport"></tr>
+                                        <tr mat-row *matRowDef="let row; columns: displayedColumnsInventoryReport;"></tr>
+                                    </table>
                                 </div>
                             </div>
                         </div>

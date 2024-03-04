@@ -72,6 +72,26 @@
                         </td>
                     </ng-container>
 
+                    <!-- Profit % Column -->
+                    <ng-container *ngIf="privilege === 'admin'; else nonAdminColumns">
+                        <ng-container matColumnDef="profitPercentage">
+                            <th class="p-2" mat-header-cell *matHeaderCellDef mat-sort-header> Profit % </th>
+                            <td class="p-2" mat-cell *matCellDef="let element"
+                                [class.red]="element.status == 'inactive' ? 'red' : ''">
+                                {{ itemProfit(element).profitPercentage | number : '1.2-2'}}%
+                            </td>
+                        </ng-container>
+                    </ng-container>
+                    <ng-template #nonAdminColumns>
+                        <ng-container matColumnDef="profitPercentage">
+                            <th class="p-2" mat-header-cell *matHeaderCellDef mat-sort-header> </th>
+                            <td class="p-2" mat-cell *matCellDef="let element"
+                                [class.red]="element.status == 'inactive' ? 'red' : ''">
+                            </td>
+                        </ng-container>
+                    </ng-template>
+
+
                     <!-- Item Menu Column -->
                     <ng-container matColumnDef="menu">
                         <th id="spin" mat-header-cell *matHeaderCellDef></th>

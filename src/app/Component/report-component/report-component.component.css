@@ -13,7 +13,7 @@ table {
   overflow: auto;
 }
 
-.salesReportTable, .profitReportTable{
+.salesReportTable, .profitReportTable, .inventoryReportTable{
   max-width: 100%;
   overflow-y: visible;
   overflow-x: hidden;

@@ -55,6 +55,17 @@ export class ReportComponentComponent implements OnInit {
     'paymentMeth',
   ];
 
+  displayedColumnsInventoryReport: string[] = [
+    'upc',
+    'description',
+    'qty',
+    'cost',
+    'price',
+    'total',
+    'profit',
+    'profitPercentage'
+  ];
+
   // -------------------------------------------------------------------------------------------------------------
   constructor(private receiptService: ReceiptService) { }
   // -------------------------------------------------------------------------------------------------------------
@@ -295,7 +306,7 @@ export class ReportComponentComponent implements OnInit {
     return total;
   }
 
-  /// Function to calculate total profit and profit percentage
+  // Function to calculate total profit and profit percentage
   receiptProfit(element: any): { profit: number, profitPercentage: number } {
     let total = 0;
     for (const item of element.items) {
@@ -309,3 +320,6 @@ export class ReportComponentComponent implements OnInit {
 
 
 }
+
+
+

@@ -39,6 +39,7 @@ export class InventoryComponentComponent implements OnInit {
     'quantity',
     'size',
     'online',
+    'profitPercentage',
     'menu',
   ];
 
@@ -175,6 +176,31 @@ export class InventoryComponentComponent implements OnInit {
   delayProgress() {
     setTimeout(() => {
       this.isLoading = false;
-    },1000);
+    }, 1000);
+  }
+  // -----------------------------------------------------------------------------------------------------------
+
+  // -----------------------------------------------------------------------------------------------------------
+  // Function to calculate total profit and profit percentage
+  itemProfit(item: any): { profitPercentage: number } {
+    // Calculate the total revenue
+    const totalRevenue = item.price * item.quantity;
+
+    // Calculate the total cost
+    const totalCost =
+      item.cost !== null && item.quantity !== null
+        ? item.cost * item.quantity
+        : 0;
+
+    // Calculate the total profit
+    const totalProfit = totalRevenue - totalCost;
+
+    // Calculate the profit percentage
+    let profitPercentage = 0;
+    if (totalCost !== 0) {
+      profitPercentage = (totalProfit / totalCost) * 100;
+    }
+
+    return { profitPercentage };
   }
 }
