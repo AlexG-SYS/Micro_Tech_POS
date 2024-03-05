@@ -3,6 +3,7 @@ import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Chart, registerables } from 'chart.js/auto';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { FormGroup, FormControl } from '@angular/forms';
 
 import { GlobalComponent } from 'src/app/global-component';
 import { ReceiptService } from 'src/app/Services/receipt.service';
@@ -33,6 +34,26 @@ export class HomeComponentComponent implements OnInit {
   // Greeting message based on time of day
   greetingMessage: string = '';
 
+  customDateSelection = new FormGroup({
+    startDate: new FormControl(),
+    endDate: new FormControl(),
+  });
+
+  monthString = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
+  ];
+
   // -----------------------------------------------------------------------------------------------------------
   constructor(
     private db: AngularFirestore,
@@ -58,8 +79,8 @@ export class HomeComponentComponent implements OnInit {
       // Create and configure the chart
       this.createChart();
 
-      // Fetch and display graph data
-      this.fetchGraphData();
+      // Fetch and display graph data for the entire month initially
+      this.fetchGraphDataForMonth();
     }, 1000);
   }
   // -----------------------------------------------------------------------------------------------------------
@@ -131,11 +152,11 @@ export class HomeComponentComponent implements OnInit {
   // -----------------------------------------------------------------------------------------------------------
 
   // -----------------------------------------------------------------------------------------------------------
-  // Fetch graph data from the database
-  fetchGraphData() {
+  // Fetch graph data from the database for the entire month
+  fetchGraphDataForMonth() {
     const month = this.currentDate.getMonth() + 1;
     const year = this.currentDate.getFullYear();
-    const daysInMonth = new Date(year, month, 0).getDate(); // Get the total number of days in the current month
+    const daysInMonth = new Date(year, month, 0).getDate();
 
     for (let day = 1; day <= daysInMonth; day++) {
       const dateString = month + '/' + day + '/' + year;
@@ -143,22 +164,7 @@ export class HomeComponentComponent implements OnInit {
       this.receiptService
         .getReceiptList(dateString)
         .subscribe((receiptData) => {
-          const monthString = [
-            'Jan',
-            'Feb',
-            'Mar',
-            'Apr',
-            'May',
-            'Jun',
-            'Jul',
-            'Aug',
-            'Sep',
-            'Oct',
-            'Nov',
-            'Dec',
-          ];
-
-          const xData = monthString[month - 1] + '-' + day;
+          const xData = this.monthString[month - 1] + '-' + day;
           const yData = receiptData.length;
           this.addDataToChart(xData, yData);
         });
@@ -175,6 +181,16 @@ export class HomeComponentComponent implements OnInit {
       dataset.data.push(data);
     });
     this.chart.update();
+  }
+  // -----------------------------------------------------------------------------------------------------------
+
+  // -----------------------------------------------------------------------------------------------------------
+  // Clear chart data
+  clearChartData() {
+    this.chart.data.labels = [];
+    this.chart.data.datasets.forEach((dataset: any) => {
+      dataset.data = [];
+    });
   }
   // -----------------------------------------------------------------------------------------------------------
 
@@ -275,6 +291,59 @@ export class HomeComponentComponent implements OnInit {
     dialogConfig.maxWidth = '700px';
     dialogConfig.data = [];
     return dialogConfig;
+  }
+  // -----------------------------------------------------------------------------------------------------------
+
+  // -----------------------------------------------------------------------------------------------------------
+  // Updated Graph Based on Selected Date Range
+  updateGraph() {
+    this.isLoading = true;
+
+    // Get the selected start and end dates from the form
+    const startDate = this.customDateSelection.value.startDate;
+    const endDate = this.customDateSelection.value.endDate;
+
+    // Call the function to fetch data for the selected date range
+    this.fetchGraphDataForDateRange(startDate, endDate);
+  }
+  // -----------------------------------------------------------------------------------------------------------
+
+  // -----------------------------------------------------------------------------------------------------------
+  // Fetch graph data from the database for the selected date range
+  fetchGraphDataForDateRange(startDate: Date, endDate: Date) {
+    this.clearChartData();
+
+    const formattedStartDate = this.formatDate(startDate);
+    const formattedEndDate = this.formatDate(endDate);
+
+    for (
+      let currentDate = new Date(startDate);
+      currentDate <= endDate;
+      currentDate.setDate(currentDate.getDate() + 1)
+    ) {
+      const dateString = this.formatDate(currentDate);
+
+      this.receiptService
+        .getReceiptList(dateString)
+        .subscribe((receiptData) => {
+          const yData = receiptData.length;
+          this.addDataToChart(dateString, yData);
+        });
+    }
+
+    this.chart.update();
+    this.isLoading = false;
+  }
+  // -----------------------------------------------------------------------------------------------------------
+
+  // -----------------------------------------------------------------------------------------------------------
+  // Format date to MM/DD/YYYY format
+  formatDate(date: Date): string {
+    
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    const year = date.getFullYear();
+    return month + '/' + day + '/' + year;
   }
   // -----------------------------------------------------------------------------------------------------------
 }
