@@ -55,15 +55,15 @@
 
             </table>
         </div>
-        <!-- Subtotal Section -->
-        <div class="row justify-content-end pt-4">
-            <div class="col-2 bold">Subtotal</div>
-            <div class="col-2">${{subTotal | number : '1.2-2'}}</div>
-        </div>
         <!-- Discount Section -->
-        <div class="row justify-content-end pt-1">
+        <div class="row justify-content-end pt-4">
             <div class="col-2 bold">Discount</div>
             <div class="col-2">${{discount | number : '1.2-2'}}</div>
+        </div>
+        <!-- Subtotal Section -->
+        <div class="row justify-content-end pt-1">
+            <div class="col-2 bold">Subtotal</div>
+            <div class="col-2">${{subTotal | number : '1.2-2'}}</div>
         </div>
         <!-- Tax Section -->
         <div class="row justify-content-end pt-1">
@@ -121,16 +121,16 @@
 
         <mat-divider class="my-2 px-2"></mat-divider>
 
-        <!-- Subtotal Section -->
-        <div class="row pt-2">
-            <div class="col bold fs-6 justify-content-end">Subtotal</div>
-            <div class="col fs-6">${{subTotal | number : '1.2-2'}}</div>
-        </div>
-
         <!-- Discount Section -->
-        <div class="row">
+        <div class="row pt-2">
             <div class="col bold fs-6 justify-content-end">Discount</div>
             <div class="col fs-6">${{discount | number : '1.2-2'}}</div>
+        </div>
+
+        <!-- Subtotal Section -->
+        <div class="row">
+            <div class="col bold fs-6 justify-content-end">Subtotal</div>
+            <div class="col fs-6">${{subTotal | number : '1.2-2'}}</div>
         </div>
 
         <!-- Tax Section -->

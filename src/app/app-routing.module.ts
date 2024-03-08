@@ -10,6 +10,7 @@ import { ReportComponentComponent } from './Component/report-component/report-co
 import { DashboardPageComponent } from './Page/dashboard-page/dashboard-page.component';
 import { LoginPageComponent } from './Page/login-page/login-page.component';
 import { PageNotFoundComponent } from './Page/page-not-found/page-not-found.component';
+import { FinanceComponentComponent } from './Component/finance-component/finance-component.component';
 
 const routes: Routes = [
   // Routes the application to diffrent components depending on what the user is doing
@@ -31,6 +32,11 @@ const routes: Routes = [
         path: 'account',
         title: 'Dashboard - Account',
         component: AccountComponentComponent,
+      },
+      {
+        path: 'finance',
+        title: 'Dashboard - Finance',
+        component: FinanceComponentComponent,
       },
       {
         path: 'inventory',

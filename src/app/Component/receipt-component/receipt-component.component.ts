@@ -34,6 +34,7 @@ export class ReceiptComponentComponent implements OnInit {
   @ViewChild('itemSearch') searchFieldItem!: ElementRef;
   @ViewChild('accountSearch') searchFieldAccount!: ElementRef;
   @ViewChildren(MatTable) tablesItems!: QueryList<Items>;
+  @ViewChild('receiptSideBar') receiptSideBar!: ElementRef;
 
   // Component properties
   accountID: string | null = '';
@@ -71,7 +72,8 @@ export class ReceiptComponentComponent implements OnInit {
   clicked = false;
   isLoading = false;
   recEdit = false;
-
+  error = '';
+  
   displayedColumns: string[] = [
     'UPC',
     'Description',
@@ -163,8 +165,8 @@ export class ReceiptComponentComponent implements OnInit {
       this.editReceiptID =
         this.activatedRoute.snapshot.paramMap.get('receiptID')!;
 
-        this.recEdit = true;
-      
+      this.recEdit = true;
+
       this.receiptService
         .findReceipt(this.editReceiptID)
         .subscribe((recData) => {
@@ -444,7 +446,7 @@ export class ReceiptComponentComponent implements OnInit {
     this.tax = 0;
     this.receiptItems.forEach((item) => {
       if (item.tax == true) {
-        this.tax = ((item.quantity * item.price)*0.125) + this.tax;
+        this.tax = item.quantity * item.price * 0.125 + this.tax;
       }
       this.subTotal = item.quantity * item.price + this.subTotal;
       this.total = item.quantity * item.price + this.total;
@@ -473,16 +475,14 @@ export class ReceiptComponentComponent implements OnInit {
         this.subTotal =
           this.subTotal +
           item.quantity *
-            (item.price -
-              item.price * (this.discountPercentage / 100));
+            (item.price - item.price * (this.discountPercentage / 100));
 
         if (item.tax == true) {
           this.tax =
             this.tax +
             0.125 *
               (item.quantity *
-                (item.price -
-                  item.price * (this.discountPercentage / 100)));
+                (item.price - item.price * (this.discountPercentage / 100)));
         }
       });
       this.total = this.subTotal + this.tax;
@@ -538,7 +538,6 @@ export class ReceiptComponentComponent implements OnInit {
   // -------------------------------------------------------------------------------------------------------------
   // Submit receipt data
   receipt: Partial<Receipt> = {};
-  error = '';
 
   receiptItemSubmit() {
     let tendered = +this.tenderedField.value!;
@@ -593,42 +592,57 @@ export class ReceiptComponentComponent implements OnInit {
         '!';
 
       if (this.editReceiptID) {
-        this.receipt.date = this.date;
-        this.receipt.receiptNumber = this.receiptNumber;
-        this.receiptService
-          .editReceipt(this.editReceiptID, this.receipt)
-          .subscribe(() => {
-            // Iterate through receipt items and update corresponding database items
-            this.receipt.items?.forEach((recItem) => {
-              const itemToUpdate = this.itemList.find(
-                (item) => item.id === recItem.id
+        // Check if all items to update are found in the item list
+        const allItemsFound = this.receipt.items?.every((recItem) => {
+          const itemToUpdate = this.itemList.find(
+            (item) => item.id === recItem.id
+          );
+          return itemToUpdate !== undefined;
+        });
+
+        if (allItemsFound) {
+          this.receipt.date = this.date;
+          this.receipt.receiptNumber = this.receiptNumber;
+          this.receiptService
+            .editReceipt(this.editReceiptID, this.receipt)
+            .subscribe(() => {
+              // Iterate through receipt items and update corresponding database items
+              this.receipt.items?.forEach((recItem) => {
+                const itemToUpdate = this.itemList.find(
+                  (item) => item.id === recItem.id
+                );
+                if (itemToUpdate && recItem.quantity !== undefined) {
+                  itemToUpdate.quantity =
+                    itemToUpdate.quantity +
+                    this.getEditReceiptItemQuantity(recItem.id || '') -
+                    recItem.quantity;
+                  this.itemService
+                    .updateItem(itemToUpdate.id, itemToUpdate)
+                    .subscribe();
+                }
+              });
+
+              console.log(
+                'Receipt Successfully Updated! ID:',
+                this.editReceiptID
               );
-              if (itemToUpdate && recItem.quantity !== undefined) {
-                itemToUpdate.quantity =
-                  itemToUpdate.quantity +
-                  this.getEditReceiptItemQuantity(recItem.id || '') -
-                  recItem.quantity;
-                this.itemService
-                  .updateItem(itemToUpdate.id, itemToUpdate)
-                  .subscribe();
-              }
+
+              this.recEdit = false;
+
+              this.resetReceipt();
+              this.openSnackBar('Receipt Updated!', 'success-snakBar');
+
+              let printData = [this.receipt];
+              this.openPrintDialog(printData);
+              this.clicked = false;
+              this.isLoading = false;
             });
-
-            console.log(
-              'Receipt Successfully Updated! ID:',
-              this.editReceiptID
-            );
-
-            this.recEdit = false;
-
-            this.resetReceipt();
-            this.openSnackBar('Receipt Updated!', 'success-snakBar');
-
-            let printData = [this.receipt];
-            this.openPrintDialog(printData);
-            this.clicked = false;
-            this.isLoading = false;
-          });
+        } else {
+          this.error = 'IN-ACTIVE Item Detected*';
+          this.clicked = false;
+          this.isLoading = false;
+          return;
+        }
       } else {
         this.receipt.date = new Date().toLocaleDateString();
         this.receiptService

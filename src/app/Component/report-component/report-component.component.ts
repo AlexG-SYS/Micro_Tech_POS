@@ -54,13 +54,23 @@ export class ReportComponentComponent implements OnInit {
     'salesRep',
   ];
 
+  displayedColumnsTaxReport: string[] = [
+    'receiptNumber',
+    'date',
+    'customerName',
+    'subTotal',
+    'tax',
+    'total',
+    'paymentMeth',
+  ];
+
   displayedColumnsProfitReport: string[] = [
     'receiptNumber',
     'date',
     'customerName',
     'cost',
-    'total',
     'profit',
+    'subtotal',
     'profitPercentage',
     'paymentMeth',
   ];
@@ -115,16 +125,19 @@ export class ReportComponentComponent implements OnInit {
 
     receiptData.forEach((receipt) => {
       let receiptProfit = 0;
+      let receiptSubtotal = 0;
       let receiptCost = 0;
 
+      receiptSubtotal = receipt.subtotal;
+
       for (const item of receipt.items) {
-        if (item.quantity !== undefined) {
-          receiptProfit += item.quantity * (item.cost || 0);
+        if (item.quantity !== undefined && item.price !== undefined) {
+          // Calculate profit and cost based on item cost price
           receiptCost += item.quantity * (item.cost || 0);
         }
       }
 
-      receiptProfit = receipt.total - receiptProfit;
+      receiptProfit = receiptSubtotal - receiptCost;
 
       this.subTotal += receipt.subtotal;
       this.tax += receipt.TAX;
@@ -329,7 +342,7 @@ export class ReportComponentComponent implements OnInit {
     for (const item of element.items) {
       total += item.quantity * item.cost;
     }
-    const profit = element.total - total;
+    const profit = element.subtotal - total;
     const profitPercentage = (profit / total) * 100;
 
     return { profit, profitPercentage };

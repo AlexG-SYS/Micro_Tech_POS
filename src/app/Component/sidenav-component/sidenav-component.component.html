@@ -18,7 +18,14 @@
             <!-- Customer Button and Router Link -->
             <button routerLink="account" routerLinkActive="active" mat-stroked-button class="my-1">
                 <mat-icon>manage_accounts</mat-icon>
-                <span class="d-none d-sm-none d-md-block">Account</span>
+                <span class="d-none d-sm-none d-md-block">Customer</span>
+            </button>
+        </div>
+        <div class="mx-auto" *ngIf="privilege == 'admin'">
+            <!-- Finance Button and Router Link -->
+            <button routerLink="finance" routerLinkActive="active" mat-stroked-button class="my-1" >
+                <mat-icon>account_balance</mat-icon>
+                <span class="d-none d-sm-none d-md-block">Finance</span>
             </button>
         </div>
         <div class="mx-auto">
