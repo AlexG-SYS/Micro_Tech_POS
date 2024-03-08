@@ -137,15 +137,6 @@
                 </div>
 
                 <mat-divider class="my-2"></mat-divider>
-                <!-- Sub Total -->
-                <div class="row p-0">
-                    <div class="col">
-                        <h4 class="mx-2 mb-1">Sub Total:</h4>
-                    </div>
-                    <div class="col d-flex justify-content-end">
-                        <h4 class="mx-4 mb-1">${{subTotal | number : '1.2-2'}}</h4>
-                    </div>
-                </div>
                 <!-- Discount -->
                 <div class="row p-0">
                     <div class="col">
@@ -153,6 +144,15 @@
                     </div>
                     <div class="col d-flex justify-content-end">
                         <h4 class="mx-4 mb-1">${{discount | number : '1.2-2'}}</h4>
+                    </div>
+                </div>
+                <!-- Sub Total -->
+                <div class="row p-0">
+                    <div class="col">
+                        <h4 class="mx-2 mb-1">Sub Total:</h4>
+                    </div>
+                    <div class="col d-flex justify-content-end">
+                        <h4 class="mx-4 mb-1">${{subTotal | number : '1.2-2'}}</h4>
                     </div>
                 </div>
                 <!-- Tax -->

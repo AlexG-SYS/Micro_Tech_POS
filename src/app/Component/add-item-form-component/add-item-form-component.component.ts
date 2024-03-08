@@ -122,14 +122,6 @@ export class AddItemFormComponentComponent {
         // Update item with categories and calculated tax/subtotal
         newItem.categories = this.tempArray;
 
-        if (newItem.tax) {
-          newItem.itemTax = newItem.price * 0.125;
-          newItem.itemSubTotal = newItem.price - newItem.itemTax;
-        } else {
-          newItem.itemTax = 0;
-          newItem.itemSubTotal = newItem.price;
-        }
-
         newItem.price = Number(newItem.price.toFixed(2));
         newItem.date = new Date().toLocaleDateString();
 

@@ -78,15 +78,6 @@ export class EditItemDialogComponent {
       });
       itemChanges.categories = this.tempArray;
 
-      // Calculate item tax and subtotal
-      if (itemChanges.tax) {
-        itemChanges.itemTax = itemChanges.price * 0.125;
-        itemChanges.itemSubTotal = itemChanges.price - itemChanges.itemTax;
-      } else {
-        itemChanges.itemTax = 0;
-        itemChanges.itemSubTotal = itemChanges.price;
-      }
-
       // Update item through ItemService
       this.itemService.updateItem(this.item.id, itemChanges).subscribe(() => {
         this.dialogRef.close(itemChanges);

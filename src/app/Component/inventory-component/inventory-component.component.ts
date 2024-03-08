@@ -187,10 +187,7 @@ export class InventoryComponentComponent implements OnInit {
     const totalRevenue = item.price * item.quantity;
 
     // Calculate the total cost
-    const totalCost =
-      item.cost !== null && item.quantity !== null
-        ? item.cost * item.quantity
-        : 0;
+    const totalCost = item.cost * item.quantity;
 
     // Calculate the total profit
     const totalProfit = totalRevenue - totalCost;
@@ -198,7 +195,7 @@ export class InventoryComponentComponent implements OnInit {
     // Calculate the profit percentage
     let profitPercentage = 0;
     if (totalCost !== 0) {
-      profitPercentage = (totalProfit / totalCost) * 100;
+        profitPercentage = (totalProfit / totalCost) * 100;
     }
 
     return { profitPercentage };

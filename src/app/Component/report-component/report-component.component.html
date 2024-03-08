@@ -28,7 +28,7 @@
                             </div>
 
                             <div class="table-container">
-                                <table mat-table [dataSource]="dataSource" matSort matSortActive="receiptNumber"
+                                <table mat-table [dataSource]="dataSourceReceipt" matSort #matSortReceipt="matSort" matSortActive="receiptNumber"
                                     matSortDirection="desc">
 
                                     <!-- Receipt Number Column -->
@@ -193,7 +193,7 @@
                             </div>
 
                             <div class="table-container">
-                                <table mat-table [dataSource]="dataSource" matSort matSortActive="receiptNumber"
+                                <table mat-table [dataSource]="dataSourceReceipt" matSort #matSortReceipt="matSort" matSortActive="receiptNumber"
                                     matSortDirection="desc">
 
                                     <!-- Receipt Number Column -->
@@ -314,6 +314,7 @@
                         </div>
                     </mat-tab>
 
+                    <!-- Inventroy Report -->
                     <mat-tab>
                         <ng-template mat-tab-label>
                             <mat-icon class="">inventory</mat-icon>
@@ -337,23 +338,24 @@
                                         printSectionId="printable-section" ngxPrint>Print Report</button>
                                 </div>
                                 <div class="table-container">
-                                    <table mat-table [dataSource]="dataSource" matSort matSortActive="upc"
-                                        matSortDirection="desc">
+                                    <table mat-table [dataSource]="dataSourceInventory" matSort #matSortInventory="matSort" matSortActive="upc"
+                                        matSortDirection="asc">
 
                                         <!-- UPC Column -->
                                         <ng-container matColumnDef="upc">
                                             <th class="p-2 px-2" mat-header-cell *matHeaderCellDef mat-sort-header> UPC
                                             </th>
                                             <td class="p-2 px-2" mat-cell *matCellDef="let element">
-                                                 </td>
+                                                {{element.upc}}</td>
                                         </ng-container>
 
                                         <!-- Description Column -->
                                         <ng-container matColumnDef="description">
-                                            <th class="p-2 px-2" mat-header-cell *matHeaderCellDef mat-sort-header> Description
+                                            <th class="p-2 px-2" mat-header-cell *matHeaderCellDef mat-sort-header>
+                                                Description
                                             </th>
                                             <td class="p-2 px-2" mat-cell *matCellDef="let element">
-                                            </td>
+                                                {{element.description}}</td>
                                         </ng-container>
 
                                         <!-- Qty Name Column -->
@@ -361,7 +363,7 @@
                                             <th class="p-2 px-2" mat-header-cell *matHeaderCellDef mat-sort-header>
                                                 Qty</th>
                                             <td class="p-2 px-2" mat-cell *matCellDef="let element">
-                                                 </td>
+                                                {{element.quantity}}</td>
                                         </ng-container>
 
                                         <!-- Cost Column -->
@@ -369,7 +371,7 @@
                                             <th class="p-2 px-2" mat-header-cell *matHeaderCellDef mat-sort-header>Cost
                                             </th>
                                             <td class="p-2 px-2" mat-cell *matCellDef="let element">
-                                                ${{ 0 | number : '1.2-2' }}
+                                                ${{ element.cost | number : '1.2-2' }}
                                             </td>
                                         </ng-container>
 
@@ -378,7 +380,7 @@
                                             <th class="p-2 px-2" mat-header-cell *matHeaderCellDef mat-sort-header>Price
                                             </th>
                                             <td class="p-2 px-2" mat-cell *matCellDef="let element">
-                                                ${{ 0 | number : '1.2-2' }}
+                                                ${{ element.price | number : '1.2-2' }}
                                             </td>
                                         </ng-container>
 
@@ -387,7 +389,8 @@
                                             <th class="p-2 px-2" mat-header-cell *matHeaderCellDef mat-sort-header>
                                                 Total
                                             </th>
-                                            <td class="p-2 px-2" mat-cell *matCellDef="let element">${{0 |
+                                            <td class="p-2 px-2" mat-cell *matCellDef="let element">
+                                                ${{(element.price * element.quantity) |
                                                 number : '1.2-2'}}
                                             </td>
                                         </ng-container>
@@ -399,7 +402,9 @@
                                             </th>
                                             <td class="p-2 px-2" mat-cell *matCellDef="let element">
                                                 <ul class="p-0 m-0 padTop-4">
-                                                    ${{ 0 | number : '1.2-2'}}
+                                                    ${{
+                                                    (element.price * element.quantity)-(element.cost*element.quantity)
+                                                    | number : '1.2-2'}}
                                                 </ul>
                                             </td>
                                         </ng-container>
@@ -411,7 +416,9 @@
                                             </th>
                                             <td class="p-2 px-2" mat-cell *matCellDef="let element">
                                                 <ul class="p-0 m-0 padTop-4">
-                                                    {{ 0 | number : '1.2-2'}}%
+                                                    {{ (((element.price * element.quantity) - (element.cost *
+                                                    element.quantity)) / (element.cost * element.quantity)) * 100 |
+                                                    number : '1.2-2'}}%
                                                 </ul>
                                             </td>
                                         </ng-container>
@@ -419,8 +426,25 @@
 
                                         <!-- Sets Table Column Names and Positions -->
                                         <tr mat-header-row *matHeaderRowDef="displayedColumnsInventoryReport"></tr>
-                                        <tr mat-row *matRowDef="let row; columns: displayedColumnsInventoryReport;"></tr>
+                                        <tr mat-row *matRowDef="let row; columns: displayedColumnsInventoryReport;">
+                                        </tr>
                                     </table>
+                                </div>
+                                <div class="row">
+                                    <div class="col-9 pt-4 noPrint"></div>
+                                    <div class="col-3 pt-4">
+                                        <div class="d-flex justify-content-end">
+                                            <h3>Cost:&emsp;$ {{totalCostInventory | number : '1.2-2'}}</h3>
+                                        </div>
+                                        <div class="d-flex justify-content-end">
+                                            <h3>Total:&emsp;$ {{salesTotalInventory | number : '1.2-2'}}</h3>
+                                        </div>
+                                        <div class="d-flex justify-content-end">
+                                            <h2>Profit:&emsp;$ {{profitTotalInventory | number : '1.2-2'}}
+                                                &emsp;<span style="font-size: medium; font-weight: 500;">-
+                                                    {{totalProfitPercentageInventory | number : '1.2-2'}}%</span></h2>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

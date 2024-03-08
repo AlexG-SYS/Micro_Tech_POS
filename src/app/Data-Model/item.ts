@@ -4,7 +4,6 @@ export interface Items {
     categories: string[];
     upc: string;
     description: string;
-    itemSubTotal: number;
     itemTax: number;
     cost: number;
     price: number;

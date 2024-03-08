@@ -444,11 +444,12 @@ export class ReceiptComponentComponent implements OnInit {
     this.tax = 0;
     this.receiptItems.forEach((item) => {
       if (item.tax == true) {
-        this.tax = item.quantity * item.itemTax + this.tax;
+        this.tax = ((item.quantity * item.price)*0.125) + this.tax;
       }
-      this.subTotal = item.quantity * item.itemSubTotal + this.subTotal;
+      this.subTotal = item.quantity * item.price + this.subTotal;
       this.total = item.quantity * item.price + this.total;
     });
+    this.total = this.tax + this.total;
   }
   // -------------------------------------------------------------------------------------------------------------
 
@@ -467,21 +468,21 @@ export class ReceiptComponentComponent implements OnInit {
       this.receiptItems.forEach((item) => {
         this.discount =
           this.discount +
-          item.quantity * (item.itemSubTotal * (this.discountPercentage / 100));
+          item.quantity * (item.price * (this.discountPercentage / 100));
 
         this.subTotal =
           this.subTotal +
           item.quantity *
-            (item.itemSubTotal -
-              item.itemSubTotal * (this.discountPercentage / 100));
+            (item.price -
+              item.price * (this.discountPercentage / 100));
 
         if (item.tax == true) {
           this.tax =
             this.tax +
             0.125 *
               (item.quantity *
-                (item.itemSubTotal -
-                  item.itemSubTotal * (this.discountPercentage / 100)));
+                (item.price -
+                  item.price * (this.discountPercentage / 100)));
         }
       });
       this.total = this.subTotal + this.tax;

@@ -3,8 +3,10 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
+import { Item } from 'firebase/analytics';
 import { forkJoin, Observable } from 'rxjs';
 import { Receipt } from 'src/app/Data-Model/receipt';
+import { ItemService } from 'src/app/Services/item.service';
 import { ReceiptService } from 'src/app/Services/receipt.service';
 
 @Component({
@@ -14,9 +16,11 @@ import { ReceiptService } from 'src/app/Services/receipt.service';
 })
 export class ReportComponentComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
-  @ViewChild(MatTable) table!: MatTable<Receipt>;
-  dataSource = new MatTableDataSource<Receipt>();
+  @ViewChild('matSortReceipt') sortReceipt!: MatSort;
+  @ViewChild('matSortInventory') sortInventory!: MatSort;
+  
+  dataSourceReceipt = new MatTableDataSource<Receipt>();
+  dataSourceInventory = new MatTableDataSource<Item>();
 
   month = '';
   reportTitle = '';
@@ -26,6 +30,12 @@ export class ReportComponentComponent implements OnInit {
   salesTotal = 0;
   profitTotal = 0;
   totalProfitPercentage = 0;
+
+  totalCostInventory = 0;
+  totalSubTotalInventory = 0
+  salesTotalInventory = 0;
+  profitTotalInventory = 0;
+  totalProfitPercentageInventory = 0;
 
   isLoading = true;
 
@@ -63,11 +73,14 @@ export class ReportComponentComponent implements OnInit {
     'price',
     'total',
     'profit',
-    'profitPercentage'
+    'profitPercentage',
   ];
 
   // -------------------------------------------------------------------------------------------------------------
-  constructor(private receiptService: ReceiptService) { }
+  constructor(
+    private receiptService: ReceiptService,
+    private itemService: ItemService
+  ) {}
   // -------------------------------------------------------------------------------------------------------------
 
   // -------------------------------------------------------------------------------------------------------------
@@ -75,13 +88,18 @@ export class ReportComponentComponent implements OnInit {
     this.refreshSalesListToday();
     const date = new Date();
     this.month = `(${this.getMonthName(date)})`;
+
+    this.updateInventoryReport();
   }
   // -------------------------------------------------------------------------------------------------------------
 
   // -------------------------------------------------------------------------------------------------------------
   ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+    this.dataSourceReceipt.paginator = this.paginator;
+    this.dataSourceReceipt.sort = this.sortReceipt;
+
+    this.dataSourceInventory.paginator = this.paginator;
+    this.dataSourceInventory.sort = this.sortInventory;
   }
   // -------------------------------------------------------------------------------------------------------------
 
@@ -119,9 +137,8 @@ export class ReportComponentComponent implements OnInit {
     // Calculate total profit percentage
     this.totalProfitPercentage = (totalProfit / this.totalCost) * 100;
 
-    this.dataSource.data = receiptData;
+    this.dataSourceReceipt.data = receiptData;
   }
-
 
   // -------------------------------------------------------------------------------------------------------------
 
@@ -184,7 +201,7 @@ export class ReportComponentComponent implements OnInit {
     this.reportTitle = `(${this.getMonthName(currentDate)})`;
 
     // Clear existing data from the data source
-    this.dataSource.data = [];
+    this.dataSourceReceipt.data = [];
 
     // Create an array of observables for fetching receipt data
     const receiptObservables: Observable<Receipt[]>[] = [];
@@ -207,7 +224,7 @@ export class ReportComponentComponent implements OnInit {
         this.refreshSalesList(allReceiptData);
 
         // Update the data source
-        this.dataSource._updateChangeSubscription();
+        this.dataSourceReceipt._updateChangeSubscription();
       },
       (error) => {
         console.error('Error fetching receipt data:', error);
@@ -230,7 +247,7 @@ export class ReportComponentComponent implements OnInit {
     this.reportTitle = `(${startDate.toLocaleDateString()} - ${endDate.toLocaleDateString()})`;
 
     // Clear existing data from the data source
-    this.dataSource.data = [];
+    this.dataSourceReceipt.data = [];
 
     // Create an array of observables for fetching receipt data
     const receiptObservables: Observable<Receipt[]>[] = [];
@@ -259,7 +276,7 @@ export class ReportComponentComponent implements OnInit {
         this.refreshSalesList(allReceiptData);
 
         // Update the data source
-        this.dataSource._updateChangeSubscription();
+        this.dataSourceReceipt._updateChangeSubscription();
       },
       (error) => {
         console.error('Error fetching receipt data:', error);
@@ -307,7 +324,7 @@ export class ReportComponentComponent implements OnInit {
   }
 
   // Function to calculate total profit and profit percentage
-  receiptProfit(element: any): { profit: number, profitPercentage: number } {
+  receiptProfit(element: any): { profit: number; profitPercentage: number } {
     let total = 0;
     for (const item of element.items) {
       total += item.quantity * item.cost;
@@ -318,8 +335,62 @@ export class ReportComponentComponent implements OnInit {
     return { profit, profitPercentage };
   }
 
+  updateInventoryReport() {
+    this.isLoading = true;
 
+    this.itemService.getItemList('active').subscribe((itemData) => {
+      // Calculate total cost, sales total, profit total, and total profit percentage
+      this.totalCostInventory = this.calculateTotalCost(itemData);
+      this.totalSubTotalInventory = this.calculateTotalSubTotal(itemData)
+      this.salesTotalInventory = this.calculateTotalSubTotal(itemData);
+      this.profitTotalInventory = this.calculateProfitTotal(itemData);
+      this.totalProfitPercentageInventory =
+        this.calculateTotalProfitPercentage();
+
+      // Update the data source with the received item data
+      this.dataSourceInventory.data = itemData;
+
+      // Update the view after processing the data
+      this.dataSourceInventory._updateChangeSubscription();
+
+      // Delay progress indicator
+      this.delayProgress();
+    });
+  }
+
+  // Function to calculate total cost
+  calculateTotalCost(items: any[]): number {
+    let totalCost = 0;
+    for (const item of items) {
+      totalCost += item.cost * item.quantity || 0;
+    }
+    return totalCost;
+  }
+
+  calculateTotalSubTotal(items: any[]): number {
+    let totalSubTotal = 0;
+    for (const item of items) {
+      totalSubTotal += item.price * item.quantity || 0;
+    }
+    return totalSubTotal;
+  }
+
+  // Function to calculate profit total
+  calculateProfitTotal(items: any[]): number {
+
+    // Calculate the profit total
+    const profitTotal = this.totalSubTotalInventory - this.totalCostInventory;
+    
+    return profitTotal;
+  }
+
+  // Function to calculate total profit percentage
+  calculateTotalProfitPercentage(): number {
+    if (this.salesTotalInventory === 0) {
+      return 0; // Avoid division by zero
+    }
+
+
+    return ((this.profitTotalInventory * 100) / this.totalCostInventory);
+  }
 }
-
-
-
